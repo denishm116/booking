@@ -50,14 +50,14 @@ class ReservationController extends Controller
     {
         $users = User::with('roles')->get()->all();
         $objects = TouristObject::with('rooms', 'rooms.price')->get();
-        if ($id) {
-//            $reservation = Reservation::findOrFail($id);
-//            $user = User::findOrFail($reservation->user_id);
-//            $room = Room::findOrFail($reservation->room_id);
-//            $obj = TouristObject::with('rooms')->where('id', $room->object_id)->first();
-//            $city = City::findOrFail($reservation->city_id);
-        }
 
+        if ($id) {
+            $reservation = Reservation::findOrFail($id);
+            $user = User::findOrFail($reservation->user_id);
+            $room = Room::findOrFail($reservation->room_id);
+            $obj = TouristObject::with('rooms')->where('id', $room->object_id)->first();
+            $city = City::findOrFail($reservation->city_id);
+        }
 
         if ($id)
             return view('backend.admin.reservations.add', compact(['users', 'objects', 'reservation', 'user', 'room', 'obj', 'city']));

@@ -155,7 +155,7 @@
 
                             <div class="col text-right align-self-end px-1 mb-2">
                                 <a href="{{ route('room',['id'=>$room->id]/* Lecture 20 */) }}"
-                                   class="btn choice__button w-100 mt-2">Забронировать</a>
+                                   class="btn choice__button w-100 mt-2">Подробнее</a>
                             </div>
                         </div>
 

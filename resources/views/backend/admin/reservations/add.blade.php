@@ -82,7 +82,11 @@
                 </div>
                 <div class="row pb-2">
                     <div class="col-2 bg-white"><b>Владелец</b></div>
-                    <div class="col-10 bg-white">{{$reservation->getOwner()->name}}</div>
+                    <div class="col-10 bg-white">
+                        @isset($reservation)
+                            {{$reservation->getOwner()->name ?? null}}
+                        @endisset
+                    </div>
 
                 </div>
 
@@ -215,4 +219,47 @@
     </div>
 
 @endsection
+
+@push('scripts')
+    <script>
+    $(function () {
+        const user = document.querySelector('.userSelect');
+        const object = document.querySelector('.object');
+        let cityId = '';
+
+        user.addEventListener('change', function () {
+            axios.get('/admin/ajax/getUser/' + user.options[user.selectedIndex].value)
+                .then(function (response) {
+                    document.querySelector('.phone').value = response.data.phone;
+                })
+        });
+
+        object.addEventListener('change', function () {
+
+            axios.get('/admin/ajax/getObject/' + object.options[object.selectedIndex].value)
+                .then(function (response) {
+                    const rooms = response.data[0].rooms;
+                    cityId = response.data[0].city_id;
+                    let array = [];
+                    rooms.forEach(function (room) {
+                        array.push('<option value="' + room.id + '" >' + room.id + '</option>');
+                    })
+                    document.querySelector('.room').innerHTML = array;
+                }).then(function () {
+                    axios.get('/admin/ajax/getCity/' + cityId)
+                        .then(function (response) {
+                             document.querySelector('.city-id').value =  response.data.id;
+                             document.querySelector('.city-name').innerHTML =  response.data.name;
+                        })
+                }
+            )
+        });
+
+
+        document.querySelector('.city').onclick = () => {
+            console.log(cityId)
+        }
+    })
+    </script>
+@endpush
 

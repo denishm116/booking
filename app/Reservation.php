@@ -12,7 +12,7 @@ class Reservation extends Model
 {
     public $timestamps = false;
     protected $guarded = ['id'];
-    //protected $fillable = ['name']; /* Lecture 26 */
+    //protected $fillable = ['name'];
     const STATUS_CONFIRMED = 1;
     const STATUS_NOT_CONFIRMED = 0;
 

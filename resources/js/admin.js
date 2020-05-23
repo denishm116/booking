@@ -29,7 +29,7 @@ function _createModal(options) {
         </div>
         <div class="modal-footer">
           <a href="${options.href || '#'}" class="btn px-4 m-3  w-50 choice__button">${options.modalButtonText || 'Button'}</a>
-          
+
         </div>
       </div>
     </div>
@@ -288,44 +288,6 @@ $(function () {
 });
 
 //Создание бронирования в админке
-$(function () {
-    const user = document.querySelector('.userSelect');
-    const object = document.querySelector('.object');
-    let cityId = '';
-
-    user.addEventListener('change', function () {
-        axios.get('/admin/ajax/getUser/' + user.options[user.selectedIndex].value)
-            .then(function (response) {
-                document.querySelector('.phone').value = response.data.phone;
-            })
-    });
-
-    object.addEventListener('change', function () {
-
-        axios.get('/admin/ajax/getObject/' + object.options[object.selectedIndex].value)
-            .then(function (response) {
-                const rooms = response.data[0].rooms;
-                cityId = response.data[0].city_id;
-                let array = [];
-                rooms.forEach(function (room) {
-                    array.push('<option value="' + room.id + '" >' + room.id + '</option>');
-                })
-                document.querySelector('.room').innerHTML = array;
-            }).then(function () {
-                axios.get('/admin/ajax/getCity/' + cityId)
-                    .then(function (response) {
-                         document.querySelector('.city-id').value =  response.data.id;
-                         document.querySelector('.city-name').innerHTML =  response.data.name;
-                    })
-            }
-        )
-    });
-
-
-    document.querySelector('.city').onclick = () => {
-        console.log(cityId)
-    }
-
-})
+//
 
 

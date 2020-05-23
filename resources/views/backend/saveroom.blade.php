@@ -179,7 +179,7 @@
                                            placeholder=""
                                            value="@if( $room ?? false ){{$periodEnd ?? old('period'.$i.'end')}}@else{{'2020-03-31'}}@endif">
                                     <div class="mt-2">
-                                        Цена<input required type="text" id="price1" class="form-control"
+                                        Цена<input required type="text"  class="form-control"
                                                    placeholder="" name="prices[]"
                                                    value="@if( $room ?? false ){{$periodPrice ?? old('price'.$i)}}@endif">
                                     </div>
@@ -267,7 +267,7 @@
 
                 let monthEndOurFormat = new Date(dateEndVal.setMonth(monthEnd))
                 let dayStartOurFormat = new Date(dateStart.setDate(dayEnd))
-                console.log(dayStartOurFormat)
+                // console.log(dayStartOurFormat)
 
                 let dayEndOurFormat = new Date(monthEndOurFormat.setDate(dayEnd + 1))
 
@@ -282,7 +282,7 @@
                  // ширина окна
                if (windowWidth < 600) {
                    numberOfMonth = 1;
-                   console.log(numberOfMonth)
+                   // console.log(numberOfMonth)
                }
 
                 $([periodBlockInputIn, periodBlockInputOut]).datepicker({
@@ -451,9 +451,9 @@
                     pairs = query.split('&');
                         for (i = 0; i < pairs.length; i += 1) {
                         keyValuePair = pairs[i].split('=');
-                        console.log('keyValuePair: ' + keyValuePair);
+                        // console.log('keyValuePair: ' + keyValuePair);
                         key = decodeURIComponent(keyValuePair[0]);
-                        console.log('KEY: ' + key);
+                        // console.log('KEY: ' + key);
                         value = (keyValuePair.length > 1) ? decodeURIComponent(keyValuePair[1]) : undefined;
 
                         if (key.slice(-2) === "[]" && key !== 'rservices[]') {
