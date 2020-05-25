@@ -17,6 +17,20 @@
           method="POST" enctype="multipart/form-data" class="form-horizontal mt-4" id="save_form">
         <fieldset>
             <div class="form-group">
+                <label for="display_name" class="col control-label">Отображаемое название номера (Напрмер: "В стиле Лофт", "Семейный", "Адмиральский" и т.д.)</label>
+                <div class="col-lg-12">
+                    <input name="display_name" value="{{ $room->display_name ?? old('display_name')}}"
+                           required type="input" class="form-control" id="display_name" placeholder="">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="display_name" class="col control-label">Внутреннее название номера для удобства (Напрмер: "1-комнатный 2-й этаж", "Трехместный с ванной", "С фиолетовыми обоями" и т.д.)</label>
+                <div class="col-lg-12">
+                    <input name="internal_name" value="{{ $room->internal_name ?? old('internal_name')}}"
+                           required type="input" class="form-control" id="internal_name" placeholder="">
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="roomNumber" class="col-lg-2 control-label">Количество комнат *</label>
                 <div class="col-lg-12">
                     <input name="room_number" value="{{ $room->room_number ?? old('room_number')}}"
@@ -228,7 +242,7 @@
         let windowWidth=document.body.clientWidth;
         let numberOfMonth = 2
         $(document).ready(function () {
-
+            console.log('111')
             const maxPeriodsAllowed = 12;
 
             let defaultPrice = document.querySelector('#price');

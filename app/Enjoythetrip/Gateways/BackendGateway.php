@@ -138,6 +138,8 @@ class BackendGateway
     {
 
         $this->validate($request, [
+            'display_name' => "string",
+            'internal_name' => "string",
             'room_number' => "required|integer",
             'room_size' => "required|integer",
             'price' => "required|integer",
@@ -146,10 +148,10 @@ class BackendGateway
 
         if ($id) {
 
-            $room = $this->bR->updateRoom($id, $request); /* Lecture 48 */
+            $room = $this->bR->updateRoom($id, $request);
 
         } else {
-            $room = $this->bR->createNewRoom($request); /* Lecture 48 */
+            $room = $this->bR->createNewRoom($request);
         }
 
 
@@ -160,17 +162,17 @@ class BackendGateway
 //                dd($picture->store('rooms', 'public'));
                 $path = $picture->store('rooms', 'public');
 
-                $this->bR->saveRoomPhotos($room, $path); /* Lecture 48 */
+                $this->bR->saveRoomPhotos($room, $path);
             }
 
         }
 
-        return $room; /* Lecture 48 */
+        return $room;
 
     }
 
 
-    /* Lecture 51 */
+    /*  51 */
     public function checkNotificationsStatus($request)
     {
 
@@ -191,7 +193,7 @@ class BackendGateway
 
         while ($currentmodif <= $lastmodif) {
 
-            if ((microtime(true) - $start) > 10) /* Lecture 52 >10 */ {
+            if ((microtime(true) - $start) > 10) /*  52 >10 */ {
                 return json_encode($response);
             }
 

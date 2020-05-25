@@ -14,7 +14,8 @@
         <div class="breadcrumb-holder my-3 p-0">
             <ul class="basic-breadcrumbs">
                 <li class="d-none d-lg-block"><a href="{{route('home')}}"><u>Главная</u></a></li>
-                <li class="d-none d-lg-block"><a href="{{route('city',['city'=>$object->city->alias])}}"><u>{{$object->city->name}}</u></a></li>
+                <li class="d-none d-lg-block"><a
+                        href="{{route('city',['city'=>$object->city->alias])}}"><u>{{$object->city->name}}</u></a></li>
                 {{--<li class="d-none d-lg-block"><a href="{{route('type',['city'=>$object->city->alias, 'type' => $object->types->first()->alias])}}"><u>{{$object->types->first()->title}}</u></a></li>--}}
                 <li class="d-none d-lg-block"><a href="#"><u>{{$object->name}}</u></a></li>
             </ul>
@@ -55,10 +56,27 @@
             <div class="col-lg-4 col-md-6 col-12 mx-0">
 
 
-                <div class="object-info_number shadow-sm">
+                <div class="shadow-sm text-center ">
 
-                    <div class="objHead text-center"> Рейтинг</div>
-                    <p class="text-center">{!! $object->rating !!}</p>
+
+                    <div class="rating__group_1 text-center">
+
+                        <div class="rating text-center">
+                            <div class="rating__group">
+                                @for ($i = 0; $i < 10; $i++)
+                                    <input class="rating__input" type="radio" name="health" id="health-{{$i}}"
+                                           value="{{$i}}"
+                                           @if ($object->rating == $i)
+                                           checked
+                                        @endif
+                                    >
+                                    <label class="rating__star" for="health-{{$i}}"></label>
+                                @endfor
+                            </div>
+                        </div>
+                        <div class="rat_text">рейтинг</div>
+                    </div>
+
 
                 </div>
 
@@ -75,7 +93,7 @@
                     <p class="text-justify">
                         @foreach($object->additionals as $additionals)
 
-                                <i class="fas fa-angle-double-right"></i>{{' '.$additionals->title.' ' }}
+                            <i class="fas fa-angle-double-right"></i>{{' '.$additionals->title.' ' }}
 
                         @endforeach
                     </p>
@@ -86,9 +104,9 @@
                     <div class="objHead">Инфраструктура:</div>
                     <p class="text-justify">
 
-                            @foreach($object->infrastructures as $infrastructures)
-                                <i class="fas fa-angle-double-right"></i>{{' '.$infrastructures->title.' ' }}
-                            @endforeach
+                        @foreach($object->infrastructures as $infrastructures)
+                            <i class="fas fa-angle-double-right"></i>{{' '.$infrastructures->title.' ' }}
+                        @endforeach
 
                     </p>
                 </div>
@@ -97,9 +115,9 @@
                     <div class="objHead">Тип:</div>
                     <p class="text-justify">
 
-                            @foreach($object->types as $type)
-                                <i class="fas fa-angle-double-right"></i>{{' '.$type->title.' ' }}
-                            @endforeach
+                        @foreach($object->types as $type)
+                            <i class="fas fa-angle-double-right"></i>{{' '.$type->title.' ' }}
+                        @endforeach
 
                     </p>
                 </div>
@@ -131,14 +149,15 @@
                         <div class="px-3">
                             <div class="text-center mb-2">Уникальный номер: <b>{{$room->id}}</b>
                             </div>
-                            <div class="pl-1 text-justify"> <b>Дополнительно:</b>
+                            <div class="pl-1 text-justify"><b>Дополнительно:</b>
                                 @foreach($room->rservices as $services)
                                     <span class="pb-style"><sup class="icon-style"><sub class="icon-center"><i
                                                     class="fas fa-circle ob"></i></sub></sup></span><span
-                                        >{{' '.$services->title.' '}}</span>
+                                    >{{' '.$services->title.' '}}</span>
                                 @endforeach
                             </div>
-                            <p class="pt-1"><b>Описание: </b>{{ str_limit($room->description,70) ?? false}} <a href="{{ route('room',['id'=>$room->id]) }}">далее...</a></p>
+                            <p class="pt-1"><b>Описание: </b>{{ str_limit($room->description,70) ?? false}} <a
+                                    href="{{ route('room',['id'=>$room->id]) }}">далее...</a></p>
                         </div>
                     </div>
 
@@ -283,41 +302,40 @@
         @endforeach
 
 
-    <!-- Lecture 25 -->
 
-        {{--<section>--}}
-        {{--<h2 class="red">Отзывы о {{$object->name}}</h2>--}}
-        {{--@foreach($object->articles as $article) <!-- Lecture 16 -->--}}
-        {{--<div class="articles-list">--}}
-        {{--<h4 class="top-buffer">{{ $article->title }} <!-- Lecture 16 --></h4>--}}
-        {{--<p><b> {{ $article->user->FullName }} <!-- Lecture 16 --></b>--}}
-        {{--<i>{{ $article->created_at }} <!-- Lecture 16 --></i>--}}
-        {{--</p>--}}
-        {{--<p>{{ str_limit($article->content,10000) }} <!-- Lecture 16 --> </p> <a--}}
-        {{--href="{{ route('article',['id'=>$article->id]/* Lecture 22 */) }}">More</a>--}}
-        {{--</div>--}}
 
-        {{--@endforeach <!-- Lecture 16 -->--}}
-        {{--</section>--}}
+        {{--        <section>--}}
+        {{--        <h2 class="red">Отзывы о {{$object->name}}</h2>--}}
+        {{--        @foreach($object->articles as $article)--}}
+        {{--        <div class="articles-list">--}}
+        {{--        <h4 class="top-buffer">{{ $article->title }} </h4>--}}
+        {{--        <p><b> {{ $article->user->FullName }}</b>--}}
+        {{--        <i>{{ $article->created_at }} </i>--}}
+        {{--        </p>--}}
+        {{--        <p>{{ str_limit($article->content,10000) }}  </p> <a--}}
+        {{--        href="{{ route('article',['id'=>$article->id]) }}">More</a>--}}
+        {{--        </div>--}}
+
+        {{--        @endforeach--}}
+        {{--        </section>--}}
 
     <!-- Кнопка лайка - дизлайка -->
-        {{--@auth--}}
+        {{--        @auth--}}
 
-        {{--@if( $object->isLiked() )--}}
-        {{--<a href="{{ route('unlike',['id'=>$object->id,'type'=>'App\TouristObject']) }}"--}}
-        {{--class="btn btn-primary btn-xs top-buffer">Дизлайкнуть</a>--}}
-        {{--@else--}}
-        {{--<a href="{{ route('like',['id'=>$object->id]) }}" class="btn btn-primary btn-xs top-buffer">Лайкнуть--}}
-        {{--объект</a>--}}
-        {{--@endif--}}
+        {{--        @if( $object->isLiked())--}}
+        {{--        <a href="{{ route('unlike',['id'=>$object->id,'type'=>'App\TouristObject']) }}"--}}
+        {{--        class=""><i class="fas fa-thumbs-up"></i></a>--}}
+        {{--        @else--}}
+        {{--        <a href="{{ route('like',['id'=>$object->id]) }}" class=""><i class="far fa-thumbs-up"></i></a>--}}
+        {{--        @endif--}}
 
-        {{--@else--}}
+        {{--        @else--}}
 
-        {{--<p><a href="{{ route('register') }}">Зарегистрируйтесь</a> или <a href="{{ route('login') }}">Войдите</a>,--}}
-        {{--чтобы--}}
-        {{--поставить Лайк!</p>--}}
+        {{--        <p><a href="{{ route('register') }}">Зарегистрируйтесь</a> или <a href="{{ route('login') }}">Войдите</a>,--}}
+        {{--        чтобы--}}
+        {{--        поставить Лайк!</p>--}}
 
-        {{--@endauth--}}
+        {{--        @endauth--}}
 
     </div>
 

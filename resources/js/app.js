@@ -3,14 +3,15 @@ import json from "vue-resource/src/http/interceptor/json";
 import response from "vue-resource/src/http/response";
 
 
-$(document).ready(function () {
-    $('.circle-wrapper').hover(function () {
-        $('.circle-wrapper').toggleClass('phone-fon')
-        $('.phone-wrapper').toggleClass('phone-wrapper-white')
-    })
+// $(document).ready(function () {
+//     $('.circle-wrapper').hover(function () {
+//         $('.circle-wrapper').toggleClass('phone-fon')
+//         $('.phone-wrapper').toggleClass('phone-wrapper-white')
+//     })
+//
+// });
 
-});
-
+//Автозаполнение города
 $(document).ready(function () {
     $(".autocomplete").autocomplete({
         source: base_url + "/searchCities", /* 17 */

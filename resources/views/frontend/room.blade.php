@@ -394,9 +394,6 @@
 
                 @endforeach
 
-
-
-
                 {{--<section>--}}
                 {{--<h2 class="red">Отзывы о {{$object->name}}</h2>--}}
                 {{--@foreach($object->articles as $article) <!-- Lecture 16 -->--}}
@@ -413,25 +410,26 @@
                 {{--</section>--}}
 
             <!-- Кнопка лайка - дизлайка -->
-                {{--@auth--}}
+{{--                @auth--}}
 
-                {{--@if( $object->isLiked() )--}}
-                {{--<a href="{{ route('unlike',['id'=>$object->id,'type'=>'App\TouristObject']) }}"--}}
-                {{--class="btn btn-primary btn-xs top-buffer">Дизлайкнуть</a>--}}
-                {{--@else--}}
-                {{--<a href="{{ route('like',['id'=>$object->id]) }}" class="btn btn-primary btn-xs top-buffer">Лайкнуть--}}
-                {{--объект</a>--}}
-                {{--@endif--}}
+{{--                @if( $room->object->isLiked() )--}}
+{{--                <a href="{{ route('unlike',['id'=>$room->object->id,'type'=>'App\TouristObject']) }}"--}}
+{{--                class="btn btn-primary btn-xs top-buffer">Дизлайкнуть</a>--}}
+{{--                @else--}}
+{{--                <a href="{{ route('like',['id'=>$room->object->id]) }}" class="btn btn-primary btn-xs top-buffer">Лайкнуть--}}
+{{--                объект</a>--}}
+{{--                @endif--}}
 
-                {{--@else--}}
+{{--                @else--}}
 
-                {{--<p><a href="{{ route('register') }}">Зарегистрируйтесь</a> или <a href="{{ route('login') }}">Войдите</a>,--}}
-                {{--чтобы--}}
-                {{--поставить Лайк!</p>--}}
+{{--                <p><a href="{{ route('register') }}">Зарегистрируйтесь</a> или <a href="{{ route('login') }}">Войдите</a>,--}}
+{{--                чтобы--}}
+{{--                поставить Лайк!</p>--}}
 
-                {{--@endauth--}}
+{{--                @endauth--}}
 
             </div>
+    </div>
             @endsection
 
             @push('scripts')

@@ -300,6 +300,7 @@ class FrontendController extends Controller
 
     public function roomsearch(Request $request /* 18 */)
     {
+        setlocale(LC_TIME, 'ru_RU.UTF-8');
         if ($city = $this->fG->getSearchResults($request)) {
             $name = $request->input('city');
             if (isset(City::where('name', $name)->first()->alias)) {

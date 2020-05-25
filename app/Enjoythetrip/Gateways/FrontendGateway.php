@@ -59,6 +59,7 @@ class FrontendGateway
     /*  18 */
     public function getSearchResults($request)
     {
+        setlocale(LC_TIME, 'ru_RU.UTF-8');
         if ($request->input('city') != null) {
             $result = $this->fR->getSearchResults($request->input('city'));
         } else {

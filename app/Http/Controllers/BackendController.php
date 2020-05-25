@@ -95,16 +95,16 @@ class BackendController extends Controller
         $authUserObject = $this->bR->getUserWithObject($request->user()->id);
         if (Auth::user()->hasRole(['admin'])) {
             $objects = $this->bR->getAllObjects();
-            return view('backend.myobjects', ['objects' => $objects, 'authUserObject' => $authUserObject]/* Lecture 46 */);
+            return view('backend.myobjects', ['objects' => $objects, 'authUserObject' => $authUserObject]/*  46 */);
         } else {
             $objects = $this->bR->getMyObjects($request); /* Lecture 46 */
-            return view('backend.myobjects', ['objects' => $objects, 'authUserObject' => $authUserObject]/* Lecture 46 */);
+            return view('backend.myobjects', ['objects' => $objects, 'authUserObject' => $authUserObject]/*  46 */);
         }
     }
 
-    public function profile(Request $request /* Lecture 39 */)
+    public function profile(Request $request)
     {
-        /* Lecture 39 */
+
         if ($request->isMethod('post')) {
 
             $user = $this->bG->saveUser($request);
@@ -228,7 +228,7 @@ class BackendController extends Controller
                 $this->bG->saveRoom($id, $request);
 
                 return redirect()->back();
-                Cache::flush(); /* Lecture 55 */
+                Cache::flush(); /* e 55 */
             } else {  // adding a new room
                 $this->bG->saveRoom($id, $request);
                 return redirect()->route('myObjects');

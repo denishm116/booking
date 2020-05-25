@@ -91,12 +91,13 @@ class FrontendRepository implements FrontendRepositoryInterface
             'object.distance',
             'object.city',
             'object.address'
-        ])->whereHas('object.city', function($q) use ($city){
-            $q->where('alias',  $city);
+        ])->whereHas('object.city', function ($q) use ($city) {
+            $q->where('alias', $city);
         })->paginate(15);
     }
 
-    public function getRoomsTypes($type) {
+    public function getRoomsTypes($type)
+    {
         return Room::with([
             'object',
             'photos',
@@ -107,12 +108,13 @@ class FrontendRepository implements FrontendRepositoryInterface
             'object.distance',
             'object.city',
             'object.address'
-        ])->whereHas('object.types', function($q) use ($type){
-            $q->where('alias',  $type);
+        ])->whereHas('object.types', function ($q) use ($type) {
+            $q->where('alias', $type);
         })->paginate(15);
     }
 
-    public function getRoomsCityAndTypes($city, $type) {
+    public function getRoomsCityAndTypes($city, $type)
+    {
         return Room::with([
             'object',
             'photos',
@@ -123,86 +125,15 @@ class FrontendRepository implements FrontendRepositoryInterface
             'object.distance',
             'object.city',
             'object.address'
-        ])->whereHas('object.city', function($q) use ($city){
-            $q->where('alias',  $city);
-        })->whereHas('object.types', function($q) use ($type){
-            $q->where('alias',  $type);
-        })->paginate(15);
-        }
-
-        public function getRoomsAdditionals($alias) {
-            return Room::with([
-                'object',
-                'photos',
-                'rservices',
-                'object.additionals',
-                'object.types',
-                'object.infrastructures',
-                'object.distance',
-                'object.city',
-                'object.address'
-            ])->whereHas('object.additionals', function($q) use ($alias){
-                $q->where('alias',  $alias);
-            })->paginate(15);
-        }
-
-        public function getRoomsAdditionalsCityTypes($city, $type, $alias) {
-            return Room::with([
-                'object',
-                'photos',
-                'rservices',
-                'object.additionals',
-                'object.types',
-                'object.infrastructures',
-                'object.distance',
-                'object.city',
-                'object.address'
-            ])->whereHas('object.city', function($q) use ($city){
-                $q->where('alias',  $city);
-            })->whereHas('object.types', function($q) use ($type){
-                $q->where('alias',  $type);
-            })->whereHas('object.additionals', function($q) use ($alias){
-                $q->where('alias',  $alias);
-            })->paginate(15);
-        }
-
-        public function getRoomsAdditionalsCity($city, $alias) {
-            return Room::with([
-                'object',
-                'photos',
-                'rservices',
-                'object.additionals',
-                'object.types',
-                'object.infrastructures',
-                'object.distance',
-                'object.city',
-                'object.address'
-            ])->whereHas('object.city', function($q) use ($city){
-                $q->where('alias',  $city);
-            })->whereHas('object.additionals', function($q) use ($alias){
-                $q->where('alias',  $alias);
-            })->paginate(15);
-        }
-
-    public function getRoomsAdditionalsTypes($type, $alias) {
-        return Room::with([
-            'object',
-            'photos',
-            'rservices',
-            'object.additionals',
-            'object.types',
-            'object.infrastructures',
-            'object.distance',
-            'object.city',
-            'object.address'
-        ])->whereHas('object.types', function($q) use ($type){
-            $q->where('alias',  $type);
-        })->whereHas('object.additionals', function($q) use ($alias){
-            $q->where('alias',  $alias);
+        ])->whereHas('object.city', function ($q) use ($city) {
+            $q->where('alias', $city);
+        })->whereHas('object.types', function ($q) use ($type) {
+            $q->where('alias', $type);
         })->paginate(15);
     }
 
-    public function getRoomsFirstLine() {
+    public function getRoomsAdditionals($alias)
+    {
         return Room::with([
             'object',
             'photos',
@@ -213,12 +144,13 @@ class FrontendRepository implements FrontendRepositoryInterface
             'object.distance',
             'object.city',
             'object.address'
-        ])->whereHas('object', function($q){
-            $q->where('distance_id', '<',  3);
+        ])->whereHas('object.additionals', function ($q) use ($alias) {
+            $q->where('alias', $alias);
         })->paginate(15);
     }
 
-    public function getRoomsFirstLineTypes($type) {
+    public function getRoomsAdditionalsCityTypes($city, $type, $alias)
+    {
         return Room::with([
             'object',
             'photos',
@@ -229,14 +161,17 @@ class FrontendRepository implements FrontendRepositoryInterface
             'object.distance',
             'object.city',
             'object.address'
-        ])->whereHas('object', function($q){
-            $q->where('distance_id', '<',  3);
-        })->whereHas('object.types', function($q) use ($type){
-            $q->where('alias',  $type);
+        ])->whereHas('object.city', function ($q) use ($city) {
+            $q->where('alias', $city);
+        })->whereHas('object.types', function ($q) use ($type) {
+            $q->where('alias', $type);
+        })->whereHas('object.additionals', function ($q) use ($alias) {
+            $q->where('alias', $alias);
         })->paginate(15);
     }
 
-    public function getRoomsFirstLineCity($city) {
+    public function getRoomsAdditionalsCity($city, $alias)
+    {
         return Room::with([
             'object',
             'photos',
@@ -247,15 +182,15 @@ class FrontendRepository implements FrontendRepositoryInterface
             'object.distance',
             'object.city',
             'object.address'
-        ])->whereHas('object', function($q){
-            $q->where('distance_id', '<',  3);
-        })->whereHas('object.city', function($q) use ($city){
-            $q->where('alias',  $city);
+        ])->whereHas('object.city', function ($q) use ($city) {
+            $q->where('alias', $city);
+        })->whereHas('object.additionals', function ($q) use ($alias) {
+            $q->where('alias', $alias);
         })->paginate(15);
     }
 
-
-    public function getRoomsFirstLineCityTypes($city, $type) {
+    public function getRoomsAdditionalsTypes($type, $alias)
+    {
         return Room::with([
             'object',
             'photos',
@@ -266,18 +201,71 @@ class FrontendRepository implements FrontendRepositoryInterface
             'object.distance',
             'object.city',
             'object.address'
-        ])->whereHas('object', function($q){
-            $q->where('distance_id', '<',  3);
-        })->whereHas('object.city', function($q) use ($city){
-            $q->where('alias',  $city);
-        })->whereHas('object.types', function($q) use ($type){
-            $q->where('alias',  $type);
+        ])->whereHas('object.types', function ($q) use ($type) {
+            $q->where('alias', $type);
+        })->whereHas('object.additionals', function ($q) use ($alias) {
+            $q->where('alias', $alias);
+        })->paginate(15);
+    }
+
+    public function getRoomsFirstLine()
+    {
+        return Room::with([
+            'object',
+            'photos',
+            'rservices',
+            'object.additionals',
+            'object.types',
+            'object.infrastructures',
+            'object.distance',
+            'object.city',
+            'object.address'
+        ])->whereHas('object', function ($q) {
+            $q->where('distance_id', '<', 3);
+        })->paginate(15);
+    }
+
+    public function getRoomsFirstLineTypes($type)
+    {
+        return Room::with([
+            'object',
+            'photos',
+            'rservices',
+            'object.additionals',
+            'object.types',
+            'object.infrastructures',
+            'object.distance',
+            'object.city',
+            'object.address'
+        ])->whereHas('object', function ($q) {
+            $q->where('distance_id', '<', 3);
+        })->whereHas('object.types', function ($q) use ($type) {
+            $q->where('alias', $type);
+        })->paginate(15);
+    }
+
+    public function getRoomsFirstLineCity($city)
+    {
+        return Room::with([
+            'object',
+            'photos',
+            'rservices',
+            'object.additionals',
+            'object.types',
+            'object.infrastructures',
+            'object.distance',
+            'object.city',
+            'object.address'
+        ])->whereHas('object', function ($q) {
+            $q->where('distance_id', '<', 3);
+        })->whereHas('object.city', function ($q) use ($city) {
+            $q->where('alias', $city);
         })->paginate(15);
     }
 
 
-
-    public function getRoomsAllInclusive() {
+    public function getRoomsFirstLineCityTypes($city, $type)
+    {
         return Room::with([
             'object',
             'photos',
@@ -288,12 +276,35 @@ class FrontendRepository implements FrontendRepositoryInterface
             'object.distance',
             'object.city',
             'object.address'
-        ])->whereHas('rservices', function($q){
+        ])->whereHas('object', function ($q) {
+            $q->where('distance_id', '<', 3);
+        })->whereHas('object.city', function ($q) use ($city) {
+            $q->where('alias', $city);
+        })->whereHas('object.types', function ($q) use ($type) {
+            $q->where('alias', $type);
+        })->paginate(15);
+    }
+
+
+    public function getRoomsAllInclusive()
+    {
+        return Room::with([
+            'object',
+            'photos',
+            'rservices',
+            'object.additionals',
+            'object.types',
+            'object.infrastructures',
+            'object.distance',
+            'object.city',
+            'object.address'
+        ])->whereHas('rservices', function ($q) {
             $q->where('id', 11);
         })->paginate(15);
     }
 
-    public function getRoomsAllInclusiveTypes($type) {
+    public function getRoomsAllInclusiveTypes($type)
+    {
         return Room::with([
             'object',
             'photos',
@@ -304,14 +315,15 @@ class FrontendRepository implements FrontendRepositoryInterface
             'object.distance',
             'object.city',
             'object.address'
-        ])->whereHas('rservices', function($q){
+        ])->whereHas('rservices', function ($q) {
             $q->where('id', 11);
-        })->whereHas('object.types', function($q) use ($type){
-            $q->where('alias',  $type);
+        })->whereHas('object.types', function ($q) use ($type) {
+            $q->where('alias', $type);
         })->paginate(15);
     }
 
-    public function getRoomsAllInclusiveCity($city) {
+    public function getRoomsAllInclusiveCity($city)
+    {
         return Room::with([
             'object',
             'photos',
@@ -322,15 +334,16 @@ class FrontendRepository implements FrontendRepositoryInterface
             'object.distance',
             'object.city',
             'object.address'
-        ])->whereHas('rservices', function($q){
+        ])->whereHas('rservices', function ($q) {
             $q->where('id', 11);
-        })->whereHas('object.city', function($q) use ($city){
-            $q->where('alias',  $city);
+        })->whereHas('object.city', function ($q) use ($city) {
+            $q->where('alias', $city);
         })->paginate(15);
     }
 
 
-    public function getRoomsAllInclusiveCityTypes($city, $type) {
+    public function getRoomsAllInclusiveCityTypes($city, $type)
+    {
         return Room::with([
             'object',
             'photos',
@@ -341,12 +354,12 @@ class FrontendRepository implements FrontendRepositoryInterface
             'object.distance',
             'object.city',
             'object.address'
-        ])->whereHas('rservices', function($q){
+        ])->whereHas('rservices', function ($q) {
             $q->where('id', 11);
-        })->whereHas('object.city', function($q) use ($city){
-            $q->where('alias',  $city);
-        })->whereHas('object.types', function($q) use ($type){
-            $q->where('alias',  $type);
+        })->whereHas('object.city', function ($q) use ($city) {
+            $q->where('alias', $city);
+        })->whereHas('object.types', function ($q) use ($type) {
+            $q->where('alias', $type);
         })->paginate(15);
     }
 
@@ -358,7 +371,8 @@ class FrontendRepository implements FrontendRepositoryInterface
     }
 
 
-    public function getTypesForMenu() {
+    public function getTypesForMenu()
+    {
         return Type::whereHas('objects')->get();
     }
 
@@ -434,7 +448,11 @@ class FrontendRepository implements FrontendRepositoryInterface
         foreach ($object->comments as $comment) {
             $arr[] = $comment->rating;
         }
-        $rating = intdiv(array_sum($arr), count($arr));
+        if (count($arr) == 0)
+            $rating = intdiv(10 + $comment->rating, 2);
+        else
+            $rating = intdiv(array_sum($arr), count($arr));
+
         $object->rating = $rating;
         $object->save();
     }

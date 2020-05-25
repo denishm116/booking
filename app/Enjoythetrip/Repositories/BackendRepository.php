@@ -442,6 +442,8 @@ class BackendRepository implements BackendRepositoryInterface
 
 //        dd($request->input());
         $room = Room::find($id);
+        $room->display_name = $request->input('display_name');
+        $room->internal_name = $request->input('internal_name');
         $room->room_number = $request->input('room_number');
         $room->room_size = $request->input('room_size');
         $room->price = $request->input('price');
@@ -524,6 +526,8 @@ class BackendRepository implements BackendRepositoryInterface
 
         $room->object_id = $request->input('object_id');
 
+        $room->display_name = $request->input('display_name');
+        $room->internal_name = $request->input('internal_name');
         $room->room_number = $request->input('room_number');
         $room->room_size = $request->input('room_size');
         $room->price = $request->input('price');

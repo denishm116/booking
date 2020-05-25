@@ -1,6 +1,129 @@
 html, body {
     height: 100%;
 }
+.rat_text {
+    font-style: italic;
+}
+.rating {
+    margin: 0 0 0 0;
+    padding: 0;
+    border: none;
+}
+
+/* Caption */
+.rating__group_1 {
+    padding: 15px 0;
+}
+.rating__caption {
+    /*margin-bottom: 0.5em;*/
+    padding: 0;
+}
+
+/* Group */
+
+.rating__group {
+    margin: 0 auto;
+    position: relative;
+    width: 10em;
+    height: 1em;
+    background-image: url('/public/images/star_off.svg');
+    background-size: 1em 0.95em;
+    background-repeat: repeat-x;
+    /*overflow: hidden;*/
+}
+
+/* Input */
+
+.rating__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+}
+
+.rating__input:focus ~ .rating__focus {
+    position: absolute;
+    top: -0.2em;
+    right: -0.2em;
+    bottom: -0.2em;
+    left: -0.2em;
+    z-index: -1;
+    outline: 0.2em solid #4a90e2;
+}
+
+/* Star */
+
+.rating__star {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    height: 1em;
+    background-size: 1em 0.95em;
+    background-repeat: repeat-x;
+}
+
+.rating__star:hover,
+.rating__input:checked + .rating__star {
+    background-image: url('/public/images/star_on.svg');
+}
+
+.rating__star:hover ~ .rating__star {
+    background-image: url('/public/images/star_off.svg');
+}
+
+/* Options */
+
+.rating__star:nth-of-type(1) {
+    z-index: 10;
+    width: 1em;
+}
+
+.rating__star:nth-of-type(2) {
+    z-index: 9;
+    width: 2em;
+}
+
+.rating__star:nth-of-type(3) {
+    z-index: 8;
+    width: 3em;
+}
+
+.rating__star:nth-of-type(4) {
+    z-index: 7;
+    width: 4em;
+}
+
+.rating__star:nth-of-type(5) {
+    z-index: 6;
+    width: 5em;
+}
+
+.rating__star:nth-of-type(6) {
+    z-index: 5;
+    width: 6em;
+}
+
+.rating__star:nth-of-type(7) {
+    z-index: 4;
+    width: 7em;
+}
+
+.rating__star:nth-of-type(8) {
+    z-index: 3;
+    width: 8em;
+}
+
+.rating__star:nth-of-type(9) {
+    z-index: 2;
+    width: 9em;
+}
+
+.rating__star:nth-of-type(10) {
+    z-index: 1;
+    width: 10em;
+}
 
 .vmodal {
 }
@@ -959,8 +1082,6 @@ li {
     font-size: 18px;
     font-weight: bold;
     color: #fff;
-
-
 }
 
 
@@ -981,8 +1102,8 @@ li {
     color: #fff;
 }
 
-.card-main-page:hover {
 
+.card-main-page:hover {
     box-shadow: none;
     /*border:1px solid rgb(218, 111, 91);*/
 }

@@ -66,7 +66,7 @@
                 </div>
                 <div class="card-main-page__content-wrapper-row-2-2">
                     <div>
-                        <span> <a href="{{ route('room',['id'=>$room->id]) }}">Название: {{$room->id}}</a></span>
+                        <span> <a href="{{ route('room',['id'=>$room->id]) }}">Название: {{$room->display_name ?? $room->id}}</a></span>
                     </div>
                     <div>
 

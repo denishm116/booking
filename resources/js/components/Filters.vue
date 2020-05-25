@@ -164,7 +164,7 @@
                                     </div>
                                     <div class="card-main-page__content-wrapper-row-2-2">
                                         <div>
-                                            <span>   <a v-bind:href="'/room/'+room.id">Название: {{room.id}}</a></span>
+                                            <span>   <a v-bind:href="'/room/'+room.id">Название: {{room.display_name ? room.display_name : room.id}}</a></span>
                                         </div>
                                         <div>
 

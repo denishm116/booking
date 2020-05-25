@@ -1,20 +1,27 @@
 <html lang="ru">
 <head>
     <!-- Yandex.Metrika counter -->
-    <script type="text/javascript" >
-        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-            m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    <script type="text/javascript">
+        (function (m, e, t, r, i, k, a) {
+            m[i] = m[i] || function () {
+                (m[i].a = m[i].a || []).push(arguments)
+            };
+            m[i].l = 1 * new Date();
+            k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+        })
         (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
         ym(57244333, "init", {
-            clickmap:true,
-            trackLinks:true,
-            accurateTrackBounce:true,
-            webvisor:true,
-            ecommerce:"dataLayer"
+            clickmap: true,
+            trackLinks: true,
+            accurateTrackBounce: true,
+            webvisor: true,
+            ecommerce: "dataLayer"
         });
     </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/57244333" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <noscript>
+        <div><img src="https://mc.yandex.ru/watch/57244333" style="position:absolute; left:-9999px;" alt=""/></div>
+    </noscript>
     <!-- /Yandex.Metrika counter -->
 
 
@@ -22,7 +29,11 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132861745-2"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
 
         gtag('config', 'UA-132861745-2');
@@ -62,8 +73,7 @@
     <script src="https://kassa.yandex.ru/checkout-ui/v2.js"></script>
 
 
-
-    <meta name="yandex-verification" content="e7e601028b8d617f" />
+    <meta name="yandex-verification" content="e7e601028b8d617f"/>
 </head>
 <body>
 
@@ -84,22 +94,32 @@
             @auth
                 <div class="li">Вы вошли, как:</div>
                 <div class="li">{{ Auth::user()->name }}</div>
-                <a href="{{ route('adminHome') }}"><div class="li">Панель управления</div></a>
-                <a href="{{route('saveObject')}}"><div class="li navigation-item-button">Добавить объект</div></a>
+                <a href="{{ route('adminHome') }}">
+                    <div class="li">Панель управления</div>
+                </a>
+                <a href="{{route('saveObject')}}">
+                    <div class="li navigation-item-button">Добавить объект</div>
+                </a>
                 <a href="{{ route('logout') }}"
                    onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();"><div class="li">
+                                                     document.getElementById('logout-form').submit();">
+                    <div class="li">
                         Выйти
 
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        {{ csrf_field() }}
-                    </form>
-                </div> </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
+                    </div>
+                </a>
             @endauth
 
             @guest
-                    <a href="{{ route('login') }}"> <div class="li">Войти</div></a>
-                    <a href="{{ route('register') }}"><div class="li">Зарегистрироваться</div></a>
+                <a href="{{ route('login') }}">
+                    <div class="li">Войти</div>
+                </a>
+                <a href="{{ route('register') }}">
+                    <div class="li">Зарегистрироваться</div>
+                </a>
                 <div>
                     <div class="li navigation-item-button"><a href="{{route('saveObject')}}">Сдать жилье</a>
                     </div>
@@ -121,15 +141,15 @@
             <div>
 
                 {{--<form action="{{route('favourites')}}">--}}
-                    {{--<button class="favourites-mob"> <i class="header-heart far fa-heart"></i>Избранное</button>--}}
-                    {{--<input type="hidden" value="111" class="hidden-favourites">--}}
+                {{--<button class="favourites-mob"> <i class="header-heart far fa-heart"></i>Избранное</button>--}}
+                {{--<input type="hidden" value="111" class="hidden-favourites">--}}
                 {{--</form>--}}
                 <a href="#" class="favourites"> <i class="header-heart far fa-heart"></i>Избранное</a>
             </div>
         </li>
 
         @auth
-             <li>
+            <li>
                 <a href="{{ route('logout') }}"
                    onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -166,17 +186,17 @@
 
 </div>
 
-<div class="circle-wrapper">
-    <div class="phone-wrapper">
-        <div class="phone-numbers">
-            <div><a href="tel: +78002226499">+7 (800) 222 64 99</a></div>
-            <div><a href="tel: +79785852287">+7 (978) 585 22 87</a></div>
-        </div>
-        <div class="phone circle circle2">
-            <i class="fa fas fa-phone"></i>
-        </div>
-    </div>
-</div>
+{{--<div class="circle-wrapper">--}}
+{{--    <div class="phone-wrapper">--}}
+{{--        <div class="phone-numbers">--}}
+{{--            <div><a href="tel: +78002226499">+7 (800) 222 64 99</a></div>--}}
+{{--            <div><a href="tel: +79785852287">+7 (978) 585 22 87</a></div>--}}
+{{--        </div>--}}
+{{--        <div class="phone circle circle2">--}}
+{{--            <i class="fa fas fa-phone"></i>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</div>--}}
 
 <div class="phone_mob_wrapper">
     <div class="phone_mob">
@@ -189,7 +209,7 @@
     </div>
 </div>
 <div id="toTop" class="bradius2 arrow-top"><i class="fas fa-caret-square-up "></i>
-   </div>
+</div>
 <footer class="footer-info">
     <div class="container">
         <div class="row d-flex justify-content-between">
@@ -230,17 +250,35 @@
                 <div class="py-0 mt-0 footer-info"><i class="fas fa-envelope"> </i> <a class="footer-doc"
                                                                                        href="mailto: info@krim-leto.ru">
                         info@krim-leto.ru</a></div>
+
+                <div class="py-0 mt-0 footer-info"><i class="fas fa-phone-square"></i> <a class="footer-doc"
+                                                                                          href="tel: +78002226499">+7
+                        (800) 222 64 99</a></div>
                 <div class="py-0 mt-0 footer-info">
                     <a href="https://vk.com/krim_letoru" class="orange_footer"><i class="fab fa-vk"></i></a>
-                    <a href="https://ok.ru/profile/580138185952" class="orange_footer ml-3"><i class="fab fa-odnoklassniki"></i></a>
-                    <a href="https://www.instagram.com/krim_leto_/" class="orange_footer ml-3"><i class="fab fa-instagram"></i></a>
+                    <a href="https://ok.ru/profile/580138185952" class="orange_footer ml-3"><i
+                            class="fab fa-odnoklassniki"></i></a>
+                    <a href="https://www.instagram.com/krim_leto_/" class="orange_footer ml-3"><i
+                            class="fab fa-instagram"></i></a>
                 </div>
             </div>
         </div>
-
+        <div class="row">
+            <div class="col footer-doc footer-conf">
+                <p class="footer-doc footer-conf">© Все права защищены. Любое использование либо копирование материалов сайта, элементов дизайна и
+                    оформления допускается лишь с разрешения правообладателя и только со ссылкой на источник:
+                    krim-leto.ru</p>
+                <p>Использование сайта означает согласие с <a href="{{route('guest_agreement')}}"
+                                                               class="footer-doc footer-user bolded">Пользовательским
+                        соглашением</a> и <a href="{{route('confidential_policy')}}"
+                                             class="footer-doc footer-conf bolded">Политикой конфиденциальности</a>. Оплачивая
+                    лицензионный платеж, вы принимаете <a href="{{route('guest_agreement')}}"
+                                                          class="footer-doc footer-user bolded">Лицензионное соглашение.</a></p>
+            </div>
+        </div>
 
     </div>
-    </div>
+
 </footer>
 
 
@@ -267,6 +305,7 @@
 <script src="{{ asset('js/cookie.js') }}"></script>
 <script src="{{ asset('js/jquery.datepicker.extension.range.min.js')}}"></script>
 <script src="{{ asset('js/ru.js') }}"></script>
+<script src="{{ asset('js/rating.js') }}"></script>
 @stack('scripts')
 
 <script type="text/javascript">
@@ -300,10 +339,10 @@
 <script>
     $.datepicker.setDefaults($.datepicker.regional['ru']);
     let myTempVar = false;
-    let width=document.body.clientWidth; // ширина
+    let width = document.body.clientWidth; // ширина
     let numberOfMonth = 2;
     if (width < 600)
-     numberOfMonth = 1;
+        numberOfMonth = 1;
 
     $("#check_in, #check_out").datepicker({
 
@@ -346,85 +385,85 @@
         let select = document.querySelector('.selected-guest');
         let gotovo = document.querySelector('.gotovo');
 
-if (gotovo) {
-    gotovo.onclick = function () {
-        guestsWrapper.classList.add('anim');
+        if (gotovo) {
+            gotovo.onclick = function () {
+                guestsWrapper.classList.add('anim');
 
-    }
-    //Появление меню
-    choiceVisible.onclick = function () {
-        guestsWrapper.classList.toggle('anim');
+            }
+            //Появление меню
+            choiceVisible.onclick = function () {
+                guestsWrapper.classList.toggle('anim');
 
-        this.classList.toggle('border-gray');
-        this.classList.toggle('border-orange');
-    };
+                this.classList.toggle('border-gray');
+                this.classList.toggle('border-orange');
+            };
 
-    adultsPlus.onclick = function () {
-        let zz = adultsCounter.innerHTML;
-        zz++;
-        if (zz > 10) zz = 10;
-        adultsCounter.innerHTML = zz;
-        adultsVisible.innerHTML = zz;
-        write();
-    };
-
-
-    adultsMinus.onclick = function () {
-        let mm = adultsCounter.innerHTML;
-        mm--;
-        if (mm <= 1) mm = 1;
-        adultsCounter.innerHTML = mm;
-        adultsVisible.innerHTML = mm;
-        write();
-    };
+            adultsPlus.onclick = function () {
+                let zz = adultsCounter.innerHTML;
+                zz++;
+                if (zz > 10) zz = 10;
+                adultsCounter.innerHTML = zz;
+                adultsVisible.innerHTML = zz;
+                write();
+            };
 
 
-    childrenPlus.onclick = function () {
-        let bb = childrenCounter.innerHTML;
-        bb++;
-        if (bb > 10) bb = 10;
-        childrenCounter.innerHTML = bb;
-        childrenVisible.innerHTML = bb;
-        write();
-    };
+            adultsMinus.onclick = function () {
+                let mm = adultsCounter.innerHTML;
+                mm--;
+                if (mm <= 1) mm = 1;
+                adultsCounter.innerHTML = mm;
+                adultsVisible.innerHTML = mm;
+                write();
+            };
 
 
-    childrenMinus.onclick = function () {
-        let mm = childrenCounter.innerHTML;
-        mm--;
-        if (mm <= 0) mm = 0;
-        childrenCounter.innerHTML = mm;
-        childrenVisible.innerHTML = mm;
-        write();
-    }
-
-    function write() {
-        let sumGuests = +adultsCounter.innerHTML + +childrenCounter.innerHTML;
-        select.options[0].value = sumGuests;
-        select.options[0].text = sumGuests;
-
-    }
+            childrenPlus.onclick = function () {
+                let bb = childrenCounter.innerHTML;
+                bb++;
+                if (bb > 10) bb = 10;
+                childrenCounter.innerHTML = bb;
+                childrenVisible.innerHTML = bb;
+                write();
+            };
 
 
-    window.addEventListener('click', function (e) {
-        if (!guestsWrapper.contains(e.target) && !choiceVisible.contains(e.target)) {
+            childrenMinus.onclick = function () {
+                let mm = childrenCounter.innerHTML;
+                mm--;
+                if (mm <= 0) mm = 0;
+                childrenCounter.innerHTML = mm;
+                childrenVisible.innerHTML = mm;
+                write();
+            }
 
-            guestsWrapper.classList.add('anim');
+            function write() {
+                let sumGuests = +adultsCounter.innerHTML + +childrenCounter.innerHTML;
+                select.options[0].value = sumGuests;
+                select.options[0].text = sumGuests;
+
+            }
+
+
+            window.addEventListener('click', function (e) {
+                if (!guestsWrapper.contains(e.target) && !choiceVisible.contains(e.target)) {
+
+                    guestsWrapper.classList.add('anim');
+
+                }
+            });
 
         }
-    });
-
-}
-}
+    }
 
 
     guests();
-document.querySelector('.btn_date_in').onclick = function (e) {
-    e.preventDefault();
-};
-document.querySelector('.btn_date_out').onclick = function (e) {
-    e.preventDefault();
-};
+    document.querySelector('.btn_date_in').onclick = function (e) {
+        e.preventDefault();
+    };
+    document.querySelector('.btn_date_out').onclick = function (e) {
+        e.preventDefault();
+    };
 </script>
 <script src="{{ asset('js/favourites.js') }}"></script>
 </body>
