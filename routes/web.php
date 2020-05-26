@@ -103,8 +103,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     });
 
 
-
-
     Route::get(trans('routes.myobjects'), 'BackendController@myobjects')->name('myObjects');
     Route::match(['GET', 'POST'], trans('routes.saveobject') . '/{id?}', 'BackendController@saveObject')->name('saveObject');
     Route::match(['GET', 'POST'], trans('routes.profile'), 'BackendController@profile')->name('profile');
@@ -141,4 +139,9 @@ Route::group(['prefix' => 'favourites'], function () {
     Route::get('favourite/{id}', 'FrontendController@favourites')->name('favourites.favourite');
 });
 //Route::get('/home', 'HomeController@index')->name('home');  /* Lecture 7 */
+Route::group(['prefix' => 'ajax', /*'middleware' => 'auth'*/], function () {
+    Route::get('/changeRating/{objectId}/{rating}', 'FrontendController@changeRating');
+//    Route::post('/setRating', 'FrontendController@setRating');
+});
+
 

@@ -4,16 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-
-class Comment extends Model
+class Rating extends Model
 {
-
-    use Enjoythetrip\Presenters\CommentPresenter;
+    protected $table = 'ratings';
+    protected $guarded = [];
     public $timestamps = false;
 
-
-
-    public function commentable()
+    public function ratingable()
     {
         return $this->morphTo();
     }
@@ -22,5 +19,5 @@ class Comment extends Model
     {
         return $this->belongsTo('App\User');
     }
-}
 
+}

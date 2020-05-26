@@ -23,7 +23,6 @@ class TouristObject extends Model
     }
 
 
-
     public function city()
     {
         return $this->belongsTo('App\City');
@@ -46,15 +45,16 @@ class TouristObject extends Model
         return $this->morphToMany('App\User', 'likeable');
     }
 
+
     public function address()
     {
-        return $this->hasOne('App\Address','object_id');
+        return $this->hasOne('App\Address', 'object_id');
     }
 
 
     public function rooms()
     {
-        return $this->hasMany('App\Room','object_id');
+        return $this->hasMany('App\Room', 'object_id');
     }
 
 
@@ -66,13 +66,13 @@ class TouristObject extends Model
 
     public function articles()
     {
-        return $this->hasMany('App\Article','object_id');
+        return $this->hasMany('App\Article', 'object_id');
     }
 
     public function isLiked()
     {
         if (Auth::user())
-        return $this->users()->where('user_id', Auth::user()->id)->exists();
+            return $this->users()->where('user_id', Auth::user()->id)->exists();
     }
 
 
@@ -96,5 +96,70 @@ class TouristObject extends Model
         return $this->belongsTo('App\Distance');
     }
 
+    public function ratings()
+    {
+        return $this->morphMany('App\Rating', 'ratingable');
+    }
+
+    public function hasUserMark($userId): bool
+    {
+        foreach ($this->ratings as $rating) {
+            if ($rating->user_id == $userId)
+                return true;
+
+        }
+        return false;
+    }
+
+    public function userMark($userId)
+    {
+    return $this->ratings()->where('user_id', $userId)->where('ratingable_id', $this->id)->first()->rating;
+    }
+
+    public function changeRating($userId, $rating)
+    {
+        if (!$this->hasUserMark($userId) && $rating <= 10) {
+            $this->ratings()->firstOrCreate([
+                'user_id' => $userId,
+                'ratingable_type' => $this,
+                'ratingable_id' => $this->id,
+                'rating' => $rating,
+            ]);
+        }
+        return $this->ratingCounter();
+
+    }
+
+    public function hasRating(): bool
+    {
+        if ($this->ratings->first() == null)
+            return false;
+        else
+            return true;
+    }
+
+    public function ratingCounter()
+    {
+        $rating = [];
+        if ($this->hasRating()) {
+            foreach ($this->ratings as $item) {
+                $rating[] = $item->rating;
+
+            }
+            return intdiv(array_sum($rating), count($rating));
+        }
+        return 0;
+
+    }
+
+    public function votedCounter()
+    {
+        return count($this->ratings()->where('ratingable_id', $this->id)->get());
+    }
+
+//    public function scopeRating()
+//    {
+//        return $this->ratings()->getModel();
+//    }
 }
 

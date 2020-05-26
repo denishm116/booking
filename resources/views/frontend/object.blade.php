@@ -59,22 +59,27 @@
                 <div class="shadow-sm text-center ">
 
 
-                    <div class="rating__group_1 text-center">
-
+                    <div class="rating__group_1 text-center" title="@guest()Авторизуйтесь, чтобы ваша оценка была учтена @endguest">
+                        @guest() <a href="{{route('login')}}"> @endguest
                         <div class="rating text-center">
-                            <div class="rating__group">
-                                @for ($i = 0; $i < 10; $i++)
-                                    <input class="rating__input" type="radio" name="health" id="health-{{$i}}"
+                            <div class="rating__group" title="Оценок: {{$object->votedCounter()}} @if($object->hasUserMark(Auth::id()))Ваша оценка {{$object->userMark(Auth::id())}}@endif
+                                ">
+                                @for ($i = 1; $i <= 10; $i++)
+
+                                    <input class="rating__input @auth auth @endauth" type="radio" name="health" id="health-{{$i}}"
                                            value="{{$i}}"
-                                           @if ($object->rating == $i)
+                                           @if ($object->ratingCounter() == $i)
                                            checked
                                         @endif
                                     >
                                     <label class="rating__star" for="health-{{$i}}"></label>
+
                                 @endfor
                             </div>
                         </div>
-                        <div class="rat_text">рейтинг</div>
+
+                            @if($object->hasUserMark(Auth::id()))<div class="">Ваша оценка {{$object->userMark(Auth::id())}}</div> @else <div class=" rat_text ">рейтинг</div> @endif
+                @guest() </a> @endguest
                     </div>
 
 
@@ -338,7 +343,7 @@
         {{--        @endauth--}}
 
     </div>
-
+    <div class="ob-id text-white">{{$object->id}}</div>
 @endsection
 
 @push('scripts')

@@ -8,6 +8,7 @@ use App\City;
 use App\Distance;
 
 use App\Mail\AdminReservationMail;
+use App\Rating;
 use App\Rservice;
 use Carbon\Carbon;
 use App\Infrastructure;
@@ -266,6 +267,7 @@ class FrontendController extends Controller
         $name = $object->city->name;
         $alias = City::where('name', $name)->first()->alias;
         $h1seo = $this->fG->seoCityArray()[$alias];
+
 
         return view('frontend.object', ['h1seo' => $h1seo, 'object' => $object, 'cities' => $this->cities]);
     }
@@ -576,6 +578,14 @@ class FrontendController extends Controller
     public function landlord_agreement()
     {
         return view('frontend.landlord_agreement');
+    }
+
+
+
+    public function changeRating($objectId, $rating)
+    {
+        $object = TouristObject::findOrFail($objectId);
+        return  $object->changeRating(Auth::id(), $rating);
     }
 
 }
