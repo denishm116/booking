@@ -124,13 +124,13 @@
                                         </template>
                                     </div>
                                     <div class="star-icon">
-                                        <small v-html="room.object.ratingForCard"></small>
+
+                                        <small v-html=room.object.rating></small>
                                     </div>
                                 </a>
 
                             </div>
                         </div>
-
                         <div class="col-lg-8 height container-fluid h-100 align-items-stretch height">
 
                             <div class="card-main-page__content-wrapper height align-items-stretch">
@@ -204,7 +204,7 @@
                                     <div class="">
 
 
-                                        <template v-if="reservprice">
+                                        <template v-if="reservprice[roomIndex].interval">
 
 
                                             <template
@@ -233,7 +233,7 @@
 
                                         </template>
                                         <template v-else>
-                                            от <span class="price">{{room.price}}&#8381;<small>/сут.</small></span>
+                                            от <span class="price">{{room.price}}&#8381;/<small>сут.</small></span>
 
                                         </template>
 
@@ -463,6 +463,7 @@
                 let checker = (arr, target) => target.every(v => arr.includes(v));
                 //Проверка стоимости номера
                 if (this.sortprice) {
+
                     this.allroom.forEach((room) => {
                         if (room.price <= this.sortprice) {
                             this.arr3.push(room)

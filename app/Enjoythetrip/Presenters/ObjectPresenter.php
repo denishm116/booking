@@ -21,7 +21,7 @@ trait ObjectPresenter
         return $this->name . ' object';
     }
 
-    public function getRatingForCardAttribute()
+    public function getRatingAttribute()
 
     {
         $value = $this->ratingCounter();
