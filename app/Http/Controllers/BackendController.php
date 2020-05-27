@@ -290,11 +290,11 @@ class BackendController extends Controller
         $room = Reservation::find($id)->room;
         $owner = Reservation::find($id)->room->object->user;
         $addres = Reservation::find($id)->room->object->address;
-
+        $cost = $reservation->price - $reservation->reward;
         $options = new Options();
-        $options->set('defaultFont', 'Arial');
+        $options->set('defaultFont', 'dejavu sans');
         $dompdf = new DOMPDF($options);
-        $html =  <<< ENDHTML
+        $html = <<< ENDHTML
 <!DOCTYPE html>
 <html>
 <head>
@@ -339,7 +339,7 @@ body {
         font-size: 16px !important;
   }
   .container {
-        padding: 0 !important; width: 100% !important;
+        padding: 15px !important; width: 60% !important;
   }
   .content {
         padding: 0 !important;
@@ -365,17 +365,18 @@ body {
         text-decoration: none;
         transition: .5s;
     }
+    .margin {
+    margin: 0 auto;
+    }
 </style>
 </head>
 
-<body itemscope itemtype="http://schema.org/EmailMessage" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6em; background-color: #f6f6f6; margin: 0;" bgcolor="#f6f6f6">
+<body style="box-sizing: border-box; font-size: 14px; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; !important; height: 100%; line-height: 1.6em; margin: 0;">
 
-<table class="body-wrap" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: #f6f6f6; margin: 0;" bgcolor="#f6f6f6"><tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;" valign="top"></td>
-    <td class="container" width="600" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; display: block !important; max-width: 600px !important; clear: both !important; margin: 0 auto;" valign="top">
-      <div class="content" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: block; margin: 0 auto; padding: 20px;">
-        <table class="main" width="100%" cellpadding="0" cellspacing="0" itemprop="action" itemscope itemtype="http://schema.org/ConfirmAction" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; background-color: #fff; margin: 0; border: 1px solid #e9e9e9;" bgcolor="#fff"><tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-wrap" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 20px;" valign="top">
-              <meta itemprop="name" content="Confirm Email" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" /><table width="100%" cellpadding="0" cellspacing="0" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                                <div>
+<table width="90%" height="90%" cellpadding="0" cellspacing="0" style="box-sizing: border-box; font-size: 14px; margin: 0 auto;  bgcolor="#f6f6f6"">
+<tr style="box-sizing: border-box; font-size: 14px; margin: 0;">
+<td   width="90%" style=" box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 15px; padding: 0 0 20px;" valign="top">
+                                <div style="margin: 20px 0">
                                     <a class="krim_Leto_ru" href="/">Krim-leto<span class="logo-orange">.ru</span>
                                     </a>
 
@@ -394,32 +395,30 @@ body {
                                 <p>Дата выезда: <b> $reservation->day_out</b> </p>
                                 <p>Полная стоимость бронирования: <b>  $reservation->price   руб.</b> </p>
                                 <p>Оплачено: <b>  $reservation->reward   руб.</b> </p>
-                                <p>Остаток оплаты: <b>  $reservation->price - $reservation->reward   руб.</b> </p>
-                                <p>Контактное лицо (в объекте размещения): <b> $owner->name    $owner->surname   </b></p>
+                                <p>Остаток оплаты: <b>  $cost  руб.</b> </p>
+                                <div style="background: #90dbf6; padding: 5px;">
+                                <p >Контактное лицо (в объекте размещения): <b> $owner->name    $owner->surname   </b></p>
                                 <p>тел: <b> $owner->phone   </b></p>
-                                <p>e-mail: <b> $owner->email   </b></p>
+                                <p>e-mail: <b> $owner->email   </b></p></div>
                   </td>
-                </tr><tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" itemprop="handler" itemscope style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                    <hr>
+                </tr><tr style="    box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" itemprop="handler" itemscope style="    box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+
                   </td>
-                </tr><tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+                </tr><tr style="    box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="    box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
                                 По всем вопросам обращайтесь по тел. <b>8-800-222-64-99</b> Звонок бесплатный
 </td>
-                </tr></table></td>
-          </tr></table><div class="footer" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; clear: both; color: #999; margin: 0; padding: 20px;">
-          <table width="100%" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="aligncenter content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 12px; vertical-align: top; color: #999; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top"><a href="https://krim-leto.ru" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 12px; color: #999; text-decoration: underline; margin: 0;">krim-leto.ru</a></td>
-            </tr></table></div></div>
-    </td>
-    <td style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;" valign="top"></td>
-  </tr></table></body>
+                </tr></table></body>
 </html>'
 ENDHTML;
 
         $dompdf->loadHtml($html);
         $dompdf->render();
-        $dompdf->stream("hello.pdf");
+//        $dompdf->stream("werlcome.pdf");
+        $output = $dompdf->output();
+        file_put_contents("file.pdf", $output);
+
         Mail::to($user->email)->send(new GuestReservationMail($reservation, $owner, $object, $addres, $city, $user, $room));
-        return redirect()->back();
+        return redirect()->back()->with('message', 'Подтверждено');
     }
 
     public function sendMailToGuestRepeat($id)
