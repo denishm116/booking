@@ -10,6 +10,7 @@ function setRating() {
                     let tmp = document.querySelector('.rat_text')
                     tmp.innerHTML = 'Ваша оценка ' + (+e.target.value)
                     tmp.removeAttribute('class');
+                    // e.preventDefault();
                 }).catch(function (error) {
 
             });

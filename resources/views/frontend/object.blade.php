@@ -66,7 +66,7 @@
                                 ">
                                 @for ($i = 1; $i <= 10; $i++)
 
-                                    <input class="rating__input @auth auth @endauth" type="radio" name="health" id="health-{{$i}}"
+                                    <input class="rating__input @auth auth @endauth" type="radio" name="health" id="health-{{$i}}" @guest() disabled  @endguest
                                            value="{{$i}}"
                                            @if ($object->ratingCounter() == $i)
                                            checked
@@ -130,8 +130,34 @@
 
             </div>
 
+
         </div>
 
+        <div class="row">
+            <div class="col">
+                <i class="fas fa-heart"></i>
+                <i class="far fa-heart"></i>
+                <i class="far fa-eye"></i>
+            </div>
+            <div class="col">
+{{--                        @auth--}}
+
+                        @if( $object->isLiked())
+                        <a href="{{ route('unlike',['id'=>$object->id,'type'=>'App\TouristObject']) }}"
+                        class=""><i class="fas fa-thumbs-up"></i></a>
+                        @else
+                        <a href="{{ route('like',['id'=>$object->id]) }}" class=""><i class="far fa-thumbs-up"></i></a>
+                        @endif
+
+{{--                        @else--}}
+
+                        <p><a href="{{ route('register') }}">Зарегистрируйтесь</a> или <a href="{{ route('login') }}">Войдите</a>,
+                        чтобы
+                        поставить Лайк!</p>
+
+{{--                        @endauth--}}
+            </div>
+        </div>
 
     </div>
     <div class="container my-3">
