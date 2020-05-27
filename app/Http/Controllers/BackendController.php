@@ -6,6 +6,11 @@ namespace App\Http\Controllers;
 use App\City;
 use App\Reservation;
 use App\Room;
+
+
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\GuestReservationMail;
@@ -13,26 +18,27 @@ use App\Mail\GuestReservationMail;
 use App\User;
 use Illuminate\Http\Request;
 
-use App\Enjoythetrip\Interfaces\BackendRepositoryInterface; /* Lecture 27 */
+use App\Enjoythetrip\Interfaces\BackendRepositoryInterface;
 
-use App\Enjoythetrip\Gateways\BackendGateway; /* Lecture 27 */
+use App\Enjoythetrip\Gateways\BackendGateway;
 
-use Illuminate\Support\Facades\Auth; /* Lecture 39 */
+use Illuminate\Support\Facades\Auth;
+
 
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Storage; /* Lecture 40 */
+use Illuminate\Support\Facades\Storage;
 
-use App\Events\ReservationConfirmedEvent; /* Lecture 54 */
+use App\Events\ReservationConfirmedEvent;
 
-use Illuminate\Support\Facades\Cache; /* Lecture 55 */
+use Illuminate\Support\Facades\Cache;
 
-use YandexCheckout\Client;
-use YandexCheckout\Model\Payment;
 use App\YandexPayment;
 
 class BackendController extends Controller
 {
-    use \App\Enjoythetrip\Traits\Ajax; /* Lecture 30 */
+    use \App\Enjoythetrip\Traits\Ajax;
+
+    /* Lecture 30 */
 
     public function __construct(BackendGateway $backendGateway, BackendRepositoryInterface $backendRepository)
     {
@@ -70,7 +76,7 @@ class BackendController extends Controller
 
         foreach ($cal->getSortedEvents() as $r) {
             $otherServiceReservatios[] = [$r['DTSTART']->format('Y-m-d'), $r['DTEND']->format('Y-m-d')];
-           }
+        }
 
         foreach ($room->reservations as $reservation) {
             $krimletoReservations[] = [$reservation->day_in, $reservation->day_out];
@@ -264,8 +270,10 @@ class BackendController extends Controller
             $conf->confirmPayment($paymentId);
             $this->sendMailToGuest($id);
         }
+
         $this->bR->confirmReservation($reservation);
         $this->flashMsg('success', __('Бронирование подтверждено'));  /*  35 */
+
 
         event(new ReservationConfirmedEvent($reservation)); /*  54 */
 
@@ -282,7 +290,136 @@ class BackendController extends Controller
         $room = Reservation::find($id)->room;
         $owner = Reservation::find($id)->room->object->user;
         $addres = Reservation::find($id)->room->object->address;
+
+        $options = new Options();
+        $options->set('defaultFont', 'Arial');
+        $dompdf = new DOMPDF($options);
+        $html =  <<< ENDHTML
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Приятного отдыха</title>
+
+
+<style type="text/css">
+    img {
+    max-width: 100%;
+}
+body {
+    -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6em;
+}
+body {
+    background-color: #f6f6f6;
+}
+@media only screen and (max-width: 640px) {
+    body {
+        padding: 0 !important;
+  }
+  h1 {
+        font-weight: 800 !important; margin: 20px 0 5px !important;
+  }
+  h2 {
+        font-weight: 800 !important; margin: 20px 0 5px !important;
+  }
+  h3 {
+        font-weight: 800 !important; margin: 20px 0 5px !important;
+  }
+  h4 {
+        font-weight: 800 !important; margin: 20px 0 5px !important;
+  }
+  h1 {
+        font-size: 22px !important;
+  }
+  h2 {
+        font-size: 18px !important;
+  }
+  h3 {
+        font-size: 16px !important;
+  }
+  .container {
+        padding: 0 !important; width: 100% !important;
+  }
+  .content {
+        padding: 0 !important;
+  }
+  .content-wrap {
+        padding: 10px !important;
+  }
+  .invoice {
+        width: 100% !important;
+    }
+}
+    .logo-orange {
+        color: rgb(218, 111, 91);
+    }
+
+    .krim_Leto_ru {
+        position: relative;
+        font-size: 26px;
+
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #00315f;
+        text-decoration: none;
+        transition: .5s;
+    }
+</style>
+</head>
+
+<body itemscope itemtype="http://schema.org/EmailMessage" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6em; background-color: #f6f6f6; margin: 0;" bgcolor="#f6f6f6">
+
+<table class="body-wrap" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; background-color: #f6f6f6; margin: 0;" bgcolor="#f6f6f6"><tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;" valign="top"></td>
+    <td class="container" width="600" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; display: block !important; max-width: 600px !important; clear: both !important; margin: 0 auto;" valign="top">
+      <div class="content" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: block; margin: 0 auto; padding: 20px;">
+        <table class="main" width="100%" cellpadding="0" cellspacing="0" itemprop="action" itemscope itemtype="http://schema.org/ConfirmAction" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; background-color: #fff; margin: 0; border: 1px solid #e9e9e9;" bgcolor="#fff"><tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-wrap" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 20px;" valign="top">
+              <meta itemprop="name" content="Confirm Email" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;" /><table width="100%" cellpadding="0" cellspacing="0" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+                                <div>
+                                    <a class="krim_Leto_ru" href="/">Krim-leto<span class="logo-orange">.ru</span>
+                                    </a>
+
+                                </div>
+                                <h1 style="text-align: center">Добро пожаловать в Крым!</h1>
+   <h2 style="text-align: center">Уважаемый $user->name!</h2>
+                <h4>Данное письмо является подтверждением того, что Вы - $user->name  $user->surname, забронировали:</h4>
+
+                                <p>Уникальный номер бронирования: <b>$reservation->id</b></p>
+                                <p>Название объекта размещения: <b>$object->name</b></p>
+                                <p>Номер/Аппартаменты id: <b>$room->id</b></p>
+
+                                <p>Населенный пункт: <b>$city->name</b></p>
+                                <p>Адрес: <b> ул. $addres->street</b> д. <b>$addres->number</b></p>
+                                <p>Дата заезда: <b> $reservation->day_in</b> </p>
+                                <p>Дата выезда: <b> $reservation->day_out</b> </p>
+                                <p>Полная стоимость бронирования: <b>  $reservation->price   руб.</b> </p>
+                                <p>Оплачено: <b>  $reservation->reward   руб.</b> </p>
+                                <p>Остаток оплаты: <b>  $reservation->price - $reservation->reward   руб.</b> </p>
+                                <p>Контактное лицо (в объекте размещения): <b> $owner->name    $owner->surname   </b></p>
+                                <p>тел: <b> $owner->phone   </b></p>
+                                <p>e-mail: <b> $owner->email   </b></p>
+                  </td>
+                </tr><tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" itemprop="handler" itemscope style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+                    <hr>
+                  </td>
+                </tr><tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+                                По всем вопросам обращайтесь по тел. <b>8-800-222-64-99</b> Звонок бесплатный
+</td>
+                </tr></table></td>
+          </tr></table><div class="footer" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; clear: both; color: #999; margin: 0; padding: 20px;">
+          <table width="100%" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;"><td class="aligncenter content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 12px; vertical-align: top; color: #999; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top"><a href="https://krim-leto.ru" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 12px; color: #999; text-decoration: underline; margin: 0;">krim-leto.ru</a></td>
+            </tr></table></div></div>
+    </td>
+    <td style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0;" valign="top"></td>
+  </tr></table></body>
+</html>'
+ENDHTML;
+
+        $dompdf->loadHtml($html);
+        $dompdf->render();
+        $dompdf->stream("hello.pdf");
         Mail::to($user->email)->send(new GuestReservationMail($reservation, $owner, $object, $addres, $city, $user, $room));
+        return redirect()->back();
     }
 
     public function sendMailToGuestRepeat($id)
@@ -306,8 +443,6 @@ class BackendController extends Controller
         if (!\Request::ajax()) /*  35 */
             return redirect()->back(); /*  34 */
     }
-
-
 
 
     /* Lecture 44 */
