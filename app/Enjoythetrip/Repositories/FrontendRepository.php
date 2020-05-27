@@ -379,7 +379,7 @@ class FrontendRepository implements FrontendRepositoryInterface
 
     public function getSearchResults(string $city)
     {
-        return City::with(['rooms.reservations', 'rooms.photos', 'rooms.object.photos', 'rooms.rservices', 'rooms.object.additionals', 'rooms.object.types', 'rooms.object.infrastructures', 'rooms.object.distance', 'rooms.object.city', 'rooms.object.address'])->where('name', $city)->first() ?? false;
+        return City::with(['rooms.reservations', 'rooms.photos', 'rooms.object.photos', 'rooms.object.ratings', 'rooms.rservices', 'rooms.object.additionals', 'rooms.object.types', 'rooms.object.infrastructures', 'rooms.object.distance', 'rooms.object.city', 'rooms.object.address'])->where('name', $city)->first() ?? false;
     }
 
     public function getCity($alias)

@@ -321,9 +321,11 @@ class FrontendController extends Controller
                 $reservationPrice[] = ['checkin' => $request->input('checkin'), 'checkout' => $request->input('checkout'), 'price' => 0, 'interval' => $interval];
 //dd($city);
             foreach ($city as $k => $room) {
+                $rating = $room->object->rating;
+//                dd($rating);
                 $room_id = $room->id;
                 $totalPrice = $this->fG->priceCounter($room_id, $request);
-                $reservationPrice[$k] = ['checkin' => $request->input('checkin'), 'checkout' => $request->input('checkout'), 'price' => $totalPrice, 'interval' => $interval];
+                $reservationPrice[$k] = ['checkin' => $request->input('checkin'), 'checkout' => $request->input('checkout'), 'price' => $totalPrice, 'interval' => $interval, 'rating' => $rating];
             }
 //            }
             return view('frontend.roomsearch', ['h1seo' => $h1seo, 'city' => $city, 'cities' => $this->cities, 'reservationPrice' => $reservationPrice]);

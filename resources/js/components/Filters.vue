@@ -123,16 +123,15 @@
                                             </template>
                                         </template>
                                     </div>
-                                    <div class="star-icon">
-
-                                        <small v-html=room.object.rating></small>
+                                    <div class="star-icon2">
+                                        <small v-html="reservprice[roomIndex].rating"></small>
                                     </div>
                                 </a>
 
                             </div>
                         </div>
-                        <div class="col-lg-8 height container-fluid h-100 align-items-stretch height">
 
+                        <div class="col-lg-8 height container-fluid h-100 align-items-stretch height">
                             <div class="card-main-page__content-wrapper height align-items-stretch">
 
                                 <div class="card-main-page__content-wrapper-row-1">
