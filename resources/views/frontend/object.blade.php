@@ -59,27 +59,36 @@
                 <div class="shadow-sm text-center ">
 
 
-                    <div class="rating__group_1 text-center" title="@guest()Авторизуйтесь, чтобы ваша оценка была учтена @endguest">
+                    <div class="rating__group_1 text-center"
+                         title="@guest()Авторизуйтесь, чтобы ваша оценка была учтена @endguest">
                         @guest() <a href="{{route('login')}}"> @endguest
-                        <div class="rating text-center">
-                            <div class="rating__group" title="Оценок: {{$object->votedCounter()}} @if($object->hasUserMark(Auth::id()))Ваша оценка {{$object->userMark(Auth::id())}}@endif
-                                ">
-                                @for ($i = 1; $i <= 10; $i++)
+                            <div class="rating text-center">
+                                <div class="rating__group"
+                                     title="Оценок: {{$object->votedCounter()}} @if($object->hasUserMark(Auth::id()))Ваша оценка {{$object->userMark(Auth::id())}}@endif
+                                         ">
+                                    @for ($i = 1; $i <= 10; $i++)
 
-                                    <input class="rating__input @auth auth @endauth" type="radio" name="health" id="health-{{$i}}" @guest() disabled  @endguest
-                                           value="{{$i}}"
-                                           @if ($object->ratingCounter() == $i)
-                                           checked
-                                        @endif
-                                    >
-                                    <label class="rating__star" for="health-{{$i}}"></label>
+                                        <input class="rating__input @auth auth @endauth" type="radio" name="health"
+                                               id="health-{{$i}}"
+                                               @if(Auth::guest()) disabled
+                                               @elseif($object->hasUserMark(Auth::id()))
+                                               disabled
+                                               @endif
+                                               value="{{$i}}"
+                                               @if ($object->ratingCounter() == $i)
+                                               checked
+                                            @endif
+                                        >
+                                        <label class="rating__star" for="health-{{$i}}"></label>
 
-                                @endfor
+                                    @endfor
+                                </div>
                             </div>
-                        </div>
 
-                            @if($object->hasUserMark(Auth::id()))<div class="">Ваша оценка {{$object->userMark(Auth::id())}}</div> @else <div class=" rat_text ">рейтинг</div> @endif
-                @guest() </a> @endguest
+                            @if($object->hasUserMark(Auth::id()))
+                                <div class="">Ваша оценка {{$object->userMark(Auth::id())}}</div> @else
+                                <div class=" rat_text ">рейтинг</div> @endif
+                            @guest() </a> @endguest
                     </div>
 
 
@@ -134,28 +143,23 @@
         </div>
 
         <div class="row">
-            <div class="col">
-                <i class="fas fa-heart"></i>
-                <i class="far fa-heart"></i>
-                <i class="far fa-eye"></i>
-            </div>
-            <div class="col">
-{{--                        @auth--}}
+            <div class="col text-right">
+                @auth
 
-                        @if( $object->isLiked())
+                    @if( $object->isLiked())
                         <a href="{{ route('unlike',['id'=>$object->id,'type'=>'App\TouristObject']) }}"
-                        class=""><i class="fas fa-thumbs-up"></i></a>
-                        @else
-                        <a href="{{ route('like',['id'=>$object->id]) }}" class=""><i class="far fa-thumbs-up"></i></a>
-                        @endif
+                           class=""><i class="fas fa-heart"></i></a>
+                    @else
+                        <a href="{{ route('like',['id'=>$object->id]) }}" class=""> <i class="far fa-heart"></i></a>
+                    @endif
 
-{{--                        @else--}}
+                @else
+                    <a href="{{ route('like',['id'=>$object->id,'type'=>'App\TouristObject']) }}"
+                       class=""><i class="far fa-heart"></i></a>
 
-                        <p><a href="{{ route('register') }}">Зарегистрируйтесь</a> или <a href="{{ route('login') }}">Войдите</a>,
-                        чтобы
-                        поставить Лайк!</p>
 
-{{--                        @endauth--}}
+                @endauth
+                {{$object->likesCounter()}}
             </div>
         </div>
 
@@ -243,23 +247,38 @@
 
     <div class="container">
 
-        <h5 class="about__title pt-4">Комментарии и оценки</h5>
+        <h5 class="about__title pt-4">Отзывы</h5>
         <div class="col-xl-4 line mb-4"></div>
 
 
-        {{--@auth--}}
-        {{--<a class="btn choice__button" role="button" data-toggle="collapse" href="#collapseExample"--}}
-        {{--aria-expanded="false"--}}
-        {{--aria-controls="collapseExample">--}}
-        {{--Добавить комментарий и оценку--}}
-        {{--</a>--}}
-        {{--@else--}}
-        {{--<p><a href="{{ route('register') }}">Зарегистрируйтесь</a> или <a href="{{ route('login') }}">Войдите</a>,--}}
-        {{--чтобы--}}
-        {{--оставить отзыв</p>--}}
-        {{--@endauth--}}
 
 
+        @foreach( $object->comments as $comment )
+            <div class="shadow-sm bg-light mb-3 p-2">
+
+                <div class="row">
+
+                    <div class="col m-1">
+                        <span class="font-weight-bold">{{ $comment->user->FullName  }}</span>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                         {{ $comment->content }}
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col">
+
+                    </div>
+                </div>
+
+            </div>
+
+        @endforeach
         <div class="row p-0">
             <div class="col-12 mb-5 mx-0 p-0">
                 <form method="POST"
@@ -274,25 +293,10 @@
 
                         </div>
 
-                        <label for="select" class="col control-label"><h4 class="mt-3">Поставьте оценку
-                                для {{$object->name ?? false}}</h4></label>
                         <div class="row">
-                            <div class="col mx-3 mb-3">
-                                <select name="rating" class="form-control" id="select">
-                                    <option value="10">10</option>
-                                    <option value="9">9</option>
-                                    <option value="8">8</option>
-                                    <option value="7">7</option>
-                                    <option value="6">6</option>
-                                    <option value="5">5</option>
-                                    <option value="4">4</option>
-                                    <option value="3">3</option>
-                                    <option value="2">2</option>
-                                    <option value="1">1</option>
-                                </select>
-                            </div>
-                            <div class="col  mx-3 mb-3">
-                                <button type="submit" class="btn choice__button w-100">Отправить</button>
+
+                            <div class="col-2  m-3 mb-3">
+                                <button type="submit" class="btn choice__button">Отправить</button>
                             </div>
                         </div>
                     </div>
@@ -304,69 +308,23 @@
         </div>
 
 
-        @foreach( $object->comments as $comment )
-            <div class="shadow-sm bg-light mb-3 p-2">
 
-                <div class="row">
+{{--                <section>--}}
+{{--                <h2 class="red">Отзывы о {{$object->name}}</h2>--}}
+{{--                @foreach($object->articles as $article)--}}
+{{--                <div class="articles-list">--}}
+{{--                <h4 class="top-buffer">{{ $article->title }} </h4>--}}
+{{--                <p><b> {{ $article->user->FullName }}</b>--}}
+{{--                <i>{{ $article->created_at }} </i>--}}
+{{--                </p>--}}
+{{--                <p>{{ str_limit($article->content,10000) }}  </p> <a--}}
+{{--                href="{{ route('article',['id'=>$article->id]) }}">More</a>--}}
+{{--                </div>--}}
 
-                    <div class="col">
-                        <span class="font-weight-bold">{{ $comment->user->FullName  }}</span> поставил
-                        <small> {!! $comment->ratingStar !!}
-                            <i class="far fa-star"></i></small>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <span class="font-weight-bold">И прокомментировал:  </span> {{ $comment->content }}
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col">
-
-                    </div>
-                </div>
-
-            </div>
-
-        @endforeach
+{{--                @endforeach--}}
+{{--                </section>--}}
 
 
-
-
-        {{--        <section>--}}
-        {{--        <h2 class="red">Отзывы о {{$object->name}}</h2>--}}
-        {{--        @foreach($object->articles as $article)--}}
-        {{--        <div class="articles-list">--}}
-        {{--        <h4 class="top-buffer">{{ $article->title }} </h4>--}}
-        {{--        <p><b> {{ $article->user->FullName }}</b>--}}
-        {{--        <i>{{ $article->created_at }} </i>--}}
-        {{--        </p>--}}
-        {{--        <p>{{ str_limit($article->content,10000) }}  </p> <a--}}
-        {{--        href="{{ route('article',['id'=>$article->id]) }}">More</a>--}}
-        {{--        </div>--}}
-
-        {{--        @endforeach--}}
-        {{--        </section>--}}
-
-    <!-- Кнопка лайка - дизлайка -->
-        {{--        @auth--}}
-
-        {{--        @if( $object->isLiked())--}}
-        {{--        <a href="{{ route('unlike',['id'=>$object->id,'type'=>'App\TouristObject']) }}"--}}
-        {{--        class=""><i class="fas fa-thumbs-up"></i></a>--}}
-        {{--        @else--}}
-        {{--        <a href="{{ route('like',['id'=>$object->id]) }}" class=""><i class="far fa-thumbs-up"></i></a>--}}
-        {{--        @endif--}}
-
-        {{--        @else--}}
-
-        {{--        <p><a href="{{ route('register') }}">Зарегистрируйтесь</a> или <a href="{{ route('login') }}">Войдите</a>,--}}
-        {{--        чтобы--}}
-        {{--        поставить Лайк!</p>--}}
-
-        {{--        @endauth--}}
 
     </div>
     <div class="ob-id text-white">{{$object->id}}</div>

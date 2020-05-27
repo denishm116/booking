@@ -113,7 +113,7 @@ class TouristObject extends Model
 
     public function userMark($userId)
     {
-    return $this->ratings()->where('user_id', $userId)->where('ratingable_id', $this->id)->first()->rating;
+        return $this->ratings()->where('user_id', $userId)->where('ratingable_id', $this->id)->first()->rating;
     }
 
     public function changeRating($userId, $rating)
@@ -156,6 +156,17 @@ class TouristObject extends Model
     {
         return count($this->ratings()->where('ratingable_id', $this->id)->get());
     }
+
+    /**
+     * @return array
+     */
+    public function likesCounter()
+    {
+        $likeCounter = $this->users()->where('likeable_id', $this->id)->get();
+        return count($likeCounter);
+    }
+
+
 
 //    public function scopeRating()
 //    {

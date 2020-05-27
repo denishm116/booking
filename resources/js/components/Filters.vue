@@ -124,7 +124,7 @@
                                         </template>
                                     </div>
                                     <div class="star-icon">
-                                        <small v-html="room.object.rating"></small>
+                                        <small v-html="room.object.ratingForCard"></small>
                                     </div>
                                 </a>
 

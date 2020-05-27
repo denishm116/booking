@@ -436,7 +436,7 @@ class FrontendRepository implements FrontendRepositoryInterface
 
         $comment->content = $request->input('content');
 
-        $comment->rating = $type == 'App\TouristObject' ? $request->input('rating') : 0;
+        $comment->rating = 9;/*$type == 'App\TouristObject' ? $request->input('rating') : 0;*/
 
         $comment->user_id = $request->user()->id;
 
@@ -444,17 +444,6 @@ class FrontendRepository implements FrontendRepositoryInterface
 
         $commentable->comments()->save($comment);
 
-        $arr = [];
-        foreach ($object->comments as $comment) {
-            $arr[] = $comment->rating;
-        }
-        if (count($arr) == 0)
-            $rating = intdiv(10 + $comment->rating, 2);
-        else
-            $rating = intdiv(array_sum($arr), count($arr));
-
-        $object->rating = $rating;
-        $object->save();
     }
 
     public function makeReservation($room_id, $city_id, $day_in, $day_out, $totalPrice, $comission, $reward, $description, $paid)

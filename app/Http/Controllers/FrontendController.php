@@ -268,7 +268,6 @@ class FrontendController extends Controller
         $alias = City::where('name', $name)->first()->alias;
         $h1seo = $this->fG->seoCityArray()[$alias];
 
-
         return view('frontend.object', ['h1seo' => $h1seo, 'object' => $object, 'cities' => $this->cities]);
     }
 

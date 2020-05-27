@@ -15,7 +15,7 @@
 
                          alt="{{ str_limit($room->description,150) }}">
                     <div class="star-icon">
-                        <small> {!! $room->object->rating ?? null!!}</small>
+                        <small> {!!$room->object->ratingForCard!!}</small>
                     </div>
                 </div>
 

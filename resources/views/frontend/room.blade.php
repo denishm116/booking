@@ -47,9 +47,36 @@
 
 
             <div class="col-lg-4 col-md-6 col-12 shadow-lg bradius text-black">
-                <div class="col pt-3 text-center">
-                    <h4 class="comfort-info">Рейтинг</h4>
-                    <p class="text-center">{!! $room->object->rating !!}</p>
+                <div class="rating__group_1 text-center"
+                     title="@guest()Авторизуйтесь, чтобы ваша оценка была учтена @endguest">
+                    @guest() <a href="{{route('login')}}"> @endguest
+                        <div class="rating text-center">
+                            <div class="rating__group"
+                                 title="Оценок: {{$room->object->votedCounter()}} @if($room->object->hasUserMark(Auth::id()))Ваша оценка {{$room->object->userMark(Auth::id())}}@endif
+                                     ">
+                                @for ($i = 1; $i <= 10; $i++)
+
+                                    <input class="rating__input @auth auth @endauth" type="radio" name="health"
+                                           id="health-{{$i}}"
+                                           @if(Auth::guest()) disabled
+                                           @elseif($room->object->hasUserMark(Auth::id()))
+                                           disabled
+                                           @endif
+                                           value="{{$i}}"
+                                           @if ($room->object->ratingCounter() == $i)
+                                           checked
+                                        @endif
+                                    >
+                                    <label class="rating__star" for="health-{{$i}}"></label>
+
+                                @endfor
+                            </div>
+                        </div>
+
+                        @if($room->object->hasUserMark(Auth::id()))
+                            <div class="">Ваша оценка {{$room->object->userMark(Auth::id())}}</div> @else
+                            <div class=" rat_text ">рейтинг</div> @endif
+                        @guest() </a> @endguest
                 </div>
                 <div class="row">
 
@@ -101,23 +128,27 @@
 
 
         </div>
+        <div class="row">
+            <div class="col text-right">
+                @auth
+
+                    @if( $room->object->isLiked())
+                        <a href="{{ route('unlike',['id'=>$room->object->id,'type'=>'App\TouristObject']) }}"
+                           class=""><i class="fas fa-heart"></i></a>
+                    @else
+                        <a href="{{ route('like',['id'=>$room->object->id]) }}" class=""> <i class="far fa-heart"></i></a>
+                    @endif
+
+                @else
+                    <a href="{{ route('like',['id'=>$room->object->id,'type'=>'App\TouristObject']) }}"
+                       class=""><i class="far fa-heart"></i></a>
+
+
+                @endauth
+                {{$room->object->likesCounter()}}
+            </div>
+        </div>
     </div>
-
-    {{--@foreach( $room->photos->chunk(4) as $chunked_photos ) <!-- Lecture 20 -->--}}
-
-    {{--<div class="row top-buffer">--}}
-
-    {{--@foreach($chunked_photos as $photo) <!-- Lecture 20 -->--}}
-
-    {{--<div class="col-md-4">--}}
-    {{--<img class="img-responsive" src="{{ $photo->path ?? $placeholder /* Lecture 20 */  }}" alt="">--}}
-    {{--</div>--}}
-
-    {{--@endforeach <!-- Lecture 20 -->--}}
-
-    {{--</div>--}}
-
-    {{--@endforeach <!-- Lecture 20 -->--}}
 
     <div class="container mt-5">
         <section>
@@ -129,10 +160,6 @@
             <div class="container">
                 <div class="row my-4 shadow-sm bg-light">
 
-                    {{--<div class="col-lg-2 col-sm-12 text-center">--}}
-                    {{--<img class="image-small" src="{{$room->photos->first()->path ?? $placeholder}}" class=""--}}
-                    {{--alt="{{$room->object->name}}">--}}
-                    {{--</div>--}}
                     <div class="col-lg-12">
 
                         <div class="row">
@@ -202,29 +229,6 @@
                     @endfor
 
 
-                    {{--@for($i = 1; $i <= 12; $i++)--}}
-                    {{--@php--}}
-                    {{--$room = (isset($room)) ? $room : false; // это чтобы шторм не ругался, можно и удалить--}}
-                    {{--$periodStartStr = 'period'.$i.'start';--}}
-                    {{--$periodEndStr = 'period'.$i.'end';--}}
-                    {{--$periodPriceStr = 'price'.$i;--}}
-                    {{--if($room){--}}
-                    {{--$periodStart = $room->price()->first()->$periodStartStr;--}}
-                    {{--$periodEnd = $room->price()->first()->$periodEndStr;--}}
-                    {{--$periodPrice = $room->price()->first()->$periodPriceStr;--}}
-                    {{--}--}}
-                    {{--@endphp--}}
-                    {{--@isset($periodPrice)--}}
-                    {{--<div class="col-12 col-lg-2 bg-light p-1"><h6>{{$i}} период</h6>--}}
-                    {{--<div>с {{ strftime('%d-%b-%Y', strtotime($periodStart))}} </div>--}}
-                    {{--по--}}
-                    {{--{{ strftime('%d-%b-%Y', strtotime($periodEnd))}}--}}
-
-                    {{--<div class="bg-light p-1"><h6>{{ $periodPrice}} руб.</h6></div>--}}
-                    {{--</div>--}}
-                    {{--@endisset--}}
-                    {{--@endfor--}}
-
 
                 </div>
                 @endisset
@@ -242,9 +246,6 @@
                                 {{ $novalidate }} action="{{ route('makeReservation',['room_id'=>$room->id,'city_id'=>$room->object->city->id])}}"
                                 method="POST">
 
-                                {{--                <form {{ $novalidate }} action="{{ route('preReservation', ['room_id'=>$room->id])}}" method="POST">--}}
-
-
                                 <div class="form-group w-100">
                                     <label for="checkin">Дата заезда</label>
                                     <input required name="checkin" type="text" class="form-control datepicker w-100"
@@ -258,12 +259,8 @@
                                            placeholder="" autocomplete="off">
                                 </div>
 
-
                                 @auth()
                                     @if( Auth::id() == $room->object->user_id || Auth::user()->hasRole(['admin']))
-
-                                        {{--<h2> {{Auth::id()}} Описание</h2>--}}
-                                        {{--<h2> {{$room->object->user_id}} Описание</h2>--}}
 
                                         <div class="form-group">
                                             <label for="checkout">Пожелания</label>
@@ -272,12 +269,7 @@
                                         </div>
                                     @endif
                                 @endauth
-                              {{--@if(Auth::guest())--}}
-                                    {{--<p><a class="btn  choice__button w-100 mt-3" href="{{ route('login') }}">войти и забронировать</a></p>--}}
-                                {{--@else--}}
                                     <button type="submit" class="btn  choice__button w-100 mt-3">Забронировать</button>
-                                {{--@endif--}}
-
 
                                 <h3 class="text-danger text-center m-2">{{ Session::get('reservationMsg') }}</h3>
                                 {{ csrf_field() }}
@@ -306,80 +298,26 @@
             </div>
             <div class="container">
 
-                <h5 class="about__title pt-4">Комментарии и оценки</h5>
+                <h5 class="about__title pt-4">Отзывы</h5>
                 <div class="col-xl-4 line mb-4"></div>
 
 
-                {{--@auth--}}
-                {{--<a class="btn choice__button" role="button" data-toggle="collapse" href="#collapseExample"--}}
-                {{--aria-expanded="false"--}}
-                {{--aria-controls="collapseExample">--}}
-                {{--Добавить комментарий и оценку--}}
-                {{--</a>--}}
-                {{--@else--}}
-                {{--<p><a href="{{ route('register') }}">Зарегистрируйтесь</a> или <a href="{{ route('login') }}">Войдите</a>,--}}
-                {{--чтобы--}}
-                {{--оставить отзыв</p>--}}
-                {{--@endauth--}}
 
-
-                <div class="row p-0">
-                    <div class="col-12 mb-5 mx-0 p-0">
-                        <form method="POST" action="{{ route('addComment',['object_id'=>$room->object->id])}}">
-                            <div class="shadow-sm p-1 m-3">
-
-                                <label for="textArea" class="col control-label"><h4>Ваш отзыв
-                                        о {{$room->object->name}} </h4>
-                                </label>
-                                <div class="col">
-                                <textarea required name="content" class="form-control" rows="3"
-                                          id="textArea"></textarea>
-
-                                </div>
-
-                                <label for="select" class="col control-label"><h4 class="mt-3">Поставьте оценку
-                                        для {{$room->object->name}}</h4></label>
-                                <div class="row">
-                                    <div class="col mx-3 mb-3">
-                                        <select name="rating" class="form-control" id="select">
-                                            <option value="10">10</option>
-                                            <option value="9">9</option>
-                                            <option value="8">8</option>
-                                            <option value="7">7</option>
-                                            <option value="6">6</option>
-                                            <option value="5">5</option>
-                                            <option value="4">4</option>
-                                            <option value="3">3</option>
-                                            <option value="2">2</option>
-                                            <option value="1">1</option>
-                                        </select>
-                                    </div>
-                                    <div class="col  mx-3 mb-3">
-                                        <button type="submit" class="btn choice__button w-100">Отправить</button>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            {{ csrf_field() }}
-                        </form>
-                    </div>
-                </div>
 
                 @foreach( $room->object->comments as $comment )
                     <div class="shadow-sm bg-light mb-3 p-2">
 
                         <div class="row">
 
-                            <div class="col">
-                                <span class="font-weight-bold">{{ $comment->user->FullName  }}</span> поставил
-                                <small> {!! $comment->ratingStar !!}
-                                    <i class="far fa-star"></i></small>
+                            <div class="col m-1">
+                                <span class="font-weight-bold">{{ $comment->user->FullName  }}</span>
+
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <span class="font-weight-bold">И прокомментировал:  </span> {{ $comment->content }}
+                                {{ $comment->content }}
+
                             </div>
                         </div>
 
@@ -393,43 +331,39 @@
                     </div>
 
                 @endforeach
+                <div class="row p-0">
+                    <div class="col-12 mb-5 mx-0 p-0">
+                        <form method="POST"
+                              action="{{ route('addComment',['object_id'=>$room->object->id])/* Lecture 25 */ }}">
+                            <div class="shadow-sm p-1 m-3">
 
-                {{--<section>--}}
-                {{--<h2 class="red">Отзывы о {{$object->name}}</h2>--}}
-                {{--@foreach($object->articles as $article) <!-- Lecture 16 -->--}}
-                {{--<div class="articles-list">--}}
-                {{--<h4 class="top-buffer">{{ $article->title }} <!-- Lecture 16 --></h4>--}}
-                {{--<p><b> {{ $article->user->FullName }} <!-- Lecture 16 --></b>--}}
-                {{--<i>{{ $article->created_at }} <!-- Lecture 16 --></i>--}}
-                {{--</p>--}}
-                {{--<p>{{ str_limit($article->content,10000) }} <!-- Lecture 16 --> </p> <a--}}
-                {{--href="{{ route('article',['id'=>$article->id]/* Lecture 22 */) }}">More</a>--}}
-                {{--</div>--}}
+                                <label for="textArea" class="col control-label"><h4>Ваш отзыв
+                                        о {{$room->object->name ?? false}} </h4></label>
+                                <div class="col">
+                                <textarea required name="content" class="form-control" rows="3"
+                                          id="textArea"></textarea>
 
-                {{--@endforeach <!-- Lecture 16 -->--}}
-                {{--</section>--}}
+                                </div>
 
-            <!-- Кнопка лайка - дизлайка -->
-{{--                @auth--}}
+                                <div class="row">
 
-{{--                @if( $room->object->isLiked() )--}}
-{{--                <a href="{{ route('unlike',['id'=>$room->object->id,'type'=>'App\TouristObject']) }}"--}}
-{{--                class="btn btn-primary btn-xs top-buffer">Дизлайкнуть</a>--}}
-{{--                @else--}}
-{{--                <a href="{{ route('like',['id'=>$room->object->id]) }}" class="btn btn-primary btn-xs top-buffer">Лайкнуть--}}
-{{--                объект</a>--}}
-{{--                @endif--}}
+                                    <div class="col-2  m-3 mb-3">
+                                        <button type="submit" class="btn choice__button">Отправить</button>
+                                    </div>
+                                </div>
+                            </div>
 
-{{--                @else--}}
 
-{{--                <p><a href="{{ route('register') }}">Зарегистрируйтесь</a> или <a href="{{ route('login') }}">Войдите</a>,--}}
-{{--                чтобы--}}
-{{--                поставить Лайк!</p>--}}
-
-{{--                @endauth--}}
+                            {{ csrf_field() }}
+                        </form>
+                    </div>
+                </div>
 
             </div>
     </div>
+
+
+    <div class="ob-id text-white">{{$room->object->id}}</div>
             @endsection
 
             @push('scripts')
