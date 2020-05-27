@@ -281,6 +281,14 @@ class BackendController extends Controller
             return redirect()->back(); /*  35 */
     }
 
+    public function removeConfirmation($id)
+    {
+        $reservation = $this->bR->getReservation($id);
+        $this->authorize('reservation', $reservation);
+        $this->bR->removeConformirmation($reservation);
+        return redirect()->back();
+    }
+
     public function sendMailToGuest($id)
     {
         $reservation = $this->bR->getReservation($id);
@@ -290,7 +298,9 @@ class BackendController extends Controller
         $room = Reservation::find($id)->room;
         $owner = Reservation::find($id)->room->object->user;
         $addres = Reservation::find($id)->room->object->address;
+
         $cost = $reservation->price - $reservation->reward;
+        $img = 'https://krim-leto.ru/images/placeholder.jpg';
         $options = new Options();
         $options->set('defaultFont', 'dejavu sans');
         $dompdf = new DOMPDF($options);
@@ -304,9 +314,7 @@ class BackendController extends Controller
 
 
 <style type="text/css">
-    img {
-    max-width: 100%;
-}
+
 body {
     -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6em;
 }
@@ -384,22 +392,25 @@ body {
                                 <h1 style="text-align: center">Добро пожаловать в Крым!</h1>
    <h2 style="text-align: center">Уважаемый $user->name!</h2>
                 <h4>Данное письмо является подтверждением того, что Вы - $user->name  $user->surname, забронировали:</h4>
+                            <div>
+                                Уникальный номер бронирования: <b>$reservation->id</b><br>
+                                Название объекта размещения: <b>$object->name</b><br>
+                                Номер/Аппартаменты id: <b>$room->id</b><br>
 
-                                <p>Уникальный номер бронирования: <b>$reservation->id</b></p>
-                                <p>Название объекта размещения: <b>$object->name</b></p>
-                                <p>Номер/Аппартаменты id: <b>$room->id</b></p>
-
-                                <p>Населенный пункт: <b>$city->name</b></p>
-                                <p>Адрес: <b> ул. $addres->street</b> д. <b>$addres->number</b></p>
-                                <p>Дата заезда: <b> $reservation->day_in</b> </p>
-                                <p>Дата выезда: <b> $reservation->day_out</b> </p>
-                                <p>Полная стоимость бронирования: <b>  $reservation->price   руб.</b> </p>
-                                <p>Оплачено: <b>  $reservation->reward   руб.</b> </p>
-                                <p>Остаток оплаты: <b>  $cost  руб.</b> </p>
+                                Населенный пункт: <b>$city->name</b><br>
+                                Адрес: <b> ул. $addres->street</b> д. <b>$addres->number</b><br>
+                                Дата заезда: <b> $reservation->day_in</b> <br>
+                                Дата выезда: <b> $reservation->day_out</b> <br>
+                                Полная стоимость бронирования: <b>  $reservation->price   руб.</b> <br>
+                                Оплачено: <b>  $reservation->reward   руб.</b> <br>
+                                Остаток оплаты: <b>  $cost  руб.</b> <br></div>
                                 <div style="background: #90dbf6; padding: 5px;">
-                                <p >Контактное лицо (в объекте размещения): <b> $owner->name    $owner->surname   </b></p>
-                                <p>тел: <b> $owner->phone   </b></p>
-                                <p>e-mail: <b> $owner->email   </b></p></div>
+                                Контактное лицо (в объекте размещения): <b> $owner->name    $owner->surname   </b><br>
+                                тел: <b> $owner->phone   </b><br>
+                                e-mail: <b> $owner->email   </b></div><br>
+                                <div style="height: 150px; width: 100%;">
+                                <img align="right" src="images/pechat.png">
+                                </div>
                   </td>
                 </tr><tr style="    box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" itemprop="handler" itemscope style="    box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
 
@@ -413,11 +424,11 @@ ENDHTML;
 
         $dompdf->loadHtml($html);
         $dompdf->render();
-//        $dompdf->stream("werlcome.pdf");
-        $output = $dompdf->output();
-        file_put_contents("file.pdf", $output);
+        $dompdf->stream("werlcome.pdf");
+//        $output = $dompdf->output();
+//        file_put_contents("tickets/".$reservation->id.$user->email.".pdf", $output);
 
-        Mail::to($user->email)->send(new GuestReservationMail($reservation, $owner, $object, $addres, $city, $user, $room));
+//        Mail::to($user->email)->send(new GuestReservationMail($reservation, $owner, $object, $addres, $city, $user, $room));
         return redirect()->back()->with('message', 'Подтверждено');
     }
 

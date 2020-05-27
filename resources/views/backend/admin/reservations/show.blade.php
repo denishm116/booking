@@ -5,7 +5,7 @@
         <ul class="nav nav-tabs mb-3">
 
             <li class="nav-item"><a class="nav-link" href="{{route('index')}}">Пользователи</a></li>
-        
+
             <li class="nav-item"><a class="nav-link active" href="{{route('reservationIndex')}}">Бронирования</a></li>
 
         </ul>
@@ -100,7 +100,7 @@
             </div>
             <div class="row pb-2">
                 <div class="col-2 bg-white"><b>Статус</b></div>
-                <div class="col-5 bg-white">
+                <div class="col-2 bg-white">
 
 
                         @if ($reservation->isConfirmed())
@@ -110,8 +110,17 @@
                         @endif
 
                 </div>
+               <div class="col-4 bg-white">
 
-                <div class="col-5 bg-white">
+
+                        @if ($reservation->isConfirmed())
+
+                            <a href="{{route('removeConfirmation', ['id' => $reservation->id])}}" class="btn btn-sm btn-danger">Убрать подтверждение</a>
+                        @endif
+
+                </div>
+
+                <div class="col-2 bg-white">
                     <form method="POST" action="{{route('confirmReservation', ['id' => $reservation->id])}}">
                         @csrf
 

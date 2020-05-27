@@ -129,6 +129,15 @@ class BackendRepository implements BackendRepositoryInterface
     {
         return $reservation->update(['status' => true]);
     }
+    public function removeConformirmation(Reservation $reservation)
+    {
+        return $reservation->update(['status' => false]);
+    }
+    /* Lecture 35 */
+    public function removeConfirmation(Reservation $reservation)
+    {
+        return $reservation->update(['status' => true]);
+    }
 
     /* Lecture 37 */
     public function getCities()

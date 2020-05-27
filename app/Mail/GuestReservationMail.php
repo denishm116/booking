@@ -33,6 +33,6 @@ class GuestReservationMail extends Mailable
 
     public function build()
     {
-        return $this->view('mail.ownerafterpay')->subject($this->user->name. ', добро пожаловать в Крым! Ваш электронный билет.');
+        return $this->view('mail.ownerafterpay')->subject($this->user->name. ', добро пожаловать в Крым! Ваш электронный билет.')->attach("tickets/".$this->reservation->id.$this->user->email.".pdf");
     }
 }

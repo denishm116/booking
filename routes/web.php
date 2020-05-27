@@ -92,7 +92,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::post('/addReservation/{id?}', 'ReservationController@create')->name('addReservation');
         Route::get('/showReservation/{id}', 'ReservationController@show')->name('showReservation');
         Route::get('/removeReservation/{id?}', 'ReservationController@removeReservation')->name('removeReservation');
-//        Route::post('/confirmReservation/{id}', 'UserController@confirmReservation')->name('confirmReservation');
+        Route::get('/removeConfirmation/{id}', 'BackendController@removeConfirmation')->name('removeConfirmation');
     });
 
     Route::group(['prefix' => 'ajax'], function () {
