@@ -300,7 +300,6 @@ class BackendController extends Controller
         $addres = Reservation::find($id)->room->object->address;
 
         $cost = $reservation->price - $reservation->reward;
-        $img = 'https://krim-leto.ru/images/placeholder.jpg';
         $options = new Options();
         $options->set('defaultFont', 'dejavu sans');
         $dompdf = new DOMPDF($options);
