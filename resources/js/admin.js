@@ -148,12 +148,11 @@ var App = {
 
 
         $('.hidden_' + App.calendar_id + " .reservation_data_room_number").html(response.room_number);
-
         $('.hidden_' + App.calendar_id + " .reservation_data_day_in").html(response.day_in);
         $('.hidden_' + App.calendar_id + " .reservation_data_day_out").html(response.day_out);
         $('.hidden_' + App.calendar_id + " .reservation_data_person").html(response.reservationNumber);
+        $('.hidden_' + App.calendar_id + " .reservation_data_person_").attr('href', response.confirmResLink);
 
-        // $('.hidden_' + App.calendar_id + " .reservation_data_person").attr('href', response.userLink);
         $('.hidden_' + App.calendar_id + " .reservation_data_delete_reservation").attr('href', response.deleteResLink);
         $('.hidden_' + App.calendar_id + " .reservation_data_delete_reservation_admin").attr('href', response.deleteResLink); /* Lecture 33 */
         $('.hidden_' + App.calendar_id + " .reservation_data_delete_reservation_admin").html('<i class="fas fa-trash"></i>'); /* Lecture 33 */

@@ -32,17 +32,13 @@ class ReservationController extends Controller
 
     public function reservationIndex(Request $request)
     {
-
-        $reservations = Reservation::with(['user', 'room', 'room.object.user'])->paginate(50);
-
-        return view('backend.admin.reservations.index', compact('reservations'));
-
+        $reservations = Reservation::with(['user', 'room', 'room.object.user'])->orderByDesc('id')->paginate(50);
+       return view('backend.admin.reservations.index', compact('reservations'));
     }
 
     public function show($id)
     {
         $reservation = Reservation::with(['user', 'room', 'room.object.user'])->where('id', $id)->first();
-
         return view('backend.admin.reservations.show', compact('reservation'));
     }
 

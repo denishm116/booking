@@ -56,8 +56,8 @@
 
         const checkout = new window.YandexCheckout({
             confirmation_token: '{{$token}}', //Токен, который перед проведением оплаты нужно получить от Яндекс.Кассы
-            // return_url: 'https://krim-leto.ru/ownerdata', //Ссылка на страницу завершения оплаты
-            return_url: 'http://booking/ownerdata', //Ссылка на страницу завершения оплаты
+            return_url: 'https://krim-leto.ru/ownerdata', //Ссылка на страницу завершения оплаты
+            // return_url: 'http://booking/ownerdata', //Ссылка на страницу завершения оплаты
             error_callback(error) {
                        function f() {
                            alert(error)

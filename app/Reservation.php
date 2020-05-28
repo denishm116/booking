@@ -64,9 +64,10 @@ class Reservation extends Model
 
     public function getCity()
     {
-
         return City::findOrFail($this->city_id);
     }
+
+
 
 }
 

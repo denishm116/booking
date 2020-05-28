@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 use App\City;
+use App\Enjoythetrip\Services\MakePdf;
 use App\Reservation;
 use App\Room;
 
@@ -259,16 +260,23 @@ class BackendController extends Controller
         return redirect()->back(); /* Lecture 48 */
     }
 
-    /*  33 */
+
     public function confirmReservation($id)
     {
         $reservation = $this->bR->getReservation($id);
+        $object = Reservation::find($id)->room->object;
+        $user = User::findOrFail($reservation->user_id);
+        $city = City::find($reservation->city_id);
+        $room = Reservation::find($id)->room;
+        $owner = Reservation::find($id)->room->object->user;
+        $addres = Reservation::find($id)->room->object->address;
         $this->authorize('reservation', $reservation); /*  35 */
 
         if ($paymentId = $this->bR->getPaymentId($reservation)) {
             $conf = new YandexPayment();
             $conf->confirmPayment($paymentId);
-            $this->sendMailToGuest($id);
+            $this->makePdf($reservation, $object, $user, $city, $room, $owner, $addres);
+            $this->sendMailToGuest($reservation, $object, $user, $city, $room, $owner, $addres);
         }
 
         $this->bR->confirmReservation($reservation);
@@ -289,7 +297,20 @@ class BackendController extends Controller
         return redirect()->back();
     }
 
-    public function sendMailToGuest($id)
+    public function makePdf($reservation, $object, $user, $city, $room, $owner, $addres)
+    {
+        $pdf = new makePdf($reservation, $object, $user, $city, $room, $owner, $addres);
+        return $pdf->makePdf();
+    }
+
+    public function sendMailToGuest($reservation, $object, $user, $city, $room, $owner, $addres)
+    {
+
+        Mail::to($user->email)->send(new GuestReservationMail($reservation, $owner, $object, $addres, $city, $user, $room));
+
+    }
+
+    public function sendMailToGuestRepeat($id)
     {
         $reservation = $this->bR->getReservation($id);
         $object = Reservation::find($id)->room->object;
@@ -298,142 +319,8 @@ class BackendController extends Controller
         $room = Reservation::find($id)->room;
         $owner = Reservation::find($id)->room->object->user;
         $addres = Reservation::find($id)->room->object->address;
-
-        $cost = $reservation->price - $reservation->reward;
-        $options = new Options();
-        $options->set('defaultFont', 'dejavu sans');
-        $dompdf = new DOMPDF($options);
-        $html = <<< ENDHTML
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width" />
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Приятного отдыха</title>
-
-
-<style type="text/css">
-
-body {
-    -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6em;
-}
-body {
-    background-color: #f6f6f6;
-}
-@media only screen and (max-width: 640px) {
-    body {
-        padding: 0 !important;
-  }
-  h1 {
-        font-weight: 800 !important; margin: 20px 0 5px !important;
-  }
-  h2 {
-        font-weight: 800 !important; margin: 20px 0 5px !important;
-  }
-  h3 {
-        font-weight: 800 !important; margin: 20px 0 5px !important;
-  }
-  h4 {
-        font-weight: 800 !important; margin: 20px 0 5px !important;
-  }
-  h1 {
-        font-size: 22px !important;
-  }
-  h2 {
-        font-size: 18px !important;
-  }
-  h3 {
-        font-size: 16px !important;
-  }
-  .container {
-        padding: 15px !important; width: 60% !important;
-  }
-  .content {
-        padding: 0 !important;
-  }
-  .content-wrap {
-        padding: 10px !important;
-  }
-  .invoice {
-        width: 100% !important;
-    }
-}
-    .logo-orange {
-        color: rgb(218, 111, 91);
-    }
-
-    .krim_Leto_ru {
-        position: relative;
-        font-size: 26px;
-
-        font-weight: bold;
-        text-transform: uppercase;
-        color: #00315f;
-        text-decoration: none;
-        transition: .5s;
-    }
-    .margin {
-    margin: 0 auto;
-    }
-</style>
-</head>
-
-<body style="box-sizing: border-box; font-size: 14px; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; !important; height: 100%; line-height: 1.6em; margin: 0;">
-
-<table width="90%" height="90%" cellpadding="0" cellspacing="0" style="box-sizing: border-box; font-size: 14px; margin: 0 auto;  bgcolor="#f6f6f6"">
-<tr style="box-sizing: border-box; font-size: 14px; margin: 0;">
-<td   width="90%" style=" box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 15px; padding: 0 0 20px;" valign="top">
-                                <div style="margin: 20px 0">
-                                    <a class="krim_Leto_ru" href="/">Krim-leto<span class="logo-orange">.ru</span>
-                                    </a>
-
-                                </div>
-                                <h1 style="text-align: center">Добро пожаловать в Крым!</h1>
-   <h2 style="text-align: center">Уважаемый $user->name!</h2>
-                <h4>Данное письмо является подтверждением того, что Вы - $user->name  $user->surname, забронировали:</h4>
-                            <div>
-                                Уникальный номер бронирования: <b>$reservation->id</b><br>
-                                Название объекта размещения: <b>$object->name</b><br>
-                                Номер/Аппартаменты id: <b>$room->id</b><br>
-
-                                Населенный пункт: <b>$city->name</b><br>
-                                Адрес: <b> ул. $addres->street</b> д. <b>$addres->number</b><br>
-                                Дата заезда: <b> $reservation->day_in</b> <br>
-                                Дата выезда: <b> $reservation->day_out</b> <br>
-                                Полная стоимость бронирования: <b>  $reservation->price   руб.</b> <br>
-                                Оплачено: <b>  $reservation->reward   руб.</b> <br>
-                                Остаток оплаты: <b>  $cost  руб.</b> <br></div>
-                                <div style="background: #90dbf6; padding: 5px;">
-                                Контактное лицо (в объекте размещения): <b> $owner->name    $owner->surname   </b><br>
-                                тел: <b> $owner->phone   </b><br>
-                                e-mail: <b> $owner->email   </b></div><br>
-                                <div style="height: 150px; width: 100%;">
-                                <img align="right" src="images/pechat.png">
-                                </div>
-                  </td>
-                </tr><tr style="    box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" itemprop="handler" itemscope style="    box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-
-                  </td>
-                </tr><tr style="    box-sizing: border-box; font-size: 14px; margin: 0;"><td class="content-block" style="    box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-                                По всем вопросам обращайтесь по тел. <b>8-800-222-64-99</b> Звонок бесплатный
-</td>
-                </tr></table></body>
-</html>'
-ENDHTML;
-
-        $dompdf->loadHtml($html);
-        $dompdf->render();
-        $dompdf->stream("werlcome.pdf");
-//        $output = $dompdf->output();
-//        file_put_contents("tickets/".$reservation->id.$user->email.".pdf", $output);
-
-//        Mail::to($user->email)->send(new GuestReservationMail($reservation, $owner, $object, $addres, $city, $user, $room));
-        return redirect()->back()->with('message', 'Подтверждено');
-    }
-
-    public function sendMailToGuestRepeat($id)
-    {
-        $this->sendMailToGuest($id);
+        $this->authorize('reservation', $reservation); /*  35 */
+        $this->sendMailToGuest($reservation, $object, $user, $city, $room, $owner, $addres);
         return redirect()->back()->with('message', 'Письмо отправлено');
     }
 

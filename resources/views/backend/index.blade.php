@@ -209,7 +209,7 @@
                                         </div>
                                         @if( Auth::user()->hasRole(['tourist']) && $reservation->status)
                                             <div class="col text-center">
-                                                <a href="{{route('sendMailToGuestRepeat',['id'=>$reservation->id])}}"><i
+                                                <a class="reservation_data_person_" href="{{route('sendMailToGuestRepeat',['id'=>$reservation->id])}}"><i
                                                         class="fas fa-envelope-open-text"></i> Выслать билет
                                                     повторно</a>
                                             </div>
@@ -234,8 +234,6 @@
     @if(count($object->rooms) == 0)
                 @push('scripts')
                     <script>
-
-
                         const modal = $$.modal({
                             modalHeaderText: 'Необходимо добавить <b>номер</b> к <b>"{{$object->name}}"</b>',
                             modalBodyText: 'Для того, чтобы объект <b>"{{$object->name}}"</b> начал отображаться в поиске, необходимо добавить хотябы 1 номер с описанием, и стоимостью. Даже если вы сдаете квартиру или дом, все равно нужно добавить номер, как будто у Вас отель, в котором 1 номер. Ведь нельзя указать стоимость отеля за сутки, можно указать только стоимость номера за сутки :)',
@@ -249,15 +247,6 @@
                 @endpush
 @endif
     @endforeach
-
-
-
-
-
-
-
-
-
 
         @if( Auth::user()->hasRole(['admin']) )
             {{ $objects->links() }}

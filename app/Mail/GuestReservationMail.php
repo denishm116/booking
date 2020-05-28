@@ -21,18 +21,21 @@ class GuestReservationMail extends Mailable
 
     public function __construct($reservation, $owner, $object, $addres, $city, $user, $room)
     {
-      $this->reservation = $reservation;
-      $this->owner = $owner;
-      $this->object = $object;
-      $this->addres = $addres;
-      $this->city = $city;
-      $this->user = $user;
-      $this->room = $room;
+        $this->reservation = $reservation;
+        $this->owner = $owner;
+        $this->object = $object;
+        $this->addres = $addres;
+        $this->city = $city;
+        $this->user = $user;
+        $this->room = $room;
     }
 
 
     public function build()
     {
-        return $this->view('mail.ownerafterpay')->subject($this->user->name. ', добро пожаловать в Крым! Ваш электронный билет.')->attach("tickets/".$this->reservation->id.$this->user->email.".pdf");
+        if (is_file("tickets/".$this->reservation->id.$this->user->email.".pdf"))
+            return $this->view('mail.ownerafterpay')->subject($this->user->name . ', добро пожаловать в Крым! Ваш электронный билет.')->attach("tickets/" . $this->reservation->id . $this->user->email . ".pdf");
+        else
+            return $this->view('mail.ownerafterpay')->subject($this->user->name . ', добро пожаловать в Крым! Ваш электронный билет.');
     }
 }
