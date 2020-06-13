@@ -179,8 +179,18 @@
 
                                 {{--<div class="bg-light p-1 periodBlock">--}}
                                 <div class=" col-12 col-lg-2 bg-light p-1 periodBlock">
-                                    <h6>{{$i}} период</h6><span class="far fa-window-close pull-right deletePeriod"
-                                                           title="Удалить период"></span>
+                                    <h6>{{$i}} период</h6>
+
+{{--                                    @if($i == 1)--}}
+
+{{--                                        @else--}}
+                                        <span class="far @if ($i == 1)
+
+                                       hidden  @endif fa-window-close pull-right deletePeriod"
+                                              title="Удалить период"></span>
+{{--                                    @endif--}}
+
+
                                     <div>с (гггг-мм-дд) <input autocomplete="off" required type="text"
                                                                class="form-control checkin"
                                                                name="period_start[]"

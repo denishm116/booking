@@ -1,9 +1,4 @@
 <?php
-/*
-|--------------------------------------------------------------------------
-| app/Room.php *** Copyright netprogs.pl | avaiable only at Udemy.com | further distribution is prohibited  ***
-|--------------------------------------------------------------------------
-*/
 
 namespace App;
 /* Lecture 16 */
