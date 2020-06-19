@@ -23,7 +23,10 @@ use App\User;
 use function GuzzleHttp\default_ca_bundle;
 use http\Env\Response;
 use Illuminate\Http\Request;
-use App\Enjoythetrip\Interfaces\FrontendRepositoryInterface; /* 12 13  */
+use App\Enjoythetrip\Interfaces\FrontendRepositoryInterface;
+
+/* 12 13  */
+
 use App\Enjoythetrip\Gateways\FrontendGateway;
 use App\Http\Controllers\SendMail;
 use Illuminate\Support\Facades\Input;
@@ -35,7 +38,9 @@ use Illuminate\Support\Facades\Cookie;
 
 
 use Illuminate\Support\Facades\Mail;
-use App\Events\OrderPlacedEvent; /* Lecture 54 */
+use App\Events\OrderPlacedEvent;
+
+/* Lecture 54 */
 
 use Illuminate\Support\Facades\Cache;
 use mysql_xdevapi\Exception;
@@ -127,19 +132,6 @@ class FrontendController extends Controller
     }
 
 
-//    public function myPagination($array, $perPage, $alias)
-//    {
-//        $page = Input::get('page', 1);
-//        if ($page > count($array) or $page < 1) {
-//            $page = 1;
-//        }
-//        $offset = ($page * $perPage) - $perPage;
-//        $articles = $array->slice($offset, $perPage);
-//        $roomsP = new LengthAwarePaginator($articles, sizeof($array), $perPage);
-//        $roomsP->withPath($alias . '/');
-//        return $roomsP;
-//    }
-
     //Получение данных по номерам при помощи ЧПУ
     public function city($city, Request $request)
     {
@@ -159,7 +151,7 @@ class FrontendController extends Controller
 
     public function typesAvailable($city = 'krim', $type, Request $request)
     {
-        if($city == 'favourites' && $type == 'favourite') {
+        if ($city == 'favourites' && $type == 'favourite') {
             return $this->favourites($condition = '');
         }
 
@@ -247,7 +239,7 @@ class FrontendController extends Controller
 
         if ($city == 'favourites') {
 //            dd($condition);
-          return $this->favourites($condition);
+            return $this->favourites($condition);
         }
         return view('frontend.conditionsseo', ['h1seo' => $h1seo[$city], 'rooms' => $allRooms, 'city' => $city, 'cities' => $this->cities, 'type' => $leftMenu1, 'typesAlias' => $leftMenu1, 'conditionsTypes' => $conditionsTypes, 'requestSegment2' => $requestSegment2, 'requestSegment3' => $requestSegment3, 'seoType' => $seoType, 'seoCondition' => $seoCondition]);
     }
@@ -302,6 +294,19 @@ class FrontendController extends Controller
     public function roomsearch(Request $request /* 18 */)
     {
         setlocale(LC_TIME, 'ru_RU.UTF-8');
+        $c = [];
+        foreach (City::all() as $cityraw) {
+            if ($cityraw->hasMatch($request->input('city')) || $request->input('city') == null) {
+                array_push($c, $cityraw->name);
+            }
+        }
+        if (!count($c)) {
+            $h1seo = $this->fG->seoCityArray();
+
+            return view('frontend.roomsearch', ['h1seo' => $request->input('city'), 'city' => false, 'cities' => $this->cities]);
+        }
+
+
         if ($city = $this->fG->getSearchResults($request)) {
             $name = $request->input('city');
             if (isset(City::where('name', $name)->first()->alias)) {
@@ -319,32 +324,28 @@ class FrontendController extends Controller
 
             if (is_array($city)) {
                 $reservationPrice[] = ['checkin' => $request->input('checkin'), 'checkout' => $request->input('checkout'), 'price' => 0, 'interval' => $interval];
-                }
-                foreach ($city as $k => $room) {
-//                    dd($city);
-                    $rating = $room->object->ratingCounter() ?? null;
-
-                    $room_id = $room->id;
-                    $totalPrice = $this->fG->priceCounter($room_id, $request);
-                    $reservationPrice[$k] = ['checkin' => $request->input('checkin'), 'checkout' => $request->input('checkout'), 'price' => $totalPrice, 'interval' => $interval, 'rating' => $rating];
-
-
-
             }
-//            }
+
+            foreach ($city as $k => $room) {
+                $rating = $room->object->ratingCounter() ?? null;
+
+                $room_id = $room->id;
+                $totalPrice = $this->fG->priceCounter($room_id, $request);
+                $reservationPrice[$k] = ['checkin' => $request->input('checkin'), 'checkout' => $request->input('checkout'), 'price' => $totalPrice, 'interval' => $interval, 'rating' => $rating];
+            }
+
             return view('frontend.roomsearch', ['h1seo' => $h1seo, 'city' => $city, 'cities' => $this->cities, 'reservationPrice' => $reservationPrice]);
 
         } else /* 18 */ {
             if (!$request->ajax()) {
                 $h1seo = $this->fG->seoCityArray();
-
                 $alias = City::all()->where('name', $request->get('city'))->first()->alias;
-
                 return view('frontend.roomsearch', ['h1seo' => $h1seo[$alias], 'city' => false, 'cities' => $this->cities]);
-//                return redirect('/')->with('norooms', __('По Вашему запросу ничего не найдено. Может быть вы допустили опечатку?'));
             }
 
         }
+
+
     }
 
 
@@ -586,11 +587,10 @@ class FrontendController extends Controller
     }
 
 
-
     public function changeRating($objectId, $rating)
     {
         $object = TouristObject::findOrFail($objectId);
-        return  $object->changeRating(Auth::id(), $rating);
+        return $object->changeRating(Auth::id(), $rating);
     }
 
 }

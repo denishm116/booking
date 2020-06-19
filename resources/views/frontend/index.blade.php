@@ -209,15 +209,6 @@
                                             </div>
 
                                         </div>
-
-                                        {{--<div class="text-center p-0 m-0)">--}}
-                                        {{--<small> {!! $object->rating ?? null!!}</small>--}}
-                                        {{--</div>--}}
-                                        {{--<div class="p-0 m-0 text-center">--}}
-                                        {{--<small><i>рейтинг </i></small>--}}
-                                        {{--</div>--}}
-
-
                                     </div>
                                 </div>
 
@@ -293,13 +284,7 @@
                         </div>
                     </div>
                 </article>
-                {{--<div class="container">--}}
-                {{--<div class="row">--}}
-                {{--<div class="col-xl-4 col-12 mx-auto pt-3 pb-5">--}}
-                {{--<a href="№" class="btn btn-large px-5 py-2 choice__button ">Больше информации</a>--}}
-                {{--</div>--}}
-                {{--</div>--}}
-                {{--</div>--}}
+
             </section>
         </div>
     </main>

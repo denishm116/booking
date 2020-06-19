@@ -1,14 +1,14 @@
 <?php
 
 
-namespace App; /* Lecture 14 */
+namespace App;
 
-use Illuminate\Database\Eloquent\Model; /* Lecture 14 */
+use Illuminate\Database\Eloquent\Model;
 
-/* Lecture 14 */
+
 class City extends Model
 {
-    //protected $table = 'table_name'; /* Lecture 14 */
+
 
     protected $guarded = []; /* Lecture 38 */
     public $timestamps = false; /* Lecture 38 */
@@ -25,6 +25,16 @@ class City extends Model
         return $this->hasMany('App\TouristObject');
     }
 
+    public function hasMatch($name): bool
+    {
+//        dd($name, $this->name);
+        if ($name == $this->name) {
+                return true;
+        } else {
+            return false;
+        }
+
+    }
 
 }
 
