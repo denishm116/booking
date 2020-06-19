@@ -317,15 +317,19 @@ class FrontendController extends Controller
 
             $interval = iterator_count($this->fG->datesPeriod($dateIn->format("Y-m-d"), $dateOut->format("Y-m-d")));
 
-            if (is_array($city))
+            if (is_array($city)) {
                 $reservationPrice[] = ['checkin' => $request->input('checkin'), 'checkout' => $request->input('checkout'), 'price' => 0, 'interval' => $interval];
-//dd($city);
-            foreach ($city as $k => $room) {
-                $rating = $room->object->rating;
-//                dd($rating);
-                $room_id = $room->id;
-                $totalPrice = $this->fG->priceCounter($room_id, $request);
-                $reservationPrice[$k] = ['checkin' => $request->input('checkin'), 'checkout' => $request->input('checkout'), 'price' => $totalPrice, 'interval' => $interval, 'rating' => $rating];
+                }
+                foreach ($city as $k => $room) {
+//                    dd($city);
+                    $rating = $room->object->ratingCounter() ?? null;
+
+                    $room_id = $room->id;
+                    $totalPrice = $this->fG->priceCounter($room_id, $request);
+                    $reservationPrice[$k] = ['checkin' => $request->input('checkin'), 'checkout' => $request->input('checkout'), 'price' => $totalPrice, 'interval' => $interval, 'rating' => $rating];
+
+
+
             }
 //            }
             return view('frontend.roomsearch', ['h1seo' => $h1seo, 'city' => $city, 'cities' => $this->cities, 'reservationPrice' => $reservationPrice]);

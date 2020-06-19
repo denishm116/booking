@@ -8,7 +8,9 @@ use App\Enjoythetrip\Interfaces\FrontendRepositoryInterface;
 use App\Room;
 use App\Price;
 use http\Env\Request;
-use Illuminate\Support\Facades\Auth; /*  17 */
+use Illuminate\Support\Facades\Auth;
+
+/*  17 */
 
 use App\User;
 
@@ -16,7 +18,9 @@ use App\User;
 class FrontendGateway
 {
 
-    use \Illuminate\Foundation\Validation\ValidatesRequests; /* 25 */
+    use \Illuminate\Foundation\Validation\ValidatesRequests;
+
+    /* 25 */
 
 
     /* Lecture 17 */
@@ -103,11 +107,12 @@ class FrontendGateway
                 }
             }
             $request->flash(); // inputs for session for one request
-            /*19 */
+
             if (count($result->rooms) > 0) {
                 $n = collect([]);
                 foreach ($result->rooms as $room) {
-                    $n->push($room);
+                    if ($room->object->status == 'moderated')
+                        $n->push($room);
                 }
                 return $n;  // filtered result
             } else {
@@ -117,13 +122,11 @@ class FrontendGateway
         return redirect()->back()->with('error', 'Непредвиденная ошибка');
     }
 
-    /* Lecture 25 */
     public function addComment($commentable_id, $type, $request)
     {
         $this->validate($request, [
             'content' => "required|string"
         ]);
-
         return $this->fR->addComment($commentable_id, $type, $request);
     }
 
@@ -201,7 +204,7 @@ class FrontendGateway
                         return ['error' => 'Цена у этого номера для выбранной даты не задана владельцем.'];
                     }
                 } catch (\Exception $e) {
-                  return redirect()->back()->with('error', 'Что-то пошло не так');
+                    return redirect()->back()->with('error', 'Что-то пошло не так');
                 }
 
             }
@@ -286,7 +289,7 @@ class FrontendGateway
 
     public function getTypeListForLeftMenu()
     {
-       return $this->fR->getTypesForMenu();
+        return $this->fR->getTypesForMenu();
     }
 
     public function conditionsAll($city = 'krim', $condition)
@@ -318,30 +321,27 @@ class FrontendGateway
         $roomsFirstLine = $this->fR->getRoomsFirstLine()->total();
         $roomsAllInclusive = $this->fR->getRoomsAllInclusive()->total();
 
-        if ($city && !$type && $city != 'krim')
-        {
+        if ($city && !$type && $city != 'krim') {
             $roomsWithChildrien = $this->fR->getRoomsAdditionalsCity($city, 'dlya-otdyha-s-detmi')->total();
-            $roomsWithEating = $this->fR->getRoomsAdditionalsCity($city,'s-pitaniem')->total();
-            $roomsWithPool = $this->fR->getRoomsAdditionalsCity($city,'s-basseynom')->total();
+            $roomsWithEating = $this->fR->getRoomsAdditionalsCity($city, 's-pitaniem')->total();
+            $roomsWithPool = $this->fR->getRoomsAdditionalsCity($city, 's-basseynom')->total();
             $roomsFirstLine = $this->fR->getRoomsFirstLineCity($city)->total();
             $roomsAllInclusive = $this->fR->getRoomsAllInclusiveCity($city)->total();
         }
 
-        if ($type && $city == 'krim')
-        {
+        if ($type && $city == 'krim') {
             $roomsWithChildrien = $this->fR->getRoomsAdditionalsTypes($type, 'dlya-otdyha-s-detmi')->total();
-            $roomsWithEating = $this->fR->getRoomsAdditionalsTypes($type,'s-pitaniem')->total();
-            $roomsWithPool = $this->fR->getRoomsAdditionalsTypes($type,'s-basseynom')->total();
+            $roomsWithEating = $this->fR->getRoomsAdditionalsTypes($type, 's-pitaniem')->total();
+            $roomsWithPool = $this->fR->getRoomsAdditionalsTypes($type, 's-basseynom')->total();
             $roomsFirstLine = $this->fR->getRoomsFirstLineTypes($type)->total();
             $roomsAllInclusive = $this->fR->getRoomsAllInclusiveTypes($type)->total();
         }
 
 
-        if ($type && $city != 'krim')
-        {
+        if ($type && $city != 'krim') {
             $roomsWithChildrien = $this->fR->getRoomsAdditionalsCityTypes($city, $type, 'dlya-otdyha-s-detmi')->total();
-            $roomsWithEating = $this->fR->getRoomsAdditionalsCityTypes($city, $type,'s-pitaniem')->total();
-            $roomsWithPool = $this->fR->getRoomsAdditionalsCityTypes($city, $type,'s-basseynom')->total();
+            $roomsWithEating = $this->fR->getRoomsAdditionalsCityTypes($city, $type, 's-pitaniem')->total();
+            $roomsWithPool = $this->fR->getRoomsAdditionalsCityTypes($city, $type, 's-basseynom')->total();
             $roomsFirstLine = $this->fR->getRoomsFirstLineCityTypes($city, $type)->total();
             $roomsAllInclusive = $this->fR->getRoomsAllInclusiveCityTypes($city, $type)->total();
         }
@@ -366,31 +366,35 @@ class FrontendGateway
         return $conditions;
     }
 
-public function getRoomsAdditionalsCityTypes($city, $type, $condition) {
+    public function getRoomsAdditionalsCityTypes($city, $type, $condition)
+    {
         if ($city == 'krim') {
             return $this->fR->getRoomsAdditionalsTypes($type, $condition);
         } else {
             return $this->fR->getRoomsAdditionalsCityTypes($city, $type, $condition);
         }
-}
+    }
 
-public function getRoomsAllInclusiveCityTypes($city, $type) {
+    public function getRoomsAllInclusiveCityTypes($city, $type)
+    {
         if ($city == 'krim') {
             return $this->fR->getRoomsAllInclusiveTypes($type);
         } else {
             return $this->fR->getRoomsAllInclusiveCityTypes($city, $type);
         }
-}
+    }
 
-public function getRoomsFirstLineCityTypes($city, $type) {
+    public function getRoomsFirstLineCityTypes($city, $type)
+    {
         if ($city == 'krim') {
             return $this->fR->getRoomsFirstLineTypes($type);
         } else {
             return $this->fR->getRoomsFirstLineCityTypes($city, $type);
         }
-}
+    }
 
-    public function getRoomsAdditionalsCity($city, $condition) {
+    public function getRoomsAdditionalsCity($city, $condition)
+    {
         if ($city == 'krim') {
             return $this->fR->getRoomsAdditionals($condition);
         } else {
@@ -398,7 +402,8 @@ public function getRoomsFirstLineCityTypes($city, $type) {
         }
     }
 
-    public function getRoomsFirstLineCity($city) {
+    public function getRoomsFirstLineCity($city)
+    {
         if ($city == 'krim') {
             return $this->fR->getRoomsFirstLine();
         } else {
@@ -406,7 +411,8 @@ public function getRoomsFirstLineCityTypes($city, $type) {
         }
     }
 
-    public function getRoomsAllInclusiveCity($city) {
+    public function getRoomsAllInclusiveCity($city)
+    {
         if ($city == 'krim') {
             return $this->fR->getRoomsAllInclusive();
         } else {

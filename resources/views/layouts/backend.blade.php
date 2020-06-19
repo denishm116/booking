@@ -9,7 +9,7 @@
     <meta name="author" content="">
 
     <title>Панель управления - krim-leto.ru. Пользователь: {{Auth::user()->name}}</title>
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css"
           integrity="sha384-rtJEYb85SiYWgfpCr0jn174XgJTn4rptSOQsMroFBPQSGLdOC5IbubP6lJ35qoM9" crossorigin="anonymous">
     <!-- Bootstrap core CSS -->
@@ -17,15 +17,14 @@
     {{--<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">--}}
     <link rel="stylesheet" href="{{asset('css/jquery-ui.css')}}">
 
-    <link type="text/css" href="{{ asset('css/Cupertino.css')}}" rel="stylesheet" />
+    <link type="text/css" href="{{ asset('css/Cupertino.css')}}" rel="stylesheet"/>
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/my.css') }}">
 
 
-
     <script>
-const $$ = {}
+        const $$ = {}
         var base_url = '{{ url('/admin') }}';
 
 
@@ -42,20 +41,27 @@ const $$ = {}
     </script>
     <script src="//code.jivosite.com/widget.js" data-jv-id="0tRmtaryEe" async></script>
     <!-- Yandex.Metrika counter -->
-    <script type="text/javascript" >
-        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-            m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    <script type="text/javascript">
+        (function (m, e, t, r, i, k, a) {
+            m[i] = m[i] || function () {
+                (m[i].a = m[i].a || []).push(arguments)
+            };
+            m[i].l = 1 * new Date();
+            k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+        })
         (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
         ym(57244333, "init", {
-            clickmap:true,
-            trackLinks:true,
-            accurateTrackBounce:true,
-            webvisor:true,
-            ecommerce:"dataLayer"
+            clickmap: true,
+            trackLinks: true,
+            accurateTrackBounce: true,
+            webvisor: true,
+            ecommerce: "dataLayer"
         });
     </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/57244333" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <noscript>
+        <div><img src="https://mc.yandex.ru/watch/57244333" style="position:absolute; left:-9999px;" alt=""/></div>
+    </noscript>
     <!-- /Yandex.Metrika counter -->
 
 
@@ -90,7 +96,8 @@ const $$ = {}
                     @if( Auth::user()->hasRole(['owner','admin'])  )
                         <li class="mb-3"><a href="{{ route('myObjects') }}">Мои объкты</a></li>
                         <li class="mb-3"><a href="{{ route('saveObject') }}">Добавить объект</a></li>
-                        <li class="mb-3"><a href="https://youtu.be/ouw9i6XIBGc"><i class="fas fa-question-circle"></i> Справка</a></li>
+                        <li class="mb-3"><a href="https://youtu.be/ouw9i6XIBGc"><i class="fas fa-question-circle"></i>
+                                Справка</a></li>
                     @endif
                     @if( Auth::user()->hasRole(['admin']) )
                         <li class="mb-3"><a href="{{ route('cities.index') }}">Курорты Крыма</a></li>
@@ -168,74 +175,87 @@ const $$ = {}
             </a>
         </li>
 
-    @auth
+        @auth
 
 
 
 
-        <li class="active"><a class="btn navigation-item-button" href="{{ route('adminHome') }}">Клендарь бронирований
-                <span class="sr-only">(current)</span></a></li>
+            <li class="active"><a class="btn navigation-item-button" href="{{ route('adminHome') }}">Клендарь
+                    бронирований
+                    <span class="sr-only">(current)</span></a></li>
 
 
-        @if( Auth::user()->hasRole(['owner','admin'])  )
-            <li><a class="btn navigation-item-button" href="{{ route('myObjects') }}">Мои объекты</a></li>
-            <li><a class="btn navigation-item-button" href="{{ route('saveObject') }}">Добавить объект</a></li>
+            @if( Auth::user()->hasRole(['owner','admin'])  )
+                <li><a class="btn navigation-item-button" href="{{ route('myObjects') }}">Мои объекты</a></li>
+                <li><a class="btn navigation-item-button" href="{{ route('saveObject') }}">Добавить объект</a></li>
 
-        @endif
-        @if( Auth::user()->hasRole(['admin']) )
-            <li><a class="btn navigation-item-button" href="{{ route('cities.index') }}">Курорты Крыма</a></li>
+            @endif
+            @if( Auth::user()->hasRole(['admin']) )
+                <li><a class="btn navigation-item-button" href="{{ route('cities.index') }}">Курорты Крыма</a></li>
 
-        @endif
+            @endif
 
 
-        <li><a class="btn navigation-item-button" href="{{ route('profile') }}">Профиль: {{ Auth::user()->name }}</a> </li>
+            <li><a class="btn navigation-item-button"
+                   href="{{ route('profile') }}">Профиль: {{ Auth::user()->name }}</a><br>
+{{--                <a--}}
+{{--                    href="">в панель</a>--}}
+
+            </li><br>
 
             @if( Auth::user()->hasRole(['owner'])  )
-            <li><a class="btn choice__button helpbutton" style="font-weight: normal"  href="https://youtu.be/ouw9i6XIBGc"><i class="fas fa-question-circle" style="color: white"></i> Cправка</a></li>
-       @endif
-        <li>
-            <a href="{{ route('logout') }}"
-               onclick="event.preventDefault();
+                <li><a class="btn choice__button helpbutton" style="font-weight: normal"
+                       href="https://youtu.be/ouw9i6XIBGc"><i class="fas fa-question-circle" style="color: white"></i>
+                        Cправка</a></li>
+            @endif
+            @if( Auth::user()->hasRole(['admin'])  )
+                <li><a class="btn choice__button helpbutton" style="font-weight: normal"
+                       href="{{ route('admin.objects.index') }}">
+                        Панель</a></li>
+            @endif
+            <li>
+                <a href="{{ route('logout') }}"
+                   onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                Выйти
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                {{ csrf_field() }}
-            </form>
-        </li>
-
-        <li>
-            <div class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                   aria-expanded="false">
-                    @if( $ncounter = count($notifications->where('status',0)) )
-                        <span id="app-notifications-count" class="button__badge">{{ $ncounter }}</span>
-                    @else
-                        <span id="app-notifications-count" class="button__badge hidden">0</span>
-                    @endif
-                    <i class="fas fa-envelope-square"></i>
+                    Выйти
                 </a>
-                <ul id="app-notifications-list" class="dropdown-menu">
-                    @foreach( $notifications as $notification )
-                        @if($notification->status)
-                            <li class="wnotification"><a>{{ $notification->content }}</a></li>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    {{ csrf_field() }}
+                </form>
+            </li>
+
+            <li>
+                <div class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">
+                        @if( $ncounter = count($notifications->where('status',0)) )
+                            <span id="app-notifications-count" class="button__badge">{{ $ncounter }}</span>
                         @else
-                            <li class="unread_notification"><a
-                                    href="{{ $notification->id }}">{{ $notification->content }}</a></li>
+                            <span id="app-notifications-count" class="button__badge hidden">0</span>
                         @endif
+                        <i class="fas fa-envelope-square"></i>
+                    </a>
+                    <ul id="app-notifications-list" class="dropdown-menu">
+                        @foreach( $notifications as $notification )
+                            @if($notification->status)
+                                <li class="wnotification"><a>{{ $notification->content }}</a></li>
+                            @else
+                                <li class="unread_notification"><a
+                                        href="{{ $notification->id }}">{{ $notification->content }}</a></li>
+                            @endif
 
-                    @endforeach
+                        @endforeach
 
-                </ul>
-            </div>
-        </li>
+                    </ul>
+                </div>
+            </li>
 
-    @endauth
-    @guest
-        <li><a href="{{ route('login') }}">Войти</a></li>
-        <li><a href="{{ route('register') }}">Зарегистрироваться</a></li>
-        <li><a class="btn px-5 navigation-item-button" href="{{route('saveObject')}}">Добавить объект</a></li>
-    @endguest
+        @endauth
+        @guest
+            <li><a href="{{ route('login') }}">Войти</a></li>
+            <li><a href="{{ route('register') }}">Зарегистрироваться</a></li>
+            <li><a class="btn px-5 navigation-item-button" href="{{route('saveObject')}}">Добавить объект</a></li>
+        @endguest
 
     </ul>
 
@@ -243,7 +263,7 @@ const $$ = {}
 
 <div class="container" id="app">
     <div class="row">
-           <div class="col-sm-9 col-sm-offset-3 col-md-12 col-md-offset-2 main">
+        <div class="col-sm-9 col-sm-offset-3 col-md-12 col-md-offset-2 main">
 
 
             @if ($errors->any())
@@ -268,24 +288,24 @@ const $$ = {}
                     </button>
                     {{ Session::get('message') }}
                 </div>
-        @endif
+            @endif
 
-        @yield('content')
+            @yield('content')
         </div>
     </div>
 </div>
 
-<div class="circle-wrapper">
-    <div class="phone-wrapper">
-        <div class="phone-numbers">
-            <div><a href="tel: +79785852287">+7 (800) 222 64 99</a></div>
-            <div><a href="tel: +79785852287">+7 (978) 585 22 87</a></div>
-        </div>
-        <div class="phone circle circle2">
-            <i class="fa fas fa-phone"></i>
-        </div>
-    </div>
-</div>
+{{--<div class="circle-wrapper">--}}
+{{--    <div class="phone-wrapper">--}}
+{{--        <div class="phone-numbers">--}}
+{{--            <div><a href="tel: +79785852287">+7 (800) 222 64 99</a></div>--}}
+{{--            <div><a href="tel: +79785852287">+7 (978) 585 22 87</a></div>--}}
+{{--        </div>--}}
+{{--        <div class="phone circle circle2">--}}
+{{--            <i class="fa fas fa-phone"></i>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</div>--}}
 
 <div class="phone_mob_wrapper">
     <div class="phone_mob">
@@ -299,7 +319,6 @@ const $$ = {}
 </div>
 
 
-
 <footer class="footer-info">
     <div class="container">
         <div class="row d-flex justify-content-between">
@@ -308,7 +327,7 @@ const $$ = {}
                     Krim-leto<span class="logo-orange">.ru</span>
                 </a>
 
-                <div class="footer-info footer-doc">© 2019 — 2020 г.</div>
+                <div class="footer-info footer-doc">© {{date('Y')}} г.</div>
 
             </div>
             <div class="col-xl-3 col-12">
@@ -331,7 +350,6 @@ const $$ = {}
                 </div>
                 <div class="py-0 mt-0 footer-info"><a href="{{route('contacts')}}" class="footer-doc footer-contakt">Контакты</a>
                 </div>
-
             </div>
 
 
@@ -348,9 +366,21 @@ const $$ = {}
             </div>
         </div>
 
+        <div class="row">
+            <div class="col footer-doc footer-conf">
+                <p class="footer-doc footer-conf">© Все права защищены. Любое использование либо копирование материалов сайта, элементов дизайна и
+                    оформления допускается лишь с разрешения правообладателя и только со ссылкой на источник:
+                    krim-leto.ru</p>
+                <p>Использование сайта означает согласие с <a href="{{route('guest_agreement')}}"
+                                                              class="footer-doc footer-user bolded">Пользовательским
+                        соглашением</a> и <a href="{{route('confidential_policy')}}"
+                                             class="footer-doc footer-conf bolded">Политикой конфиденциальности</a>. Оплачивая
+                    лицензионный платеж, вы принимаете <a href="{{route('guest_agreement')}}"
+                                                          class="footer-doc footer-user bolded">Лицензионное соглашение.</a></p>
+            </div>
+        </div>
+    </div>
 
-    </div>
-    </div>
 </footer>
 
 

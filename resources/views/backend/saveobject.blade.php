@@ -328,42 +328,6 @@
 
             </div>
         </div>
-
-        {{--<div class="col-lg-10 col-lg-offset-2" style="display: none;">--}}
-
-        {{--<form {{$novalidate}} method="POST" class="form-horizontal"--}}
-        {{--action="{{ route('saveArticle',['id'=>$object->id ?? null])}}">--}}
-        {{--<fieldset>--}}
-
-        {{--<div class="form-group">--}}
-        {{--<label for="textTitle" class="col-lg-2 control-label">Title *</label>--}}
-        {{--<div class="col-lg-10">--}}
-        {{--<input name="title" value="{{ old('title') }}" required type="text"--}}
-        {{--class="form-control" id="textTitle" placeholder="">--}}
-        {{--</div>--}}
-        {{--</div>--}}
-
-        {{--<div class="form-group">--}}
-        {{--<label for="textArea" class="col-lg-2 control-label">Content *</label>--}}
-        {{--<div class="col-lg-10">--}}
-        {{--<textarea name="content" required class="form-control" rows="3"--}}
-        {{--id="textArea">{{ old('content')}}</textarea>--}}
-        {{--<span class="help-block">Add an article about this object.</span>--}}
-        {{--</div>--}}
-        {{--</div>--}}
-
-        {{--<div class="form-group">--}}
-        {{--<div class="col-lg-10 col-lg-offset-2">--}}
-        {{--<button type="submit" class="btn btn-primary">Save</button>--}}
-        {{--</div>--}}
-        {{--</div>--}}
-        {{--</fieldset>--}}
-        {{--{{ csrf_field() }}--}}
-        {{--</form>--}}
-
-        {{--</div>--}}
-
-
     </div>
 
 @endsection

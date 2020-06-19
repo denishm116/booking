@@ -6,13 +6,23 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * @property int $id
+ * @property string $status
+
+ *
+ * @property Network[] networks
+ *
+ * @method Builder byNetwork(string $network, string $identity)
+ */
 
 class TouristObject extends Model
 {
 
     protected $table = 'objects';
     public $timestamps = false;
-
+    const MODERATED = 'moderated';
+    const NOT_MODERATED = 'not_moderated';
 
     use Enjoythetrip\Presenters\ObjectPresenter;
 
@@ -157,20 +167,42 @@ class TouristObject extends Model
         return count($this->ratings()->where('ratingable_id', $this->id)->get());
     }
 
-    /**
-     * @return array
-     */
+
     public function likesCounter()
     {
         $likeCounter = $this->users()->where('likeable_id', $this->id)->get();
         return count($likeCounter);
     }
 
+    public function hasRooms()
+    {
+        return count($this->rooms) != 0;
+    }
 
 
-//    public function scopeRating()
-//    {
-//        return $this->ratings()->getModel();
-//    }
+    public function isModerated(): bool
+    {
+        return $this->status === self::MODERATED;
+    }
+
+
+    public function isNotModerated(): bool
+    {
+        return $this->status === self::NOT_MODERATED;
+    }
+
+    public function moderate()
+    {
+        $this->status = self::MODERATED;
+        $this->saveOrFail();
+    }
+
+    public function unModerate()
+    {
+        $this->status = self::NOT_MODERATED;
+        $this->saveOrFail();
+    }
+
+
 }
 

@@ -232,7 +232,7 @@
                 <div class="row">
                     <div class="col mt-3">
 
-{{--                        {{ $objects->links() }}--}}
+                        {{ $objects->links() }}
 
                     </div>
                 </div>

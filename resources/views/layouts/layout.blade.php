@@ -163,7 +163,13 @@
             <li>
 
                 <div class="for-menu-button">
-                    <a href="{{ route('adminHome') }}" class="btn px-5 navigation-item-button">Панель
+                    <a href="
+@if(Auth::user()->hasRole(['admin']))
+                    {{route('admin.objects.index')}}
+                    @else
+                    {{ route('adminHome') }}
+                    @endif
+                        " class="btn px-5 navigation-item-button">Панель
                         управления: {{ Auth::user()->name }}</a>
                 </div>
             </li>
@@ -218,7 +224,7 @@
                     Krim-leto<span class="logo-orange">.ru</span>
                 </a>
 
-                <div class="footer-info footer-doc">© 2019 — 2020 г.</div>
+                <div class="footer-info footer-doc">© {{date('Y')}} г.</div>
 
             </div>
             <div class="col-xl-3 col-12">
@@ -230,7 +236,6 @@
                         соглашение</a>
                 </div>
             </div>
-
             <div class="col-xl-3 col-12 ">
                 <div class="py-0 mt-0 footer-info"><a href="{{route('confidential_policy')}}"
                                                       class="footer-doc footer-conf">Политика
@@ -265,15 +270,18 @@
         </div>
         <div class="row">
             <div class="col footer-doc footer-conf">
-                <p class="footer-doc footer-conf">© Все права защищены. Любое использование либо копирование материалов сайта, элементов дизайна и
+                <p class="footer-doc footer-conf">© Все права защищены. Любое использование либо копирование материалов
+                    сайта, элементов дизайна и
                     оформления допускается лишь с разрешения правообладателя и только со ссылкой на источник:
                     krim-leto.ru</p>
                 <p>Использование сайта означает согласие с <a href="{{route('guest_agreement')}}"
-                                                               class="footer-doc footer-user bolded">Пользовательским
+                                                              class="footer-doc footer-user bolded">Пользовательским
                         соглашением</a> и <a href="{{route('confidential_policy')}}"
-                                             class="footer-doc footer-conf bolded">Политикой конфиденциальности</a>. Оплачивая
+                                             class="footer-doc footer-conf bolded">Политикой конфиденциальности</a>.
+                    Оплачивая
                     лицензионный платеж, вы принимаете <a href="{{route('guest_agreement')}}"
-                                                          class="footer-doc footer-user bolded">Лицензионное соглашение.</a></p>
+                                                          class="footer-doc footer-user bolded">Лицензионное
+                        соглашение.</a></p>
             </div>
         </div>
 

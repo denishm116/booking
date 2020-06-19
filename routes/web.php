@@ -14,28 +14,28 @@
 
 Route::get('/', 'FrontendController@index')->name('home');
 Route::get('object/{id}', 'FrontendController@object')->name('object');
-Route::post('roomsearch', 'FrontendController@roomsearch')->name('roomSearch'); /* Lecture 5 Lecture 18 get->post */
-Route::get('room/{id}', 'FrontendController@room')->name('room'); /* Lecture 6 Lecture 19 {id} */
-Route::get('article/{id}', 'FrontendController@article')->name('article'); /* Lecture 6 Lecture 22 {id} */
-Route::get('person/{id}', 'FrontendController@person')->name('person'); /* Lecture 6 Lecture 23 {id} */
+Route::post('roomsearch', 'FrontendController@roomsearch')->name('roomSearch');
+Route::get('room/{id}', 'FrontendController@room')->name('room');
+Route::get('article/{id}', 'FrontendController@article')->name('article');
+Route::get('person/{id}', 'FrontendController@person')->name('person');
 
 //Route::post('/favourites/{favourites}','FrontendController@favourites')->name('favourites');
 
 //Route::post('/favourites','FrontendController@favouritesPost');
 
-Route::get('/searchCities', 'FrontendController@searchCities'); /* Lecture 17 */
-Route::get('/ajaxGetRoomReservations/{id}', 'FrontendController@ajaxGetRoomReservations'); /* Lecture 20 */
+Route::get('/searchCities', 'FrontendController@searchCities');
+Route::get('/ajaxGetRoomReservations/{id}', 'FrontendController@ajaxGetRoomReservations');
 
-Route::get('/like/{likeable_id}', 'FrontendController@like')->name('like'); /* Lecture 24 */
-Route::get('/unlike/{likeable_id}', 'FrontendController@unlike')->name('unlike'); /* Lecture 24 */
+Route::get('/like/{likeable_id}', 'FrontendController@like')->name('like');
+Route::get('/unlike/{likeable_id}', 'FrontendController@unlike')->name('unlike');
 
-Route::post('/addComment/{commentable_id}', 'FrontendController@addComment')->name('addComment'); /* Lecture 25 */
-Route::post('/makeReservation/{room_id}/{city_id}', 'FrontendController@makeReservation')->name('makeReservation'); /* Lecture 26 */
-Route::get('/guest_agreement', 'FrontendController@guest_agreement')->name('guest_agreement'); /* Lecture 26 */
-Route::get('/landlord_agreement', 'FrontendController@landlord_agreement')->name('landlord_agreement'); /* Lecture 26 */
-Route::get('/confidential_policy', 'FrontendController@confidential_policy')->name('confidential_policy'); /* Lecture 26 */
-Route::get('/contacts', 'FrontendController@contacts')->name('contacts'); /* Lecture 26 */
-Route::get('/forowners', 'FrontendController@forowners')->name('forowners'); /* Lecture 26 */
+Route::post('/addComment/{commentable_id}', 'FrontendController@addComment')->name('addComment');
+Route::post('/makeReservation/{room_id}/{city_id}', 'FrontendController@makeReservation')->name('makeReservation');
+Route::get('/guest_agreement', 'FrontendController@guest_agreement')->name('guest_agreement');
+Route::get('/landlord_agreement', 'FrontendController@landlord_agreement')->name('landlord_agreement');
+Route::get('/confidential_policy', 'FrontendController@confidential_policy')->name('confidential_policy');
+Route::get('/contacts', 'FrontendController@contacts')->name('contacts');
+Route::get('/forowners', 'FrontendController@forowners')->name('forowners');
 
 Route::get('/verify', 'VerifyController@getVerify')->name('getVerify');
 Route::post('/verify', 'VerifyController@postVerify')->name('verify');
@@ -74,8 +74,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::post('/setReadNotifications', 'BackendController@setReadNotifications'); /* 53 */
 
     Route::get('/', 'BackendController@index')->name('adminHome');
-    Route::get('/index2', 'BackendController@index2')->name('adminHome2');
-    Route::get('/adminpage', 'BackendController@adminpage')->name('adminpage');
+//    Route::get('/index2', 'BackendController@index2')->name('adminHome2');
+//    Route::get('/adminpage', 'BackendController@adminpage')->name('adminpage');
 
     Route::group(['prefix' => 'admin'], function () {
         Route::get('', 'UserController@index')->name('index');
@@ -93,6 +93,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::get('/showReservation/{id}', 'ReservationController@show')->name('showReservation');
         Route::get('/removeReservation/{id?}', 'ReservationController@removeReservation')->name('removeReservation');
         Route::get('/removeConfirmation/{id}', 'BackendController@removeConfirmation')->name('removeConfirmation');
+    });
+
+    Route::group(['prefix' => 'objects'], function () {
+        Route::get('', 'ObjectController@index')->name('admin.objects.index');
+        Route::get('/moderate/{id?}', 'ObjectController@moderate')->name('admin.objects.moderate');
+        Route::get('/unmoderate/{id?}', 'ObjectController@unModerate')->name('admin.objects.unmoderate');
+//        Route::get('/addReservation/{id?}', 'ReservationController@addReservationForm')->name('addReservationForm');
+//        Route::post('/addReservation/{id?}', 'ReservationController@create')->name('addReservation');
+//        Route::get('/showReservation/{id}', 'ReservationController@show')->name('showReservation');
+//        Route::get('/removeReservation/{id?}', 'ReservationController@removeReservation')->name('removeReservation');
+//        Route::get('/removeConfirmation/{id}', 'BackendController@removeConfirmation')->name('removeConfirmation');
     });
 
     Route::group(['prefix' => 'ajax'], function () {

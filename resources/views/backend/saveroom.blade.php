@@ -203,7 +203,7 @@
                                            placeholder=""
                                            value="@if( $room ?? false ){{$periodEnd ?? old('period'.$i.'end')}}@else{{'2020-03-31'}}@endif">
                                     <div class="mt-2">
-                                        Цена<input required type="text"  class="form-control"
+                                        Цена<input required type="number"  class="form-control"
                                                    placeholder="" name="prices[]"
                                                    value="@if( $room ?? false ){{$periodPrice ?? old('price'.$i)}}@endif">
                                     </div>

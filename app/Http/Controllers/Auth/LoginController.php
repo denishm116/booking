@@ -47,6 +47,11 @@ class LoginController extends Controller
                 Auth::logout();
                 return redirect()->route('requestNewCode');
             }
+
+            if ($user->hasRole(['admin'])) {
+                return redirect()->route('admin.objects.index');
+            }
+
             return redirect()->intended();
         }
         $this->incrementLoginAttempts($request);

@@ -18,7 +18,7 @@ class FrontendRepository implements FrontendRepositoryInterface
     public function getObjectsForMainPage()
     {
 
-        return TouristObject::with(['city', 'photos', 'types', 'rooms', 'distance'])->orderBy('id', 'desc')->paginate(8);
+        return TouristObject::with(['city', 'photos', 'types', 'rooms', 'distance'])->orderBy('id', 'desc')->where('status', TouristObject::MODERATED)->paginate(8);
 //        return TouristObject::with(['city', 'photos', 'types', 'rooms', 'distance'])->take(8)->orderBy('id', 'desc')->get();
     }
 
@@ -62,7 +62,9 @@ class FrontendRepository implements FrontendRepositoryInterface
             'object.distance',
             'object.city',
             'object.address'
-        ])->paginate(15);
+        ])->whereHas('object', function ($q) {
+            $q->where('status', 'moderated');
+        })->paginate(15);
     }
 
     public function getRoomsForFavourites($id)
@@ -76,7 +78,9 @@ class FrontendRepository implements FrontendRepositoryInterface
             'object.infrastructures',
             'object.distance',
             'object.city',
-            'object.address'])->findOrFail($id);
+            'object.address'])->whereHas('object', function ($q) {
+            $q->where('status', 'moderated');
+        })->findOrFail($id);
     }
 
     public function getRoomsCity($city)
@@ -93,6 +97,8 @@ class FrontendRepository implements FrontendRepositoryInterface
             'object.address'
         ])->whereHas('object.city', function ($q) use ($city) {
             $q->where('alias', $city);
+        })->whereHas('object', function ($q) {
+            $q->where('status', 'moderated');
         })->paginate(15);
     }
 
@@ -110,6 +116,8 @@ class FrontendRepository implements FrontendRepositoryInterface
             'object.address'
         ])->whereHas('object.types', function ($q) use ($type) {
             $q->where('alias', $type);
+        })->whereHas('object', function ($q) {
+            $q->where('status', 'moderated');
         })->paginate(15);
     }
 
@@ -129,6 +137,8 @@ class FrontendRepository implements FrontendRepositoryInterface
             $q->where('alias', $city);
         })->whereHas('object.types', function ($q) use ($type) {
             $q->where('alias', $type);
+        })->whereHas('object', function ($q) {
+            $q->where('status', 'moderated');
         })->paginate(15);
     }
 
@@ -146,6 +156,8 @@ class FrontendRepository implements FrontendRepositoryInterface
             'object.address'
         ])->whereHas('object.additionals', function ($q) use ($alias) {
             $q->where('alias', $alias);
+        })->whereHas('object', function ($q) {
+            $q->where('status', 'moderated');
         })->paginate(15);
     }
 
@@ -167,6 +179,8 @@ class FrontendRepository implements FrontendRepositoryInterface
             $q->where('alias', $type);
         })->whereHas('object.additionals', function ($q) use ($alias) {
             $q->where('alias', $alias);
+        })->whereHas('object', function ($q) {
+            $q->where('status', 'moderated');
         })->paginate(15);
     }
 
@@ -186,6 +200,8 @@ class FrontendRepository implements FrontendRepositoryInterface
             $q->where('alias', $city);
         })->whereHas('object.additionals', function ($q) use ($alias) {
             $q->where('alias', $alias);
+        })->whereHas('object', function ($q) {
+            $q->where('status', 'moderated');
         })->paginate(15);
     }
 
@@ -205,6 +221,8 @@ class FrontendRepository implements FrontendRepositoryInterface
             $q->where('alias', $type);
         })->whereHas('object.additionals', function ($q) use ($alias) {
             $q->where('alias', $alias);
+        })->whereHas('object', function ($q) {
+            $q->where('status', 'moderated');
         })->paginate(15);
     }
 
@@ -222,6 +240,8 @@ class FrontendRepository implements FrontendRepositoryInterface
             'object.address'
         ])->whereHas('object', function ($q) {
             $q->where('distance_id', '<', 3);
+        })->whereHas('object', function ($q) {
+            $q->where('status', 'moderated');
         })->paginate(15);
     }
 
@@ -241,6 +261,8 @@ class FrontendRepository implements FrontendRepositoryInterface
             $q->where('distance_id', '<', 3);
         })->whereHas('object.types', function ($q) use ($type) {
             $q->where('alias', $type);
+        })->whereHas('object', function ($q) {
+            $q->where('status', 'moderated');
         })->paginate(15);
     }
 
@@ -260,6 +282,8 @@ class FrontendRepository implements FrontendRepositoryInterface
             $q->where('distance_id', '<', 3);
         })->whereHas('object.city', function ($q) use ($city) {
             $q->where('alias', $city);
+        })->whereHas('object', function ($q) {
+            $q->where('status', 'moderated');
         })->paginate(15);
     }
 
@@ -282,6 +306,8 @@ class FrontendRepository implements FrontendRepositoryInterface
             $q->where('alias', $city);
         })->whereHas('object.types', function ($q) use ($type) {
             $q->where('alias', $type);
+        })->whereHas('object', function ($q) {
+            $q->where('status', 'moderated');
         })->paginate(15);
     }
 
@@ -300,6 +326,8 @@ class FrontendRepository implements FrontendRepositoryInterface
             'object.address'
         ])->whereHas('rservices', function ($q) {
             $q->where('id', 11);
+        })->whereHas('object', function ($q) {
+            $q->where('status', 'moderated');
         })->paginate(15);
     }
 
@@ -319,6 +347,8 @@ class FrontendRepository implements FrontendRepositoryInterface
             $q->where('id', 11);
         })->whereHas('object.types', function ($q) use ($type) {
             $q->where('alias', $type);
+        })->whereHas('object', function ($q) {
+            $q->where('status', 'moderated');
         })->paginate(15);
     }
 
@@ -338,6 +368,8 @@ class FrontendRepository implements FrontendRepositoryInterface
             $q->where('id', 11);
         })->whereHas('object.city', function ($q) use ($city) {
             $q->where('alias', $city);
+        })->whereHas('object', function ($q) {
+            $q->where('status', 'moderated');
         })->paginate(15);
     }
 
@@ -360,6 +392,8 @@ class FrontendRepository implements FrontendRepositoryInterface
             $q->where('alias', $city);
         })->whereHas('object.types', function ($q) use ($type) {
             $q->where('alias', $type);
+        })->whereHas('object', function ($q) {
+            $q->where('status', 'moderated');
         })->paginate(15);
     }
 
@@ -379,7 +413,21 @@ class FrontendRepository implements FrontendRepositoryInterface
 
     public function getSearchResults(string $city)
     {
-        return City::with(['rooms.reservations', 'rooms.photos', 'rooms.object.photos', 'rooms.object.ratings', 'rooms.rservices', 'rooms.object.additionals', 'rooms.object.types', 'rooms.object.infrastructures', 'rooms.object.distance', 'rooms.object.city', 'rooms.object.address'])->where('name', $city)->first() ?? false;
+        return City::with([
+                'rooms.reservations',
+                'rooms.photos',
+                'rooms.rservices',
+                'rooms.object.photos',
+                'rooms.object.ratings',
+                'rooms.object.additionals',
+                'rooms.object.types',
+                'rooms.object.infrastructures',
+                'rooms.object.distance',
+                'rooms.object.city',
+                'rooms.object.address',
+
+            ])->where('name', $city)
+                ->first() ?? false;
     }
 
     public function getCity($alias)

@@ -2,11 +2,8 @@
 
 namespace App\Enjoythetrip\Repositories;
 
-
 use App\Enjoythetrip\Interfaces\BackendRepositoryInterface;
-
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Str;
 use App\{Additional,
     Distance,
@@ -24,14 +21,10 @@ use App\{Additional,
     Room,
     Notification};
 
-
-
-
 class BackendRepository implements BackendRepositoryInterface
 {
 
 
-    /* 28 */
     public function getOwnerReservations($request)
     {
         return TouristObject::with([
@@ -51,18 +44,14 @@ class BackendRepository implements BackendRepositoryInterface
     public function getAllReservations($request)
     {
         return TouristObject::with([
-
             'rooms' => function ($q) {
                 $q->has('reservations'); // works like where clause for Room
             }, // give me rooms only with reservations, if it wasn't there would be rooms without reservations
-
             'rooms.reservations.user'
-
         ])
             ->has('rooms.reservations')// ensures that it gives me only those objects that have at least one reservation, has() here works like where clause for Object
             ->paginate(8);
     }
-
 
     /* 28 */
     public function getTouristReservations($request)
@@ -93,70 +82,56 @@ class BackendRepository implements BackendRepositoryInterface
             ->get();
     }
 
-    /* Lecture 30 */
     public function getReservationData($request)
     {
-//        dd($request->input('room_id'));
         return Reservation::with('user', 'room')
             ->where('room_id', $request->input('room_id'))
             ->where('day_in', '<=', date('Y-m-d', strtotime($request->input('date'))))
             ->where('day_out', '>=', date('Y-m-d', strtotime($request->input('date'))))
             ->where('day_out', '>=', date('Y-m-d', strtotime($request->input('date'))))
-//            ->where('day_in', '<=', date('d-m-Y', strtotime($request->input('date'))))
-//            ->where('day_out', '>=', date('d-m-Y', strtotime($request->input('date'))))
-//            ->where('day_out', '>=', date('d-m-Y', strtotime($request->input('date'))))
-
             ->first();
     }
 
 
-    /* Lecture 35 */
     public function getReservation($id)
     {
         return Reservation::find($id);
     }
 
-
-    /* Lecture 35 */
     public function deleteReservation(Reservation $reservation)
     {
         return $reservation->delete();
     }
 
 
-    /* Lecture 35 */
     public function confirmReservation(Reservation $reservation)
     {
         return $reservation->update(['status' => true]);
     }
+
     public function removeConformirmation(Reservation $reservation)
     {
         return $reservation->update(['status' => false]);
     }
-    /* Lecture 35 */
+
     public function removeConfirmation(Reservation $reservation)
     {
         return $reservation->update(['status' => true]);
     }
 
-    /* Lecture 37 */
     public function getCities()
     {
         return City::orderBy('name', 'asc')->get();
     }
 
-
-    /* Lecture 37 */
     public function getCity($id)
     {
         return City::find($id);
     }
 
 
-    /* Lecture 37 */
     public function createCity($request)
     {
-//        dd(Str::slug(mb_substr($request->input('name'), 0, 40)));
         return City::create([
             'name' => $request->input('name'),
             'alias' => Str::slug(mb_substr($request->input('name'), 0, 40)),
@@ -164,7 +139,6 @@ class BackendRepository implements BackendRepositoryInterface
     }
 
 
-    /* Lecture 37 */
     public function updateCity($request, $id)
     {
         return City::where('id', $id)->update([
@@ -174,14 +148,12 @@ class BackendRepository implements BackendRepositoryInterface
     }
 
 
-    /* Lecture 37 */
     public function deleteCity($id)
     {
         return City::where('id', $id)->delete();
     }
 
 
-    /* Lecture 39 */
     public function saveUser($request)
     {
         $user = User::find($request->user()->id);
@@ -194,14 +166,12 @@ class BackendRepository implements BackendRepositoryInterface
     }
 
 
-    /* Lecture 40 */
     public function getPhoto($id)
     {
         return Photo::find($id);
     }
 
 
-    /* Lecture 40 */
     public function updateUserPhoto(User $user, Photo $photo)
     {
         return $user->photos()->save($photo);
@@ -290,6 +260,7 @@ class BackendRepository implements BackendRepositoryInterface
         $object->city_id = $request->input('city');
         $object->description = $request->input('description');
         $object->distance_id = $request->input('distance_id');
+        $object->status = $object::NOT_MODERATED;
 
         $object->push();
         $object->additionals()->attach($request->input('additionals'));

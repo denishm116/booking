@@ -7,46 +7,27 @@ use App\City;
 use App\Enjoythetrip\Services\MakePdf;
 use App\Reservation;
 use App\Room;
-
-
-use Dompdf\Dompdf;
-use Dompdf\Options;
-
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\GuestReservationMail;
-
 use App\User;
 use Illuminate\Http\Request;
-
 use App\Enjoythetrip\Interfaces\BackendRepositoryInterface;
-
 use App\Enjoythetrip\Gateways\BackendGateway;
-
 use Illuminate\Support\Facades\Auth;
-
-
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
-
 use App\Events\ReservationConfirmedEvent;
-
 use Illuminate\Support\Facades\Cache;
-
 use App\YandexPayment;
+use App\SendCode;
 
 class BackendController extends Controller
 {
     use \App\Enjoythetrip\Traits\Ajax;
 
-    /* Lecture 30 */
-
     public function __construct(BackendGateway $backendGateway, BackendRepositoryInterface $backendRepository)
     {
-
         $this->middleware('CheckOwner')->only(['confirmReservation', 'saveRoom', 'saveObject', 'myObjects']);/*  36 */
         $this->middleware('CheckAdmin')->only(['adminpage']);
-
         $this->bG = $backendGateway;
         $this->bR = $backendRepository;
     }
@@ -56,7 +37,6 @@ class BackendController extends Controller
     {
         $objects = $this->bG->getReservations($request);
         $authUserObject = $this->bR->getUserWithObject($request->user()->id);
-
         return view('backend.index', ['objects' => $objects, 'authUserObject' => $authUserObject]);
     }
 
@@ -170,8 +150,10 @@ class BackendController extends Controller
     }
 
 
-    public function saveObject($id = null, Request $request /* Lecture 41 two args */)
+    public function saveObject($id = null, Request $request)
     {
+
+
         $additionals = $this->bR->getAdditionals();
         $types = $this->bR->getTypes();
         $infrastructures = $this->bR->getInfrastructures();
@@ -179,30 +161,28 @@ class BackendController extends Controller
 
         $users = $this->bR->getUsersOwners();
 
-        /*  41 */
         if ($request->isMethod('post')) {
-
+            if (Auth::user()->hasRole(['owner'])) {
+                SendCode::createObjectNotification('89034593805');
+            }
             if ($id) {
-
                 $this->authorize('checkOwner', $this->bR->getObject($id));
-
                 $this->bG->saveObject($id, $request);
-
                 return back();
-
-                Cache::flush(); /* Lecture 55 */
-
             } else {
-                $this->bG->saveObject($id, $request);
-                return redirect()->route('myObjects');
+                $object = $this->bG->saveObject($id, $request);
+//                dd($object->id);
+                if ($object)
+                    return redirect()->route('saveRoom', '?object_id=' . $object->id);
+                else
+                    return redirect()->route('myObjects');
             }
         }
-        /* 41 */
+
         if ($id) {
 
             return view('backend.saveobject', ['object' => $this->bR->getObject($id), 'cities' => $this->bR->getCities(), 'types' => $types, 'additionals' => $additionals, 'infrastructures' => $infrastructures, 'distances' => $distances, 'users' => $users]);
         } else {
-
             return view('backend.saveobject', ['cities' => $this->bR->getCities(), 'additionals' => $additionals, 'types' => $types, 'infrastructures' => $infrastructures, 'distances' => $distances, 'users' => $users]);
         }
     }

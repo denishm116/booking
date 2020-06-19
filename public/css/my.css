@@ -9,7 +9,10 @@ html, body {
     padding: 0;
     border: none;
 }
-
+.eye {
+    margin: 0; !important;
+    padding: 0; !important;
+}
 /* Caption */
 .rating__group_1 {
     padding: 15px 0;
