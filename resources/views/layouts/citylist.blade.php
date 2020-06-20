@@ -1,9 +1,12 @@
+
+
 @foreach($cities as $city )
-
-
-    <div class="col-xl-3 col-6">
+{{--    <div class="col-sm-6 col-xl-2">--}}
+{{----}}
+    <div class="col-5 col-xl-2">
         <a class="town"
            href="{{ route('city',['city'=>$city->alias ?? false]) }}">{{$city->name}}</a>
+
 
     </div>
 

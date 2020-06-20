@@ -144,7 +144,7 @@
                 {{--<button class="favourites-mob"> <i class="header-heart far fa-heart"></i>Избранное</button>--}}
                 {{--<input type="hidden" value="111" class="hidden-favourites">--}}
                 {{--</form>--}}
-                <a href="#" class="favourites"> <i class="header-heart far fa-heart"></i>Избранное</a>
+                <a href="#" class="favourites"> <i class="header-heart far fa-heart"></i> Избранное</a>
             </div>
         </li>
 
@@ -303,10 +303,10 @@
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
-
+{{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"--}}
+{{--        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"--}}
+{{--        crossorigin="anonymous"></script>--}}
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 <script src="{{ asset('js/app.js') }}"></script>
 

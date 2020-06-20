@@ -10,9 +10,14 @@
         <div class="breadcrumb-holder my-3 p-0">
             <ul class="basic-breadcrumbs">
                 <li class="d-none d-lg-block"><a href="{{route('home')}}"><u>Главная</u></a></li>
-                <li class="d-none d-lg-block"><a href="{{route('city',['city'=>$room->object->city->alias ?? null])}}"><u>{{$room->object->city->name}}</u></a></li>
-                <li class="d-none d-lg-block"><a href="{{route('type',['city'=>$room->object->city->alias  ?? null, 'type' => $room->object->types->first()->alias  ?? null])}}"><u>{{$room->object->types->first()->title ?? null}}</u></a></li>
-                <li class="d-none d-lg-block"><a href="{{route('object', ['id'=>$room->object->id])}}"><u>{{$room->object->name}}</u></a></li>
+                <li class="d-none d-lg-block"><a
+                        href="{{route('city',['city'=>$room->object->city->alias ?? null])}}"><u>{{$room->object->city->name}}</u></a>
+                </li>
+                <li class="d-none d-lg-block"><a
+                        href="{{route('type',['city'=>$room->object->city->alias  ?? null, 'type' => $room->object->types->first()->alias  ?? null])}}"><u>{{$room->object->types->first()->title ?? null}}</u></a>
+                </li>
+                <li class="d-none d-lg-block"><a
+                        href="{{route('object', ['id'=>$room->object->id])}}"><u>{{$room->object->name}}</u></a></li>
                 <li class="d-none d-lg-block"><a href="#"><u>{{$room->id}}</u></a></li>
             </ul>
         </div>
@@ -136,7 +141,8 @@
                         <a href="{{ route('unlike',['id'=>$room->object->id,'type'=>'App\TouristObject']) }}"
                            class=""><i class="fas fa-heart"></i></a>
                     @else
-                        <a href="{{ route('like',['id'=>$room->object->id]) }}" class=""> <i class="far fa-heart"></i></a>
+                        <a href="{{ route('like',['id'=>$room->object->id]) }}" class=""> <i
+                                class="far fa-heart"></i></a>
                     @endif
 
                 @else
@@ -229,7 +235,6 @@
                     @endfor
 
 
-
                 </div>
                 @endisset
 
@@ -269,13 +274,24 @@
                                         </div>
                                     @endif
                                 @endauth
-                                    <button type="submit" class="btn  choice__button w-100 mt-3">Забронировать</button>
+                                <div class="row">
+                                    <div class="col">
+                                        <button class="btn  choice__button w-100 mt-3 price-counter">рассчитать
+                                            стоимость
+                                        </button>
+                                    </div>
+                                    <div class="col">
+                                        <button type="submit" class="btn  choice__button w-100 mt-3">Забронировать
+                                        </button>
+                                    </div>
+                                </div>
+
 
                                 <h3 class="text-danger text-center m-2">{{ Session::get('reservationMsg') }}</h3>
                                 {{ csrf_field() }}
                             </form>
 
-
+                            <h5 class="text-center m-2 price-message">{{ Session::get('reservationMsg') }}</h5>
                         </div>
                         <div class="col col-lg-4">
                             <div id="avaiability_calendar">
@@ -300,8 +316,6 @@
 
                 <h5 class="about__title pt-4">Отзывы</h5>
                 <div class="col-xl-4 line mb-4"></div>
-
-
 
 
                 @foreach( $room->object->comments as $comment )
@@ -364,212 +378,225 @@
 
 
     <div class="ob-id text-white">{{$room->object->id}}</div>
-            @endsection
+@endsection
 
-            @push('scripts')
-
-
-
-                <script src="https://api-maps.yandex.ru/2.1/?apikey=3da80f65-799c-41a4-ba8f-ea7b21148fd6&lang=ru_RU"
-                        type="text/javascript">
-                </script>
-
-                <script type="text/javascript">
-
-                    ymaps.ready(init);
-
-                    function init() {
-                        var Url = "https://geocode-maps.yandex.ru/1.x/?apikey=3da80f65-799c-41a4-ba8f-ea7b21148fd6&format=json&lang=ru_RU&geocode={{$room->object->city->name}},+{{$room->object->address->street}},+{{$room->object->address->number}}"
-                        var coords = '';
+@push('scripts')
 
 
-                        axios.get(Url)
-                            .then(data => {
-                                z = data.data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos;
-                                // console.log('Координаты ' + z)
-                                // return z;
-                                test(z)
+
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=3da80f65-799c-41a4-ba8f-ea7b21148fd6&lang=ru_RU"
+            type="text/javascript">
+    </script>
+
+    <script type="text/javascript">
+
+        ymaps.ready(init);
+
+        function init() {
+            var Url = "https://geocode-maps.yandex.ru/1.x/?apikey=3da80f65-799c-41a4-ba8f-ea7b21148fd6&format=json&lang=ru_RU&geocode={{$room->object->city->name}},+{{$room->object->address->street}},+{{$room->object->address->number}}"
+            var coords = '';
+
+
+            axios.get(Url)
+                .then(data => {
+                    z = data.data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos;
+                    // console.log('Координаты ' + z)
+                    // return z;
+                    test(z)
+                })
+                .catch(err => console.log(err))
+
+
+            function test(z) {
+                coords = z.split(" ", 2);
+
+                axios.get('/getCoords/{{$room->object->id}}')
+                    .then(data => {
+                        // console.log(data.data[0].Array)
+                        if (data.data[0] == '') {
+                            console.log('ne data')
+                            axios.post('/putCoords', {
+                                latitude: coords[1],
+                                longitude: coords[0],
+                                id: {{$room->object->id}},
+                            }).then(data => {
+                                // setTimeout(() => { showOnCard
+                                //     console.log('zagruzilos')
+                                // resolve()
+                                // }, 1000 )
+                                // console.log(data)
+                                location.reload()
                             })
-                            .catch(err => console.log(err))
-
-
-                        function test(z) {
-                            coords = z.split(" ", 2);
-
-                            axios.get('/getCoords/{{$room->object->id}}')
-                                .then(data => {
-                                    // console.log(data.data[0].Array)
-                                    if (data.data[0] == '') {
-                                        console.log('ne data')
-                                        axios.post('/putCoords', {
-                                            latitude: coords[1],
-                                            longitude: coords[0],
-                                            id: {{$room->object->id}},
-                                        }).then(data => {
-                                            // setTimeout(() => { showOnCard
-                                            //     console.log('zagruzilos')
-                                            // resolve()
-                                            // }, 1000 )
-                                            // console.log(data)
-                                            location.reload()
-                                        })
-                                    } else {
-                                        return showOnCard();
-                                    }
-
-                                    function showOnCard() {
-
-                                        // console.log('Дата ' + data.data);
-
-                                        coords = data.data;
-                                        // console.log('Data CoOrDs ' + coords);
-                                        var myMap = new ymaps.Map("map", {
-                                            center: [coords[1], coords[0]],
-                                            zoom: 12
-                                        });
-
-                                        var myGeoObject = new ymaps.GeoObject({
-                                            geometry: {
-                                                type: "Point", // тип геометрии - точка
-                                                coordinates: [coords[1], coords[0]], // координаты точки
-
-                                            }
-                                        });
-                                        // Размещение геообъекта на карте.
-                                        myMap.geoObjects.add(myGeoObject);
-
-                                        var placemark = new ymaps.Placemark([coords[1], coords[0]], {
-                                            hintContent: '{{$room->object->name}}',
-                                            balloonContent: '{{$room->object->city->name}}, {{$room->object->address->street}}, {{$room->object->address->number}}',
-
-                                        });
-
-                                        // Размещение геообъекта на карте.
-                                        myMap.geoObjects.add(placemark);
-
-
-                                    }
-
-
-                                });
+                        } else {
+                            return showOnCard();
                         }
 
+                        function showOnCard() {
 
-                    }
-                </script>
+                            // console.log('Дата ' + data.data);
 
-
-                <script>
-                    $('.datepicker').datepicker({
-                        range: 'period',
-                        minDate: 0,
-                        numberOfMonths: 2,
-                        dateFormat: "yy-mm-dd",
-                        monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
-                        dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
-                        onSelect: function (dateText, inst, extensionRange) {
-                            // extensionRange - объект расширения
-                            $('[name=checkin]').val(extensionRange.startDateText);
-                            $('[name=checkout]').val(extensionRange.endDateText);
-
-
-                            document.querySelector('#checkin').onfocus = () => myTempVar = false;
-                            if (!myTempVar) {
-                                document.querySelector('#checkout').focus()
-                                myTempVar = true;
-                            }
-                            if (myTempVar && extensionRange.startDateText < extensionRange.endDateText)
-                                setTimeout(function () {
-                                    $("#checkin, #checkout").datepicker('hide')
-                                }, 1000)
-
-
-                        }
-                    });
-
-                    /* Lecture 21 */
-                    function datesBetween(startDt, endDt) {
-                        var between = [];
-                        var currentDate = new Date(startDt);
-                        var end = new Date(endDt);
-                        while (currentDate <= end) {
-                            between.push($.datepicker.formatDate('mm/dd/yy', new Date(currentDate)));
-                            currentDate.setDate(currentDate.getDate() + 1);
-                        }
-
-                        return between;
-                    }
-
-                    $.ajax({
-
-                        cache: false,
-                        url: base_url + '/ajaxGetRoomReservations/' + {{ $room->id }},
-                        type: "GET",
-                        success: function (response) {
-                            var eventDates = {};
-                            var dates = [/* Lecture 21 */];
-
-                            /* Lecture 21 */
-                            for (var i = 0; i <= response.reservations.length - 1; i++) {
-                                dates.push(datesBetween(new Date(response.reservations[i].day_in), new Date(response.reservations[i].day_out))); // array of arrays
-                            }
-                            dates = [].concat.apply([], dates); /* 21 */
-                            /* Lecture 21 */
-                            for (var i = 0; i <= dates.length - 1; i++) {
-                                eventDates[dates[i]] = dates[i];
-                            }
-
-                            $(function () {
-                                $("#avaiability_calendar").datepicker({
-                                    minDate: 0,
-                                    dateFormat: "dd-mm-yy",
-                                    range: 'period',
-
-                                    numberOfMonths: 1,
-                                    onSelect: function (data) {
-
-                                        // console.log($('#checkin').val());
-
-                                        if ($('#checkin').val() == '') {
-
-                                            $('#checkin').val(data);
-                                            $("#check_in, #check_out").datepicker({
-                                                minDate: 0,
-                                                dateFormat: "dd-mm-yy",
-
-                                            })
-
-                                        } else if ($('#checkout').val() == '') {
-                                            $('#checkout').val(data);
-                                        } else if ($('#checkout').val() != '') {
-                                            $('#checkin').val(data);
-                                            $('#checkout').val('');
-                                        }
-
-                                    },
-                                    beforeShowDay: function (date) {
-                                        var tmp = eventDates[$.datepicker.formatDate('mm/dd/yy', date)];
-                                        /* Lecture 21 */
-                                        //console.log(date);
-                                        if (tmp)
-                                            return [false, 'unavaiable_date'];
-                                        else
-                                            return [true, ''];
-                                    }
-
-
-                                });
+                            coords = data.data;
+                            // console.log('Data CoOrDs ' + coords);
+                            var myMap = new ymaps.Map("map", {
+                                center: [coords[1], coords[0]],
+                                zoom: 12
                             });
 
+                            var myGeoObject = new ymaps.GeoObject({
+                                geometry: {
+                                    type: "Point", // тип геометрии - точка
+                                    coordinates: [coords[1], coords[0]], // координаты точки
+
+                                }
+                            });
+                            // Размещение геообъекта на карте.
+                            myMap.geoObjects.add(myGeoObject);
+
+                            var placemark = new ymaps.Placemark([coords[1], coords[0]], {
+                                hintContent: '{{$room->object->name}}',
+                                balloonContent: '{{$room->object->city->name}}, {{$room->object->address->street}}, {{$room->object->address->number}}',
+
+                            });
+
+                            // Размещение геообъекта на карте.
+                            myMap.geoObjects.add(placemark);
+
 
                         }
 
 
                     });
+            }
 
-                </script>
 
-    @endpush
+        }
+    </script>
+
+
+    <script>
+        $('.datepicker').datepicker({
+            range: 'period',
+            minDate: 0,
+            numberOfMonths: 2,
+            dateFormat: "yy-mm-dd",
+            monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+            dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+            onSelect: function (dateText, inst, extensionRange) {
+                // extensionRange - объект расширения
+                $('[name=checkin]').val(extensionRange.startDateText);
+                $('[name=checkout]').val(extensionRange.endDateText);
+
+
+                document.querySelector('#checkin').onfocus = () => myTempVar = false;
+                if (!myTempVar) {
+                    document.querySelector('#checkout').focus()
+                    myTempVar = true;
+                }
+                if (myTempVar && extensionRange.startDateText < extensionRange.endDateText)
+                    setTimeout(function () {
+                        $("#checkin, #checkout").datepicker('hide')
+                    }, 1000)
+
+
+            }
+        });
+
+        /* Lecture 21 */
+        function datesBetween(startDt, endDt) {
+            var between = [];
+            var currentDate = new Date(startDt);
+            var end = new Date(endDt);
+            while (currentDate <= end) {
+                between.push($.datepicker.formatDate('mm/dd/yy', new Date(currentDate)));
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            return between;
+        }
+
+        $.ajax({
+
+            cache: false,
+            url: base_url + '/ajaxGetRoomReservations/' + {{ $room->id }},
+            type: "GET",
+            success: function (response) {
+                var eventDates = {};
+                var dates = [/* Lecture 21 */];
+
+                /* Lecture 21 */
+                for (var i = 0; i <= response.reservations.length - 1; i++) {
+                    dates.push(datesBetween(new Date(response.reservations[i].day_in), new Date(response.reservations[i].day_out))); // array of arrays
+                }
+                dates = [].concat.apply([], dates); /* 21 */
+                /* Lecture 21 */
+                for (var i = 0; i <= dates.length - 1; i++) {
+                    eventDates[dates[i]] = dates[i];
+                }
+
+                $(function () {
+                    $("#avaiability_calendar").datepicker({
+                        minDate: 0,
+                        dateFormat: "dd-mm-yy",
+                        range: 'period',
+
+                        numberOfMonths: 1,
+                        onSelect: function (data) {
+
+                            // console.log($('#checkin').val());
+
+                            if ($('#checkin').val() == '') {
+
+                                $('#checkin').val(data);
+                                $("#check_in, #check_out").datepicker({
+                                    minDate: 0,
+                                    dateFormat: "dd-mm-yy",
+
+                                })
+
+                            } else if ($('#checkout').val() == '') {
+                                $('#checkout').val(data);
+                            } else if ($('#checkout').val() != '') {
+                                $('#checkin').val(data);
+                                $('#checkout').val('');
+                            }
+
+                        },
+                        beforeShowDay: function (date) {
+                            var tmp = eventDates[$.datepicker.formatDate('mm/dd/yy', date)];
+                            /* Lecture 21 */
+                            //console.log(date);
+                            if (tmp)
+                                return [false, 'unavaiable_date'];
+                            else
+                                return [true, ''];
+                        }
+
+
+                    });
+                });
+
+
+            }
+
+
+        });
+
+    </script>
+    <script>
+        document.querySelector('.price-counter').addEventListener('click', function (e) {
+            e.preventDefault()
+            const dayIn = document.querySelector('#checkin').value
+            const dayOut = document.querySelector('#checkout').value
+            axios.get('/ajax/price/'+'{{$room->id}}'+'/'+dayIn + '/' + dayOut)
+            .then(response => {
+                document.querySelector('.price-message').innerHTML = `C ${dayIn} по ${dayOut} <br> стомость бронирования <br> <b class="text-danger">${response.data} руб.</b>`
+            })
+            .catch(error => {
+
+            })
+        })
+    </script>
+@endpush
 
 
 

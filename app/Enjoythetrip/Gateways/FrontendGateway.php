@@ -20,21 +20,15 @@ class FrontendGateway
 
     use \Illuminate\Foundation\Validation\ValidatesRequests;
 
-    /* 25 */
 
-
-    /* Lecture 17 */
     public function __construct(FrontendRepositoryInterface $fR)
     {
         $this->fR = $fR;
     }
 
-
-    /* Lecture 17 */
     public function searchCities($request)
     {
         $term = $request->input('term');
-
         $results = array();
 
         $queries = $this->fR->getSearchCities($term);
@@ -49,18 +43,8 @@ class FrontendGateway
     public function getCity($alias)
     {
         return $this->fR->getCity($alias);
-
-//        if (count($result->rooms) > 0) {
-//            $n = collect([]);
-//            foreach ($result->rooms as $room) {
-//                $n->push($room);
-//            }
-//            return $n;  // filtered result
-//        }
-
     }
 
-    /*  18 */
     public function getSearchResults($request)
     {
         setlocale(LC_TIME, 'ru_RU.UTF-8');
@@ -136,12 +120,9 @@ class FrontendGateway
     {
         $startDate = new \DateTime($dateIn);
         $endDate = new \DateTime($dateOut);
-//            $endDate = $endDateRaw->modify('+1 day');
         $dateInterval = new \DateInterval('P1D');
-
         $period = new \DatePeriod($startDate, $dateInterval, $endDate);
         return $period;
-
     }
 
 
@@ -154,27 +135,12 @@ class FrontendGateway
         $period = $this->datesPeriod($request->get('checkin'), $request->get('checkout'));
 
         if ($request->get('checkin') && $request->get('checkout')) {
+
             $prices = Price::where('room_id', $room_id)->first();
             $totalPrice = 0;
 
             foreach ($period as $k => $value) {
                 $currDate = new \DateTime($value->format('Y-m-d'));
-
-                //                try {
-//                    for ($i = 1; $i <= 12; $i++) {
-//                        $periodStartStr = 'period' . $i . 'start';
-//                        $periodEndStr = 'period' . $i . 'end';
-//                        $periodPriceStr = 'price' . $i;
-//
-//                        if ($currDate >= new \DateTime($prices->$periodStartStr) && $currDate <= new \DateTime($prices->$periodEndStr)) {
-//                            $totalPrice += $prices->$periodPriceStr;
-//                        }
-//                    }
-//                } catch (\Exception $e) {
-//                    return redirect()->back()->with('error', 'Что-то пошло не так');
-//                }
-//dd($totalPrice);
-
                 try {
                     if ($currDate >= new \DateTime($prices->period1start) && $currDate <= new \DateTime($prices->period1end)) {
                         $totalPrice += $prices->price1;
@@ -523,6 +489,7 @@ class FrontendGateway
             'fiolent' => 'Фиоленте',
             'roomsearch' => 'Поиск',
             'favourites' => 'Избранное',
+            'price' => 'Прайс'
         ];
     }
 

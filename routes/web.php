@@ -31,6 +31,10 @@ Route::get('/unlike/{likeable_id}', 'FrontendController@unlike')->name('unlike')
 
 Route::post('/addComment/{commentable_id}', 'FrontendController@addComment')->name('addComment');
 Route::post('/makeReservation/{room_id}/{city_id}', 'FrontendController@makeReservation')->name('makeReservation');
+
+
+
+
 Route::get('/guest_agreement', 'FrontendController@guest_agreement')->name('guest_agreement');
 Route::get('/landlord_agreement', 'FrontendController@landlord_agreement')->name('landlord_agreement');
 Route::get('/confidential_policy', 'FrontendController@confidential_policy')->name('confidential_policy');
@@ -65,8 +69,6 @@ Route::get('/paymenterror/{reason}/{iniciator}', 'FrontendController@paymenterro
 
 
 Route::get('/sendMailToGuestRepeat/{id}', 'BackendController@sendMailToGuestRepeat')->name('sendMailToGuestRepeat');
-//
-
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     //for json mobile
@@ -99,11 +101,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::get('', 'ObjectController@index')->name('admin.objects.index');
         Route::get('/moderate/{id?}', 'ObjectController@moderate')->name('admin.objects.moderate');
         Route::get('/unmoderate/{id?}', 'ObjectController@unModerate')->name('admin.objects.unmoderate');
-//        Route::get('/addReservation/{id?}', 'ReservationController@addReservationForm')->name('addReservationForm');
-//        Route::post('/addReservation/{id?}', 'ReservationController@create')->name('addReservation');
-//        Route::get('/showReservation/{id}', 'ReservationController@show')->name('showReservation');
-//        Route::get('/removeReservation/{id?}', 'ReservationController@removeReservation')->name('removeReservation');
-//        Route::get('/removeConfirmation/{id}', 'BackendController@removeConfirmation')->name('removeConfirmation');
     });
 
     Route::group(['prefix' => 'ajax'], function () {
@@ -152,6 +149,7 @@ Route::group(['prefix' => 'favourites'], function () {
 //Route::get('/home', 'HomeController@index')->name('home');  /* Lecture 7 */
 Route::group(['prefix' => 'ajax', /*'middleware' => 'auth'*/], function () {
     Route::get('/changeRating/{objectId}/{rating}', 'FrontendController@changeRating');
+    Route::get('/price/{room_id}/{dayIn}/{dayOut}', 'FrontendController@price');
 //    Route::post('/setRating', 'FrontendController@setRating');
 });
 

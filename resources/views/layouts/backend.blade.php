@@ -166,7 +166,7 @@
     </div>
 
 
-    <ul class="ulmenu1 ulmenu_mobile ulmenu2 py-2">
+    <ul class="ulmenu2 py-2 backend-menu bg-light" >
         <li>
             <a class="mob" href="/">
                 <div>
@@ -261,7 +261,7 @@
 
 </div>
 
-<div class="container" id="app">
+<div class="container backend-content" id="app">
     <div class="row">
         <div class="col-sm-9 col-sm-offset-3 col-md-12 col-md-offset-2 main">
 

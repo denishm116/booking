@@ -442,6 +442,47 @@ class FrontendController extends Controller
         return redirect()->back();
     }
 
+    public function price($room_id, $day_in, $day_out)
+    {
+       $period = $this->fG->datesPeriod($day_in, $day_out);
+        $prices = Price::where('room_id', $room_id)->first();
+        $totalPrice = 0;
+        foreach ($period as $k => $value) {
+            $currDate = new \DateTime($value->format('Y-m-d'));
+            try {
+                if ($currDate >= new \DateTime($prices->period1start) && $currDate <= new \DateTime($prices->period1end)) {
+                    $totalPrice += $prices->price1;
+                } elseif ($currDate >= new \DateTime($prices->period2start) && $currDate <= new \DateTime($prices->period2end)) {
+                    $totalPrice += $prices->price2;
+                } elseif ($currDate >= new \DateTime($prices->period3start) && $currDate <= new \DateTime($prices->period3end)) {
+                    $totalPrice += $prices->price3;
+                } elseif ($currDate >= new \DateTime($prices->period4start) && $currDate <= new \DateTime($prices->period4end)) {
+                    $totalPrice += $prices->price4;
+                } elseif ($currDate >= new \DateTime($prices->period5start) && $currDate <= new \DateTime($prices->period5end)) {
+                    $totalPrice += $prices->price5;
+                } elseif ($currDate >= new \DateTime($prices->period6start) && $currDate <= new \DateTime($prices->period6end)) {
+                    $totalPrice += $prices->price6;
+                } elseif ($currDate >= new \DateTime($prices->period7start) && $currDate <= new \DateTime($prices->period7end)) {
+                    $totalPrice += $prices->price7;
+                } elseif ($currDate >= new \DateTime($prices->period8start) && $currDate <= new \DateTime($prices->period8end)) {
+                    $totalPrice += $prices->price8;
+                } elseif ($currDate >= new \DateTime($prices->period9start) && $currDate <= new \DateTime($prices->period9end)) {
+                    $totalPrice += $prices->price9;
+                } elseif ($currDate >= new \DateTime($prices->period10start) && $currDate <= new \DateTime($prices->period10end)) {
+                    $totalPrice += $prices->price10;
+                } elseif ($currDate >= new \DateTime($prices->period11start) && $currDate <= new \DateTime($prices->period11end)) {
+                    $totalPrice += $prices->price11;
+                } elseif ($currDate >= new \DateTime($prices->period12start) && $currDate <= new \DateTime($prices->period12end)) {
+                    $totalPrice += $prices->price12;
+                } else {
+                    return ['error' => 'Цена у этого номера для выбранной даты не задана владельцем.'];
+                }
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Что-то пошло не так');
+            }
+        }
+        return $totalPrice;
+    }
 
     public function makeReservation($room_id, $city_id, Request $request)
     {
