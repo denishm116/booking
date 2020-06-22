@@ -87,7 +87,7 @@
         </div>
 
 
-        <div class="col-lg-9 align-content-center">
+        <div class="col-lg-9 align-content-center ml-vue">
 
             <div class="row justify-content-center mb-3 mt-1"
                  v-for="(room, roomIndex) in displayedRooms">
@@ -96,7 +96,7 @@
 
                     <div class="row p-1 align-items-center height h-100">
                         <div class="col-lg-4 col-sm-12 text-center m-0 p-1 h-100">
-                            <div class="thumbnail bg-light" v-bind:class="{ looked: room.looked}">
+                            <div class="thumbnail bg-light card-main-page__photo-row1" v-bind:class="{ looked: room.looked}">
                                 <a v-bind:href="'/room/'+room.id">
                                     <div class="card-main-page__photo-header">Номер ID: {{room.id}}</div>
                                     <div class="card__photo-wrapper">
@@ -124,6 +124,7 @@
                                         </template>
                                     </div>
                                     <div class="star-icon2">
+
                                         <small v-html="reservprice[roomIndex].rating"></small>
                                     </div>
                                 </a>
@@ -252,23 +253,37 @@
                 <!--</div>-->
             </div>
 
-            <div class="row ml-4 ml-xl-1">
-                <ul class="pagination m-2">
-                    <li class="page-item">
+            <ul class="pagination mb-3">
+                <li class="page-item">
+                    <a v-if="page != 1" @click.prevent="page = 1" class="page-link" href="#">
+                        Первая
+                    </a>
+                </li>
 
-                        <button type="button" class="page-link" v-if="page != 1" @click="page--"> Назад</button>
-                    </li>
-                    <li class="page-item">
-                        <button type="button" class="page-link" v-for="pageNumber in pages.slice(page-1, page+5)"
-                                @click="page = pageNumber"> {{pageNumber}}
-                        </button>
-                    </li>
-                    <li class="page-item">
-                        <button type="button" @click="page++" v-if="page < pages.length" class="page-link"> Вперед
-                        </button>
-                    </li>
-                </ul>
-            </div>
+                <li class="page-item">
+                    <a v-if="page != 1" @click.prevent="page--" class="page-link" href="#" aria-label="Предыдущая">
+                        <span aria-hidden="true">«</span>
+                        <span class="sr-only">Предыдущая</span>
+                    </a>
+                </li>
+                <li class="page-item" v-for="pageNumber in pages.slice(page-1, page+3)" @click="page = pageNumber"
+                    :class="active(pageNumber)">
+
+                    <a class="page-link" href="#">{{pageNumber}}</a>
+                </li>
+
+                <li class="page-item">
+                    <a class="page-link" href="#" @click="page++" v-if="page < pages.length" aria-label="Следующая">
+                        <span aria-hidden="true">»</span>
+                        <span class="sr-only">Следующая</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a @click="page = pages.length" v-if="page < pages.length" class="page-link" href="#">
+                        Последняя
+                    </a>
+                </li>
+            </ul>
 
 
         </div>
@@ -349,7 +364,7 @@
         },
         created() {
             this.getRooms();
-        },
+          },
         watch: {
             sortprice: function () {
                 this.setTypes()
@@ -403,14 +418,16 @@
                     let to = (page * perPage);
                     return rooms.slice(from, to);
                 },
-
+                active(pageNumber) {
+                    if (this.page == pageNumber) {
+                        return 'active'
+                    }
+                },
 
                 getAdditionals: function () {
                     axios.get('/additionals').then((response) => {
                         this.additionals = response.data;
                     });
-                    // console.log(this.getLookedRooms())
-                    // console.log(this.allroom_display.id);
                 },
 
                 getRservices: function () {
@@ -450,7 +467,7 @@
                 },
 
 
-//Огромная функция фильтрации
+
             setTypes: function () {
                 this.allroom_display = [];
                 this.typeArr = [];
@@ -552,7 +569,6 @@
         },
         computed: {
             displayedRooms() {
-
                 return this.paginate(this.rooms);
             }
         },
@@ -567,7 +583,7 @@
     .card-radius {
         border: 1px solid #ced4da;
         border-radius: 5px;
-        padding: auto;
+
 
     }
 
@@ -590,5 +606,9 @@
         width: 500px !important;
         margin: 20px auto;
     }
-
+    @media only screen and (max-width: 768px) {
+        .ml-vue {
+margin-left: 15px;
+        }
+    }
 </style>

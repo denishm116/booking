@@ -1,8 +1,10 @@
 function setRating() {
 
     const radio = document.querySelectorAll('.auth')
-    console.log(radio)
-    const objectId = document.querySelector('.ob-id').innerHTML;
+    // if (document.querySelector('.ob-id')) {
+        const objectId = document.querySelector('.ob-id').innerHTML;
+    // }
+
     for (var i = 0; i < radio.length; i++) {
         radio[i].addEventListener('change', function (e) {
             axios.get('/ajax/changeRating/' + objectId + '/' + (+e.target.value))

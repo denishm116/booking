@@ -36,18 +36,16 @@ class YandexPayment extends Model
             uniqid('', true)
         );
 
-        $pay = $payment;
-        return $pay;
+        return $payment;
     }
 
     public function getPaymentId($session)
     {
-    return $this->client->getPaymentInfo($session);
+        return $this->client->getPaymentInfo($session);
     }
 
-    public function confirmPayment($paymentId) {
-
-
+    public function confirmPayment($paymentId)
+    {
         $payment = $this->client->getPaymentInfo($paymentId);
         $this->client->capturePayment(
             array(
@@ -56,6 +54,12 @@ class YandexPayment extends Model
             $payment->id,
             uniqid('', true)
         );
+    }
 
+    public function returnPayment($paymentId)
+    {
+        $payment = $this->client->getPaymentInfo($paymentId);
+        $this->client->cancelPayment($payment->id,
+            uniqid('', true));
     }
 }

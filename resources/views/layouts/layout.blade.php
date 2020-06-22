@@ -1,5 +1,22 @@
 <html lang="ru">
 <head>
+    <meta property="og:type" content="krim-leto.ru">
+    <meta property="og:site_name" content="krim-leto.ru">
+    <meta property="og:title" content="Отдых в Крыму 2020 цены, жилье для отдыха у моря. Курорты Крыма для отдыха летом">
+    <meta property="og:description" content="Отдых в Крыму в 2020 году: гостиницы, частный сектор, гостевые дома с отзывами. Фотографии, описание, бронирование жилья у моря.">
+    <meta property="og:url" content="https://krim-leto.ru">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:image" content="https://krim-leto.ru/images/foto-header.jpg">
+    <meta property="og:image:width" content="1920">
+    <meta property="og:image:height" content="515">
+
+
+    <meta name="twitter:card" content="https://krim-leto.ru/images/foto-header.jpg">
+    <meta name="twitter:title" content="Отдых в Крыму 2020 цены, жилье для отдыха у моря. Курорты Крыма для отдыха летом">
+    <meta name="twitter:description" content="Отдых в Крыму в 2020 году: гостиницы, частный сектор, гостевые дома с отзывами. Фотографии, описание, бронирование жилья у моря.">
+    <meta name="twitter:image:src" content="https://krim-leto.ru/images/foto-header.jpg">
+    <meta name="twitter:url" content="https://krim-leto.ru/">
+    <meta name="twitter:domain" content="krim-leto.ru">
     <!-- Yandex.Metrika counter -->
     <script type="text/javascript">
         (function (m, e, t, r, i, k, a) {
@@ -74,6 +91,7 @@
 
 
     <meta name="yandex-verification" content="e7e601028b8d617f"/>
+    @livewireStyles
 </head>
 <body>
 
@@ -214,7 +232,7 @@
         </a>
     </div>
 </div>
-<div id="toTop" class="bradius2 arrow-top"><i class="fas fa-caret-square-up "></i>
+<div id="toTop" class="bradius2 arrow-top"><i class="fas fa-chevron-circle-up"></i>
 </div>
 <footer class="footer-info">
     <div class="container">
@@ -315,7 +333,7 @@
 <script src="{{ asset('js/ru.js') }}"></script>
 <script src="{{ asset('js/rating.js') }}"></script>
 @stack('scripts')
-
+@livewireScripts
 <script type="text/javascript">
 
     $(function () {
@@ -333,11 +351,9 @@
             }
 
         });
-
         $('#toTop').click(function () {
 
             $('body,html').animate({scrollTop: 0}, 800);
-
         });
 
     });
@@ -463,7 +479,6 @@
 
         }
     }
-
 
     guests();
     document.querySelector('.btn_date_in').onclick = function (e) {

@@ -11,7 +11,8 @@ class SendPassword extends Notification
 {
     use Queueable;
 
-private $pass;
+    private $pass;
+
     public function __construct($pass)
     {
         $this->pass = $pass;
@@ -20,7 +21,7 @@ private $pass;
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      * @return array
      */
     public function via($notifiable)
@@ -31,22 +32,22 @@ private $pass;
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
 
         return (new MailMessage)
-            ->subject('Здравствуйте, ' .$notifiable->name. '. Вы зарегистрированы на сервисе krim-leto.ru' )
-            ->greeting('Здравствуйте, '. $notifiable->name.'!')
-                    ->line('Для входа на сайт https://krim-leto.ru используйте:')
-                    ->line('Логин:')
-                    ->line($notifiable->email)
-                    ->line('Пароль: ')
-                    ->line($this->pass)
+            ->subject('Здравствуйте, ' . $notifiable->name . '. Вы зарегистрированы на сервисе krim-leto.ru')
+            ->greeting('Здравствуйте, ' . $notifiable->name . '!')
+            ->line('Для входа на сайт https://krim-leto.ru используйте:')
+            ->line('Логин:')
+            ->line($notifiable->email)
+            ->line('Пароль: ')
+            ->line($this->pass)
             ->line('Для того, чтобы изменить пароль, нажмите на кнопку')
-                    ->action('Изменить пароль', url('https://krim-leto.ru/password/reset'));
+            ->action('Изменить пароль', url('https://krim-leto.ru/password/reset'));
 
 
     }
@@ -54,7 +55,7 @@ private $pass;
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      * @return array
      */
     public function toArray($notifiable)

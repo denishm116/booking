@@ -24,9 +24,10 @@
         <div class="row">
             <div class="col-lg-8 col-12">
 
-                <h1 class="about__title">Номер id: {{$room->id}}
+                <h1 class="about__title-popular">Номер: {{$room->display_name ?? $room->id}} </h1>
+                id: {{$room->id}}
 
-                </h1>
+
                 <div class="col-xl-4 line"></div>
 
 
@@ -170,12 +171,16 @@
 
                         <div class="row">
                             <div class="col text-right align-self-end">
+                                <a href="{{route('object', ['id' => $room->object->id])}}"
+                                   class="btn choice__button w-100 mb-2" role="button">Еще номера</a>
+                            </div>
+                            <div class="col text-right align-self-end">
                                 <a href="#" data="{{$room->id}}"
-                                   class="btn choice__button w-100 favourites-button" role="button">В избранное</a>
+                                   class="btn choice__button w-100 favourites-button  mb-2" role="button">В избранное</a>
                             </div>
                             <div class="col text-right align-self-end">
                                 <a href="{{ route('room',['id'=>$room->id]) }}#reservation"
-                                   class="btn choice__button w-100" role="button">Забронировать</a>
+                                   class="btn choice__button w-100  mb-2" role="button">Забронировать</a>
                             </div>
                         </div>
                     </div>

@@ -127,7 +127,7 @@
                         @if ($reservation->isConfirmed())
                             <div class="btn btn-sm btn-success"><i class="fas fa-ruble-sign"></i></div>
                         @else
-                            <button type="submit" class="btn btn-sm btn-danger">Вернуть деньги</button>
+                            <a href="{{route('returnPayment', ['id' => $reservation->id])}}" type="submit" class="btn btn-sm btn-danger">Вернуть деньги</a>
                         @endif
                     </form>
                 </div>

@@ -84,6 +84,9 @@ window.hooper = require('hooper')
 // Vue.component('pagination', require('./components/pagination.vue').default);
 Vue.component('filters', require('./components/Filters.vue').default);
 Vue.component('slider', require('./components/Slider.vue').default);
+Vue.component('app-admin-reservations-index', require('./components/AppAdminReservationsIndex.vue').default);
+Vue.component('app-admin-objects-index', require('./components/AppAdminObjectsIndex.vue').default);
+// Vue.component('app-pagination', require('./components/AppPagination.vue').default);
 // Vue.component('price-counter', require('./components/PriceCounter.vue').default);
 
 

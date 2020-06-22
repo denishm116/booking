@@ -1,27 +1,36 @@
 <div class="card-main-page">
 
     <div class="card-main-page__photo">
-        <div class="card-main-page__photo-header room_seen{{$room->id}}">
-            <a
-                href="{{ route('room',['id'=>$room->id]) }}">Номер ID
-                {{$room->id}}
-            </a>
-        </div>
+        <div class="card-main-page__photo-wrapper-card">
 
-        <div class="card__photo-wrapper">
-            <a href="{{ route('room',['id'=>$room->id]) }}">
-                <div class="for-star-icon">
-                    <img class="" src="{{ $room->photos->first()->path ?? $placeholder}}"
-
-                         alt="{{ str_limit($room->description,150) }}">
-                    <div class="star-icon">
-                        <small> {!!$room->object->rating!!}</small>
-                    </div>
+            <div class="card-main-page__photo-row1">
+                <div class="card-main-page__photo-header room_seen{{$room->id}}">
+                    <a
+                        href="{{ route('room',['id'=>$room->id]) }}">Номер ID
+                        {{$room->id}}
+                    </a>
                 </div>
+            </div>
+            <div class="card-main-page__photo-row2">
+                <div class="card__photo-wrapper">
+                    <div class="for-star-icon">
+                        <a href="{{ route('room',['id'=>$room->id]) }}">
 
-            </a>
+                            <img class="" src="{{ $room->photos->first()->path ?? $placeholder}}"
+
+                                 alt="{{ str_limit($room->description,150) }}">
+                            <div class="star-icon">
+                                <small> {!!$room->object->rating!!}</small>
+                            </div>
+                        </a>
+                    </div>
+
+
+                </div>
+            </div>
+
+
         </div>
-
     </div>
 
     <div class="card-main-page__content">
@@ -34,7 +43,7 @@
                     , {{$room->object->address->street}}, {{$room->object->address->number}}
                 </div>
                 <div class="">
-                    море: {{$room->object->distance->title ?? null}}
+                    <i class="fas fa-water"></i> море: {{$room->object->distance->title ?? null}}
 
                 </div>
 
@@ -48,9 +57,9 @@
 
                     @if  (Request::is('favourites/*'))
                         <div class="">
-                        <a href="#"
-                        class="favorite-delete" data="{{$room->id}}"
-                        role="button"><i class="fas fa-heart"></i> удалить</a>
+                            <a href="#"
+                               class="favorite-delete" data="{{$room->id}}"
+                               role="button"><i class="fas fa-heart"></i> удалить</a>
                         </div>
                     @else
 
@@ -62,11 +71,11 @@
                     @endif
 
 
-
                 </div>
                 <div class="card-main-page__content-wrapper-row-2-2">
                     <div>
-                        <span> <a href="{{ route('room',['id'=>$room->id]) }}">Название: {{$room->display_name ?? $room->id}}</a></span>
+                        <span> <a
+                                href="{{ route('room',['id'=>$room->id]) }}">Название: {{$room->display_name ?? $room->id}}</a></span>
                     </div>
                     <div>
 

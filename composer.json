@@ -16,6 +16,7 @@
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
+        "livewire/livewire": "^1.2",
         "om/icalparser": "^0.2.7",
         "predis/predis": "^1.1",
         "yandex-money/yandex-checkout-sdk-php": "^1.5",

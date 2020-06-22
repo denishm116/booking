@@ -3,7 +3,10 @@
 namespace App\Enjoythetrip\Gateways;
 /* Lecture 27 */
 
-use App\Enjoythetrip\Interfaces\BackendRepositoryInterface; /* Lecture 27 */
+use App\Enjoythetrip\Interfaces\BackendRepositoryInterface;
+use App\User;
+
+/* Lecture 27 */
 
 
 /* Lecture 27 */
@@ -62,10 +65,13 @@ class BackendGateway
     /* Lecture 39 */
     public function saveUser($request)
     {
+        $user = User::findOrFail($request->input('id'));
         $this->validate($request, [
             'name' => "required|string",
+            'patronymic' => "required|string",
             'surname' => "required|string",
-            'email' => "required|email",
+            'email' => "required|unique:users,email,".$user->id,
+            'phone' => 'required|min:10|max:13|unique:users,phone,'.$user->id,
         ]);
 
         if ($request->hasFile('userPicture')) {
@@ -122,8 +128,8 @@ class BackendGateway
     {
 
         $this->validate($request, [
-            'display_name' => "string",
-            'internal_name' => "string",
+//            'display_name' => "string",
+//            'internal_name' => "string",
             'room_number' => "required|integer",
             'room_size' => "required|integer",
             'price' => "required|integer",

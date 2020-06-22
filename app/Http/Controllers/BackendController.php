@@ -35,6 +35,7 @@ class BackendController extends Controller
 
     public function index(Request $request)
     {
+        setlocale(LC_TIME, 'ru_RU.UTF-8');
         $objects = $this->bG->getReservations($request);
         $authUserObject = $this->bR->getUserWithObject($request->user()->id);
         return view('backend.index', ['objects' => $objects, 'authUserObject' => $authUserObject]);
@@ -93,36 +94,24 @@ class BackendController extends Controller
     {
 
         if ($request->isMethod('post')) {
-
             $user = $this->bG->saveUser($request);
-
             if ($request->hasFile('userPicture')) {
-                $path = $request->file('userPicture')->store('users', 'public'); /*  40 */
-
-                /*  40 */
+                $path = $request->file('userPicture')->store('users', 'public');
                 if (count($user->photos) != 0) {
                     $photo = $this->bR->getPhoto($user->photos->first()->id);
-
                     Storage::disk('public')->delete($photo->storagepath);
                     $photo->path = $path;
-
                     $this->bR->updateUserPhoto($user, $photo);
-
                 } else {
                     $this->bR->createUserPhoto($user, $path);
-                }
-
+               }
             }
-
-            Cache::flush(); /* Lecture 58 */
-
+            Cache::flush();
             return redirect()->back();
         }
-
-        return view('backend.profile', ['user' => Auth::user()]/*  39 */);
+        return view('backend.profile', ['user' => Auth::user()]);
     }
 
-    /* Lecture 39 */
     public function deletePhoto($id)
     {
 
@@ -163,7 +152,7 @@ class BackendController extends Controller
 
         if ($request->isMethod('post')) {
             if (Auth::user()->hasRole(['owner'])) {
-                SendCode::createObjectNotification('89034593805');
+                SendCode::createObjectNotification('89034590869');
             }
             if ($id) {
                 $this->authorize('checkOwner', $this->bR->getObject($id));
@@ -188,7 +177,6 @@ class BackendController extends Controller
     }
 
 
-    /* Lecture 47 */
     public function saveRoom($id = null, Request $request)
     {
         setlocale(LC_TIME, 'ru_RU.UTF-8');

@@ -157,11 +157,19 @@ class BackendRepository implements BackendRepositoryInterface
     public function saveUser($request)
     {
         $user = User::find($request->user()->id);
-        $user->name = $request->input('name');
-        $user->surname = $request->input('surname');
-        $user->email = $request->input('email');
-        $user->save();
-
+        $user->update([
+        'name' => $request->input('name'),
+        'patronymic' => $request->input('patronymic'),
+        'surname' => $request->input('surname'),
+        'email' => $request->input('email'),
+        'phone' => $request->input('phone'),
+        ]);
+//        $user->name = $request->input('name');
+//        $user->patronymic = $request->input('patronymic');
+//        $user->surname = $request->input('surname');
+//        $user->email = $request->input('email');
+//        $user->phone = $request->input('phone');
+//        $user->save();
         return $user;
     }
 

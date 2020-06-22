@@ -327,7 +327,7 @@ class FrontendController extends Controller
             }
 
             foreach ($city as $k => $room) {
-                $rating = $room->object->ratingCounter() ?? null;
+                $rating = $room->object->rating ?? null;
 
                 $room_id = $room->id;
                 $totalPrice = $this->fG->priceCounter($room_id, $request);

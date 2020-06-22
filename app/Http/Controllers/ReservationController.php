@@ -10,9 +10,12 @@ use App\Reservation;
 use App\Room;
 use App\TouristObject;
 use App\User;
+use App\YandexPayment;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
-use App\Enjoythetrip\Interfaces\FrontendRepositoryInterface; /* 12 13  */
+use App\Enjoythetrip\Interfaces\FrontendRepositoryInterface;
+
+/* 12 13  */
 
 use App\Enjoythetrip\Gateways\FrontendGateway;
 
@@ -32,8 +35,10 @@ class ReservationController extends Controller
 
     public function reservationIndex(Request $request)
     {
+
         $reservations = Reservation::with(['user', 'room', 'room.object.user'])->orderByDesc('id')->paginate(50);
-       return view('backend.admin.reservations.index', compact('reservations'));
+        return view('backend.admin.reservations.index', compact('reservations'));
+
     }
 
     public function show($id)
@@ -63,7 +68,6 @@ class ReservationController extends Controller
 
     public function create(Request $request, $id = null)
     {
-
         $avaiable = $this->fG->checkAvaiableReservations($request->get('room_id'), $request);
         if ($id)
             $avaiable = true;
@@ -89,7 +93,6 @@ class ReservationController extends Controller
                 $reservation = Reservation::findOrFail($id);
                 $comission = 0.1;
                 $reward = $totalPrice * $comission;
-//                dd($request->input());
                 $reservation->update([
                     'user_id' => $request->get('user_id'),
                     'city_id' => $request->get('city_id'),
@@ -111,12 +114,8 @@ class ReservationController extends Controller
                 $message = 'Бронирование создано';
                 event(new OrderPlacedEvent($reservation));
             }
-
             return redirect()->route('showReservation', ['id' => $reservation->id])->with('message', $message);
-
-
         }
-
     }
 
 
@@ -124,9 +123,19 @@ class ReservationController extends Controller
     {
         $reservation = Reservation::findOrFail($id);
         $reservation->delete();
-
         return redirect()->route('reservationIndex');
     }
+
+    public function returnPayment($id)
+    {
+        $payment = new YandexPayment();
+
+        $reservation = Reservation::findOrFail($id);
+        $payment->returnPayment($reservation->payment_id);
+        $reservation->delete();
+        return redirect()->route('reservationIndex')->with('message', 'Деньги возвращеныб бронирование удалено!');
+    }
+
 
     public function getUser($id = null)
     {
@@ -146,6 +155,19 @@ class ReservationController extends Controller
     {
         $city = City::findOrFail($id);
         return response()->json($city);
+    }
+
+    public function getReservationsAjax()
+    {
+
+        return Reservation::with(['user', 'room', 'room.object.user'])->orderByDesc('id')->get();
+    }
+
+
+    public function getObjectsAjax()
+    {
+
+        return response()->json(TouristObject::with(['user', 'rooms', 'city'])->orderByDesc('id')->get());
     }
 
 

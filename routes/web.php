@@ -95,6 +95,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::get('/showReservation/{id}', 'ReservationController@show')->name('showReservation');
         Route::get('/removeReservation/{id?}', 'ReservationController@removeReservation')->name('removeReservation');
         Route::get('/removeConfirmation/{id}', 'BackendController@removeConfirmation')->name('removeConfirmation');
+        Route::get('/removeConfirmation/{id}', 'BackendController@removeConfirmation')->name('removeConfirmation');
+        Route::get('/returnPayment/{id}', 'ReservationController@returnPayment')->name('returnPayment');
     });
 
     Route::group(['prefix' => 'objects'], function () {
@@ -107,6 +109,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::get('/getUser/{id?}', 'ReservationController@getUser');
         Route::get('/getObject/{id?}', 'ReservationController@getObject');
         Route::get('/getCity/{id?}', 'ReservationController@getCity');
+        Route::get('/reservations', 'ReservationController@getReservationsAjax');
+        Route::get('/objects', 'ReservationController@getobjectsAjax');
+        Route::get('/objects/rooms/{id}', 'ObjectController@removeRoom');
+
 
     });
 

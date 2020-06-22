@@ -93,7 +93,7 @@ class UserController extends Controller
         $user->roles()->detach();
         $user->roles()->attach($request->input('roles'));
         if ($request->input('sendmail') && !$id)
-            $user->notify(new SendPassword($user->password));
+            $user->notify(new SendPassword($pass));
 
             return redirect()->route('index');
     }

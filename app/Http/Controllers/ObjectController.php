@@ -33,16 +33,19 @@ class ObjectController extends Controller
         return view('backend.admin.objects.index', compact('objects'));
     }
 
-    public function moderate ($id)
+    public function moderate($id)
     {
-            TouristObject::findOrFail($id)->moderate();
+        TouristObject::findOrFail($id)->moderate();
 
-            return redirect()->back()->with('message', 'Отмодерировано');
     }
-    public function unModerate ($id)
+
+    public function unModerate($id)
     {
-            TouristObject::findOrFail($id)->unModerate();
-            return redirect()->back()->with('message', 'Отмодерировано');
+        TouristObject::findOrFail($id)->unModerate();
+    }
+
+    public function removeRoom($id) {
+        Room::findOrFail($id)->delete();
     }
 
     public function show($id)

@@ -151,7 +151,6 @@ class User extends Authenticatable
             ]);
             $this->attempt = 1;
             $this->save();
-
         }
     }
 

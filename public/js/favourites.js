@@ -5,7 +5,6 @@ $(document).ready(function () {
     function setFavouritesHeader() {
         let length = JSON.parse(localStorage.getItem('favourites')).length
         let counter = document.querySelector('.favourites')
-        console.log(length)
         if (length > 0) {
             counter.innerHTML = `<i class="header-heart fas fa-heart"> </i>  Избранное (${length})`
         } else {

@@ -169,7 +169,7 @@
                 </div>
                 <div class="col-4 ">
                     <label for='sendMail'> Отправить письмо с паролем</label>
-                   <input type="checkbox" name="sendmail" id="sendmail" checked>
+                   <input type="checkbox" name="sendmail" id="sendmail">
                 </div>
                 <div class="col-4 ">
 

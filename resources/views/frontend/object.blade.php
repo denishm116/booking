@@ -23,7 +23,7 @@
 
         <div class="row">
             <div class="col-lg-8 col-12">
-                <h1 class="about__title"> {{ $object->name }} в {{$h1seo}}</h1>
+                <h1 class="about__title"> {{ $object->name }}</h1>
                 <div class="col-xl-4 line"></div>
             </div>
 
