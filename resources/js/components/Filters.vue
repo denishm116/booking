@@ -462,7 +462,6 @@
                 getSortprices: function () {
                     axios.get('/sortprices').then((response) => {
                         this.sortprices = response.data;
-                        // this.allroom_display = this.allroom
                     });
                 },
 

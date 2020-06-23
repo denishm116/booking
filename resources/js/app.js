@@ -26,8 +26,6 @@ $(document).ready(function () {
     $("#sandwich, .li").click(function () {
         $("#sandwich").toggleClass("active");
         $(".ul").toggleClass('ul-menu');
-
-
     });
     window.addEventListener('click', function (e) {
         let menu = document.querySelector('.ul');
@@ -35,7 +33,7 @@ $(document).ready(function () {
         let sandwich = document.querySelector('#sandwich')
 
         if (!menu.contains(e.target) && !sandwich.contains(e.target) && !ulmenu.contains(e.target)) {
-            // Ниже код, который нужно выполнить при срабатывании события.
+
             menu.classList.remove('ul-menu');
             sandwich.classList.remove('active');
         }
@@ -76,18 +74,16 @@ $(document).ready(function () {
 window.axios = require('axios');
 window.Vue = require('vue');
 window.hooper = require('hooper')
-// window.VueResource = require('vue-resource')
 
 
-// Vue.component('example-component', require('./components/ExampleComponent.vue'));
-// Vue.component('prop-component', require('./components/PropComponent.vue').default);
-// Vue.component('pagination', require('./components/pagination.vue').default);
+
+
 Vue.component('filters', require('./components/Filters.vue').default);
 Vue.component('slider', require('./components/Slider.vue').default);
 Vue.component('app-admin-reservations-index', require('./components/AppAdminReservationsIndex.vue').default);
 Vue.component('app-admin-objects-index', require('./components/AppAdminObjectsIndex.vue').default);
-// Vue.component('app-pagination', require('./components/AppPagination.vue').default);
-// Vue.component('price-counter', require('./components/PriceCounter.vue').default);
+Vue.component('app-modal', require('./components/AppModal.vue').default);
+
 
 
 const app = new Vue({

@@ -10,9 +10,9 @@
         </div>
 
 
-        <div class="row mb-2 justify-content-center" v-for="object in objects">
+        <div class="row mb-2 justify-content-center" v-for="object in displayedObjects">
             <div class="col mb-1 bg-white col-1 shadow-sm p-2 text-center">
-                <a :href="'/object/' + object.id">
+                <a href="#" @click.prevent="removeObject(object.id)">
                     {{object.id}}
                     <i class="fas fa-trash-alt"></i>
                 </a>
@@ -59,19 +59,51 @@
                     {{object.rooms.length}} + добавить
                 </a>
                 <hr>
-               <template v-for="room in object.rooms">
-                id{{room.id}}
-                <a :href="'/room/'+room.id" style="margin: 0; padding: 0 5px;"
-                   class=" btn  btn-success eye"><i class="far fa-eye"></i></a>
-                <a :href="'routes.saveroom/'+room.id" style="margin: 0; padding: 0 5px;"
-                   class=" btn  btn-danger eye"><i class="fas fa-cog"></i></a>
+                <template v-for="room in object.rooms">
+                    id{{room.id}}
+                    <a :href="'/room/'+room.id" style="margin: 0; padding: 0 5px;"
+                       class=" btn  btn-success eye"><i class="far fa-eye"></i></a>
+                    <a :href="'routes.saveroom/'+room.id" style="margin: 0; padding: 0 5px;"
+                       class=" btn  btn-danger eye"><i class="fas fa-cog"></i></a>
 
-                <a href="#" @click.prevent="removeRoom(room.id)" class="eye"
-                ><i class="fas fa-trash-alt" style="color: #1b1e21;"></i></a>
-                <br>
-               </template>
+                    <a href="#" @click.prevent="removeRoom(room.id)" class="eye"
+                    ><i class="fas fa-trash-alt" style="color: #1b1e21;"></i></a>
+                    <br>
+                </template>
             </div>
         </div>
+
+        <ul class="pagination mb-3">
+            <li class="page-item">
+                <a v-if="page != 1" @click.prevent="page = 1" class="page-link" href="#">
+                    Первая
+                </a>
+            </li>
+
+            <li class="page-item">
+                <a v-if="page != 1" @click.prevent="page--" class="page-link" href="#" aria-label="Предыдущая">
+                    <span aria-hidden="true">«</span>
+                    <span class="sr-only">Предыдущая</span>
+                </a>
+            </li>
+            <li class="page-item" v-for="pageNumber in pages.slice(page-1, page+4)" @click="page = pageNumber"
+                :class="active(pageNumber)">
+
+                <a class="page-link" href="#">{{pageNumber}}</a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link" href="#" @click="page++" v-if="page < pages.length" aria-label="Следующая">
+                    <span aria-hidden="true">»</span>
+                    <span class="sr-only">Следующая</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a @click="page = pages.length" v-if="page < pages.length" class="page-link" href="#">
+                    Последняя
+                </a>
+            </li>
+        </ul>
 
 
     </div>
@@ -94,6 +126,8 @@
             getObjects() {
                 axios.get('/admin/ajax/objects').then((response) => {
                     this.objects = response.data;
+                }).catch((e) => {
+
                 })
             },
             unmoderate(id) {
@@ -121,16 +155,61 @@
                     return 'btn btn-danger'
                 }
             },
-            removeRoom(room) {
-                axios.get('http://booking/admin/ajax/objects/rooms/' + room)
-                    .then((response) => {
-                        this.getObjects()
-                    })
-                    .catch((e) => {
-                    })
-            },
+            removeRoom(id) {
+               if ( confirm('Вы действительно хотите удалить номер:' + id)){
+                   axios.get('http://booking/admin/ajax/objects/rooms/' + id)
+                       .then((response) => {
+                           this.getObjects()
+                       })
+                       .catch((e) => {
+                       })
+               } else {
+                   alert('Удаление отменено')
+               }
 
-        }
+            },
+            removeObject(id) {
+               if ( confirm('Вы действительно хотите удалить объект:' + id)){
+                   axios.get('http://booking/admin/ajax/objects/' + id)
+                       .then((response) => {
+                           this.getObjects()
+                       })
+                       .catch((e) => {
+                       })
+               } else {
+                   alert('Удаление отменено')
+               }
+
+            },
+            setPages() {
+                let numberOfPages = Math.ceil(this.objects.length / this.perPage);
+                for (let index = 1; index <= numberOfPages; index++) {
+                    this.pages.push(index);
+                }
+            },
+            paginate(objects) {
+                let page = this.page;
+                let perPage = this.perPage;
+                let from = (page * perPage) - perPage;
+                let to = (page * perPage);
+                return objects.slice(from, to);
+            },
+            active(pageNumber) {
+                if (this.page == pageNumber) {
+                    return 'active'
+                }
+            }
+        },
+        computed: {
+            displayedObjects() {
+                return this.paginate(this.objects);
+            }
+        },
+        watch: {
+            objects() {
+                this.setPages();
+            }
+        },
     }
 </script>
 

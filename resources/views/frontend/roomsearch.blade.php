@@ -17,7 +17,7 @@
             <h3 class="about__title">
                 Доступные предложения в {{$h1seo}}  </h3>
             @if(isset($reservationPrice[0]['checkin']))
-                <h4 class="my-3"> с <i>{{strftime('%d %b %Y', strtotime($reservationPrice[0]['checkin']))}}</i> оп
+                <h4 class="my-3"> с <i>{{strftime('%d %b %Y', strtotime($reservationPrice[0]['checkin']))}}</i> по
                     <i>{{strftime('%d %b %Y', strtotime($reservationPrice[0]['checkout']))}}</i></h4>
             @endif
             <div class="col-xl-4 line mb-5"></div>

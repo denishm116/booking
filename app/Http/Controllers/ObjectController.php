@@ -48,6 +48,10 @@ class ObjectController extends Controller
         Room::findOrFail($id)->delete();
     }
 
+    public function removeObject($id) {
+        TouristObject::findOrFail($id)->delete();
+    }
+
     public function show($id)
     {
         $reservation = Reservation::with(['user', 'room', 'room.object.user'])->where('id', $id)->first();
