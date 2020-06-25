@@ -5,8 +5,8 @@
         <ul class="nav nav-tabs mb-3">
 
             <li class="nav-item"><a class="nav-link active" href="{{route('index')}}">Пользователи</a></li>
-
-            <li class="nav-item"><a class="nav-link" href="#">Бронирования</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{route('admin.objects.index')}}">Объекты</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{route('reservationIndex')}}">Бронирования</a></li>
 
         </ul>
         <div class="row">
@@ -42,6 +42,7 @@
             <div class="row pb-2">
                 <div class="col-2 bg-white"><b>Телефон</b></div>
                 <div class="col-10 bg-white">{{$user->phone}}</div>
+
 
             </div>
             <div class="row pb-2">

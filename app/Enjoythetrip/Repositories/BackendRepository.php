@@ -215,7 +215,7 @@ class BackendRepository implements BackendRepositoryInterface
     /* Lecture 42 */
     public function getObject($id)
     {
-        return TouristObject::with('additionals')->find($id);
+        return TouristObject::with('additionals', 'rooms')->find($id);
     }
 
 
@@ -235,6 +235,8 @@ class BackendRepository implements BackendRepositoryInterface
         $object->city_id = $request->input('city');
         $object->description = $request->input('description');
         $object->distance_id = $request->input('distance_id');
+        $object->latitude = $request->input('latitude');
+        $object->longitude = $request->input('longitude');
 
         if ($request->input('user_id') != null)
             $object->user_id = $request->input('user_id');

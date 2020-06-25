@@ -155,6 +155,7 @@ class BackendController extends Controller
                 SendCode::createObjectNotification('89034590869');
             }
             if ($id) {
+
                 $this->authorize('checkOwner', $this->bR->getObject($id));
                 $this->bG->saveObject($id, $request);
                 return back();

@@ -7,6 +7,13 @@
 
             <h3 class="about__title">Редактирование объекта {{ $object->name }}</h3>
             <div class="col-xl-4 line"></div>
+            @if (Auth::user()->hasRole(['admin']))
+                <div class="container m-0"><small>
+                        Объект id: {{$object->id}} <a href="{{route('object', ['id' => $object->id])}}"> <i
+                                class="fas fa-eye"></i></a>
+                    </small></div>
+
+            @endif
         @else
             <h3 class="about__title">Добавление нового объекта объекта</h3>
             <div class="col-xl-4 line"></div>
@@ -73,7 +80,7 @@
                         <label for="street" class="col-lg-2 control-label">Улица *</label>
                         <div class="col-lg-12">
                             <input name="street" required type="text"
-                                   value="{{ $object->address->street ?? old('street')}}"
+                                   value="{{ $object->address->street ?? old('street') ?? ''}}"
                                    class="form-control"
                                    id="street" placeholder="">
                         </div>
@@ -82,17 +89,50 @@
                         <label for="number" class="col-lg-2 control-label">Номер дома *</label>
                         <div class="col-lg-12">
                             <input name="number" required
-                                   value="{{ $object->address->number ?? old('number')}}"
+                                   value="{{ $object->address->number ?? old('number') ?? ''}}"
                                    class="form-control"
                                    id="number" placeholder="">
                         </div>
                     </div>
+                    @if($object ?? null)
+                        @if (Auth::user()->hasRole(['admin']))
+                            <div class="row">
+
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="latitude" class="col-lg-2 control-label">Широта</label>
+                                        <div class="col">
+                                            <input name="latitude"
+                                                   value="{{ $object->latitude ?? old('latitude')}}"
+                                                   class="form-control"
+                                                   id="latitude" placeholder="">
+                                        </div>
+
+                                        <label for="longitude" class="col-lg-2 control-label">Долгота</label>
+                                        <div class="col">
+                                            <input name="longitude"
+                                                   value="{{ $object->longitude ?? old('longitude')}}"
+                                                   class="form-control"
+                                                   id="number" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+
+                                    <div id="map" class="yaMap pt-3"></div>
+
+                                </div>
+                            </div>
+
+                        @endif
+                    @endif
+
                     <div class="form-group">
                         <label for="descr" class="col-lg-3 control-label">Описание объекта (не менее 100 символов)
                             *</label>
                         <div class="col-lg-12">
-                <textarea name="description" required class="form-control" rows="3"
-                          id="descr">{{ $object->description ?? old('description')}}</textarea>
+                <textarea name="description" required class="form-control" rows="10"
+                          id="descr">{{ $object->description ?? old('description') ?? ''}}</textarea>
                         </div>
                     </div>
 
@@ -200,6 +240,104 @@
 
                     </div>
 
+                    @if ($object ?? false)
+                        <section class="container">
+                            <div class="row">
+
+                                @forelse( $object->rooms as $room )
+
+                                    <div class="col-lg-2 align-content-between">
+                                        <div class="objects__category__type text-center a">
+
+                                            <div class="row shadow-sm">
+                                                <div class="col text-center font-weight-bold"><a
+                                                        href="{{route('room', ['id'=>$room->id])}}">
+                                                        Уникальный номер id: <b>{{ $room->id  }}</b> </a></div>
+                                            </div>
+
+                                            <div class="row mt-3">
+                                                <div class="col text-center">
+                                                    Комнат: {{$room->room_number}}
+                                                </div>
+                                            </div>
+
+                                            <div class="row my-3">
+                                                <div class="col text-center">
+                                                    Мест: {{$room->room_size}}
+                                                </div>
+                                            </div>
+                                            <div class="row my-3">
+                                                <div class="col text-center">
+                                                    Цена: {{$room->price}}
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <a title="edit" class="btn confirm__button w-100"
+                                                   href="{{ route('saveRoom',['id'=>$room->id]) }}"><i
+                                                        class="fas fa-edit"> </i> Редактировать</a></div>
+
+                                            <div class="row">
+                                                <a title="delete" class="btn confirm__button w-100"
+                                                   href="{{ route('deleteRoom',['id'=>$room->id])  }}"><i
+                                                        class="fas fa-trash"> </i> Удалить
+                                                </a></div>
+
+                                        </div>
+
+                                    </div>
+
+                                @empty
+                                    @push('scripts')
+                                        <script>
+
+
+                                            const modal = $$.modal({
+                                                modalHeaderText: 'Теперь необходимо добавить <b>номер</b>',
+                                                modalBodyText: 'Для того, чтобы объект <b>"{{$object->name}}"</b> начал отображаться в поиске, необходимо добавить хотябы 1 номер с описанием, и стоимостью. Даже если вы сдаете квартиру или дом, все равно нужно добавить номер, как будто у Вас отель, в котором 1 номер. Ведь нельзя указать стоимость отеля за сутки, можно указать только стоимость номера за сутки :)',
+                                                modalButtonText: 'Добавить номер к <b>"{{$object->name}}"</b>',
+                                                href: '{{ route('saveRoom').'?object_id='.$object->id  }}',
+                                                closable: true,
+                                            })
+                                            modal.open()
+                                        </script>
+
+                                    @endpush
+                                    @if ($object ?? false)
+                                        <div class="col-12 align-content-center text-center">
+                                            <div class="alert alert-danger"><b>ВНИМАНИЕ: </b>для того, чтобы ваш объект
+                                                отобразился в поиске нажмите <a
+                                                    href="{{ route('saveRoom').'?object_id='.$object->id  }}"
+                                                    class="btn confirm__button btn-xs">Добавить номер</a>. И заполните
+                                                данные хотя бы одного номера.<br> Если вы сдаете квартиру или дом,
+                                                заполните
+                                                оставшиеся данные, после нажатия кнопки.
+                                            </div>
+                                        </div>
+
+                                    @endif
+                                @endforelse
+
+                                @forelse($object->rooms as $room)
+
+                                    <div
+                                        class="col-lg-2 align-content-between objects__category__type text-center my-auto">
+
+                                        <a
+                                            href="{{ route('saveRoom').'?object_id='.$object->id  }}"
+                                            class="">Нажмите <span class="btn confirm__button w-100">ЗДЕСЬ</span> чтобы
+                                            добавить еще номер<i class="fas fa-plus-square"></i></a>
+
+                                    </div>
+                                    @break
+                                @empty
+
+                                @endforelse
+                            </div>
+                        </section>
+                    @endif
+
+
                     <div class="form-group shadow-sm p-3 m-3">
                         <div class="col-lg-10 col-lg-offset-2">
                             <label for="objectPictures">Фото объекта (размер одного фото не должен превышать
@@ -253,16 +391,18 @@
                                                     </div>
 
                                                     <div class="margin">
-                                                            @if ($photo->main_photo ?? false )
-<div class="navigation-item-button p-0 px-3 mb-2">Главное фото</div>
-                                                            @else
-                                                                <a
-                                                                    href="{{ route('mainPhoto',['id'=>$photo->id])}}"
-                                                                    class="btn confirm__button px-3"
-                                                                    role="button">
+                                                        @if ($photo->main_photo ?? false )
+                                                            <div class="navigation-item-button p-0 px-3 mb-2">Главное
+                                                                фото
+                                                            </div>
+                                                        @else
+                                                            <a
+                                                                href="{{ route('mainPhoto',['id'=>$photo->id])}}"
+                                                                class="btn confirm__button px-3"
+                                                                role="button">
                                                                 Сделать главным <i class="fas fa-search"></i>
-                                                        </a>
-                                                            @endif
+                                                            </a>
+                                                        @endif
 
                                                     </div>
                                                 </div>
@@ -298,7 +438,8 @@
 
                     @if( $object ?? false )
 
-                        <h5 class="m-3">Чтобы изменения вступили в силу, не забудьте нажать на кнопку "сохранить объект"</h5>
+                        <h5 class="m-3">Чтобы изменения вступили в силу, не забудьте нажать на кнопку "сохранить
+                            объект"</h5>
 
                     @else
                         <div class="form-group">
@@ -318,7 +459,8 @@
 
                     <div class="form-group">
                         <div class="col-lg-10 col-lg-offset-2">
-                            <button type="submit" class="btn choice__button">Сохранить объект</button>
+                            <button type="submit" class="btn choice__button">Сохранить объект @if( $object ?? false )
+                                    id:{{$object->id}} @endif</button>
                         </div>
                     </div>
 
@@ -332,4 +474,67 @@
 
 @endsection
 
+@if ($object ?? null)
 
+
+@push('scripts')
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=3da80f65-799c-41a4-ba8f-ea7b21148fd6&lang=ru_RU"
+            type="text/javascript">
+    </script>
+
+    <script type="text/javascript">
+        ymaps.ready(init);
+        function init() {
+            var Url = "https://geocode-maps.yandex.ru/1.x/?apikey=3da80f65-799c-41a4-ba8f-ea7b21148fd6&format=json&lang=ru_RU&geocode={{$object->city->name}},+{{$object->address->street}},+{{$object->address->number}}"
+            var coords = '';
+            axios.get(Url)
+                .then(data => {
+                    z = data.data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos;
+                    test(z)
+                })
+                .catch(err => console.log(err))
+            function test(z) {
+                coords = z.split(" ", 2);
+                axios.get('/getCoords/{{$object->id}}')
+                    .then(data => {
+                        // console.log(data.data[0].Array)
+                        if (data.data[0] == '') {
+                            console.log('ne data')
+                            axios.post('/putCoords', {
+                                latitude: coords[1],
+                                longitude: coords[0],
+                                id: {{$object->id}},
+                            }).then(data => {
+                                location.reload()
+                            })
+                        } else {
+                            return showOnCard();
+                        }
+                        function showOnCard() {
+                            coords = data.data;
+                           var myMap = new ymaps.Map("map", {
+                                center: [coords[1], coords[0]],
+                                zoom: 12
+                            });
+                            var myGeoObject = new ymaps.GeoObject({
+                                geometry: {
+                                    type: "Point", // тип геометрии - точка
+                                    coordinates: [coords[1], coords[0]], // координаты точки
+                                }
+                            });
+                            // Размещение геообъекта на карте.
+                            myMap.geoObjects.add(myGeoObject);
+
+                            var placemark = new ymaps.Placemark([coords[1], coords[0]], {
+                                hintContent: '{{$object->name}}',
+                                balloonContent: '{{$object->city->name}}, {{$object->address->street}}, {{$object->address->number}}',
+                            });
+                            // Размещение геообъекта на карте.
+                            myMap.geoObjects.add(placemark);
+                        }
+                    });
+            }
+        }
+    </script>
+@endpush
+@endif

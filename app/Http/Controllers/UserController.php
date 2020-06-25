@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Users\UsersRequest;
+use App\Notifications\AdminMessage;
 use App\Notifications\SendPassword;
 use App\Role;
+use App\SendCode;
 use App\TouristObject;
 use App\User;
 use Carbon\Carbon;
@@ -111,6 +113,17 @@ class UserController extends Controller
         $user->delete();
         $user->roles()->detach();
         return redirect()->route('index');
+    }
+    public function sendSms($phone, $message) {
+        SendCode::sendAdminNotification($phone, $message);
+        return 'Success';
+    }
+
+    public function sendEmail($email, $message) {
+        $recipient = User::where('email', $email)->first();
+
+        $recipient->notify(new AdminMessage($message));
+        return 'Success';
     }
 
 }

@@ -166,7 +166,7 @@
     </div>
 
 
-    <ul class="ulmenu2 py-2 backend-menu bg-light" >
+    <ul class="ulmenu2 py-2 backend-menu bg-light">
         <li>
             <a class="mob" href="/">
                 <div>
@@ -198,8 +198,8 @@
 
             <li><a class="btn navigation-item-button"
                    href="{{ route('profile') }}">Профиль: {{ Auth::user()->name }}</a><br>
-{{--                <a--}}
-{{--                    href="">в панель</a>--}}
+                {{--                <a--}}
+                {{--                    href="">в панель</a>--}}
 
             </li><br>
 
@@ -318,117 +318,149 @@
     </div>
 </div>
 
+<div id="toTop" class="bradius2 arrow-top"><i class="fas fa-chevron-circle-up"></i></div>
+    <footer class="footer-info">
+        <div class="container">
+            <div class="row d-flex justify-content-between">
+                <div class="col-xl-3 col-12">
+                    <a class="down-logo" href="#">
+                        Krim-leto<span class="logo-orange">.ru</span>
+                    </a>
 
-<footer class="footer-info">
-    <div class="container">
-        <div class="row d-flex justify-content-between">
-            <div class="col-xl-3 col-12">
-                <a class="down-logo" href="#">
-                    Krim-leto<span class="logo-orange">.ru</span>
-                </a>
+                    <div class="footer-info footer-doc">© {{date('Y')}} г.</div>
 
-                <div class="footer-info footer-doc">© {{date('Y')}} г.</div>
+                </div>
+                <div class="col-xl-3 col-12">
 
-            </div>
-            <div class="col-xl-3 col-12">
+                    <div class="py-0 mt-0 footer-info"><a href="{{route('forowners')}}" class="footer-doc footer-serv">Для
+                            владельцев недвижимости</a></div>
+                    <div class="py-0 mt-0 footer-info"><a href="{{route('guest_agreement')}}"
+                                                          class="footer-doc footer-user">Пользовательское
+                            соглашение</a>
+                    </div>
+                </div>
 
-                <div class="py-0 mt-0 footer-info"><a href="{{route('forowners')}}" class="footer-doc footer-serv">Для
-                        владельцев недвижимости</a></div>
-                <div class="py-0 mt-0 footer-info"><a href="{{route('guest_agreement')}}"
-                                                      class="footer-doc footer-user">Пользовательское
-                        соглашение</a>
+                <div class="col-xl-3 col-12 ">
+                    <div class="py-0 mt-0 footer-info"><a href="{{route('confidential_policy')}}"
+                                                          class="footer-doc footer-conf">Политика
+                            конфиденциальности</a>
+                    </div>
+                    <div class="py-0 mt-0 footer-info"><a href="{{route('landlord_agreement')}}"
+                                                          class="footer-doc footer-contract">Договор публичной
+                            оферты</a>
+                    </div>
+                    <div class="py-0 mt-0 footer-info"><a href="{{route('contacts')}}"
+                                                          class="footer-doc footer-contakt">Контакты</a>
+                    </div>
+                </div>
+
+
+                <div class="col-xl-3 col-12 ">
+
+                    <div class="py-0 mt-0 footer-info"><i class="fas fa-envelope"> </i> <a class="footer-doc"
+                                                                                           href="mailto: info@krim-leto.ru">
+                            info@krim-leto.ru</a></div>
+                    <div class="py-0 mt-0 footer-info">
+                        <a href="#" class="orange_footer"><i class="fab fa-vk"></i></a>
+                        <a href="#" class="orange_footer ml-3"><i class="fab fa-odnoklassniki"></i></a>
+                        <a href="#" class="orange_footer ml-3"><i class="fab fa-instagram"></i></a>
+                    </div>
                 </div>
             </div>
 
-            <div class="col-xl-3 col-12 ">
-                <div class="py-0 mt-0 footer-info"><a href="{{route('confidential_policy')}}"
-                                                      class="footer-doc footer-conf">Политика
-                        конфиденциальности</a>
-                </div>
-                <div class="py-0 mt-0 footer-info"><a href="{{route('landlord_agreement')}}"
-                                                      class="footer-doc footer-contract">Договор публичной оферты</a>
-                </div>
-                <div class="py-0 mt-0 footer-info"><a href="{{route('contacts')}}" class="footer-doc footer-contakt">Контакты</a>
-                </div>
-            </div>
-
-
-            <div class="col-xl-3 col-12 ">
-
-                <div class="py-0 mt-0 footer-info"><i class="fas fa-envelope"> </i> <a class="footer-doc"
-                                                                                       href="mailto: info@krim-leto.ru">
-                        info@krim-leto.ru</a></div>
-                <div class="py-0 mt-0 footer-info">
-                    <a href="#" class="orange_footer"><i class="fab fa-vk"></i></a>
-                    <a href="#" class="orange_footer ml-3"><i class="fab fa-odnoklassniki"></i></a>
-                    <a href="#" class="orange_footer ml-3"><i class="fab fa-instagram"></i></a>
+            <div class="row">
+                <div class="col footer-doc footer-conf">
+                    <p class="footer-doc footer-conf">© Все права защищены. Любое использование либо копирование
+                        материалов сайта, элементов дизайна и
+                        оформления допускается лишь с разрешения правообладателя и только со ссылкой на источник:
+                        krim-leto.ru</p>
+                    <p>Использование сайта означает согласие с <a href="{{route('guest_agreement')}}"
+                                                                  class="footer-doc footer-user bolded">Пользовательским
+                            соглашением</a> и <a href="{{route('confidential_policy')}}"
+                                                 class="footer-doc footer-conf bolded">Политикой конфиденциальности</a>.
+                        Оплачивая
+                        лицензионный платеж, вы принимаете <a href="{{route('guest_agreement')}}"
+                                                              class="footer-doc footer-user bolded">Лицензионное
+                            соглашение.</a></p>
                 </div>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col footer-doc footer-conf">
-                <p class="footer-doc footer-conf">© Все права защищены. Любое использование либо копирование материалов сайта, элементов дизайна и
-                    оформления допускается лишь с разрешения правообладателя и только со ссылкой на источник:
-                    krim-leto.ru</p>
-                <p>Использование сайта означает согласие с <a href="{{route('guest_agreement')}}"
-                                                              class="footer-doc footer-user bolded">Пользовательским
-                        соглашением</a> и <a href="{{route('confidential_policy')}}"
-                                             class="footer-doc footer-conf bolded">Политикой конфиденциальности</a>. Оплачивая
-                    лицензионный платеж, вы принимаете <a href="{{route('guest_agreement')}}"
-                                                          class="footer-doc footer-user bolded">Лицензионное соглашение.</a></p>
-            </div>
-        </div>
-    </div>
-
-</footer>
+    </footer>
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-<script src="{{ asset('js/jquery-ui.js') }}"></script>
-<script src="{{ asset('js/jquery.datepicker.extension.range.min.js')}}"></script>
-<script src="{{ asset('js/ru.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui.js') }}"></script>
+    <script src="{{ asset('js/jquery.datepicker.extension.range.min.js')}}"></script>
+    <script src="{{ asset('js/ru.js') }}"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
-        integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
-        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+            integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+            crossorigin="anonymous"></script>
 
 
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
 
-<script src="{{ asset('js/app.js') }}"></script> <!-- Lecture 5 -->
-<script src="{{ asset('js/admin.js') }}"></script> <!-- Lecture 5 -->
+    <script src="{{ asset('js/app.js') }}"></script> <!-- Lecture 5 -->
+    <script src="{{ asset('js/admin.js') }}"></script> <!-- Lecture 5 -->
 
-<script>
+    <script>
 
-    $(function () {
+        $(function () {
+
+
+            //to prevent scroll top when refreshing
+            if (typeof scroll_val !== 'undefined') {
+
+                $(window).scrollTop(scroll_val);
+                //scroll(0,scroll_val);
+            }
+
+        });
 
 
         //to prevent scroll top when refreshing
-        if (typeof scroll_val !== 'undefined') {
-
-            $(window).scrollTop(scroll_val);
-            //scroll(0,scroll_val);
+        function scroll_value() {
+            document.cookie = 'scroll_val' + '=' + $(window).scrollTop();
         }
 
-    });
+
+        $(document).on('click', '.keep_pos', function (e) {
+            scroll_value();
+        });
+
+    </script>
+    @stack('scripts')
+    <script>
+
+        $(function () {
+
+            $(window).scroll(function () {
+
+                if ($(this).scrollTop() != 0) {
+
+                    $('#toTop').fadeIn();
+
+                } else {
+
+                    $('#toTop').fadeOut();
+
+                }
+
+            });
+            $('#toTop').click(function () {
+
+                $('body,html').animate({scrollTop: 0}, 800);
+            });
+
+        });
+
+    </script>
 
 
-    //to prevent scroll top when refreshing
-    function scroll_value() {
-        document.cookie = 'scroll_val' + '=' + $(window).scrollTop();
-    }
-
-
-    $(document).on('click', '.keep_pos', function (e) {
-        scroll_value();
-    });
-
-</script>
-@stack('scripts')
 </body>
 </html>
 

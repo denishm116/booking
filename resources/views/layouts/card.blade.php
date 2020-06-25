@@ -40,7 +40,7 @@
             <div class="card-main-page__content-wrapper-row-1">
                 <div class="">
                     <i class="fas fa-map-marker-alt"></i> {!! $room->object->city->name ?? null!!}
-                    , {{$room->object->address->street}}, {{$room->object->address->number}}
+
                 </div>
                 <div class="">
                     <i class="fas fa-water"></i> море: {{$room->object->distance->title ?? null}}
@@ -52,7 +52,22 @@
             <div class="card-main-page__content-wrapper-row-2">
                 <div class="card-main-page__content-wrapper-row-2-1">
                     <div class="">
-                        {{$room->room_size}}-местный номер
+                        @foreach($room->object->types as $type)
+                            @if($type->id === 6)
+                                {{$room->room_number}}-комнатная квартира
+                                @break;
+                            @elseif ($type->id === 7)
+                                {{$room->room_number}}-комнатный дом
+                                @break;
+                            @elseif ($type->id === 10)
+                                {{$room->room_number}}-комнатный коттедж
+                                @break;
+                            @else
+                                {{$room->room_size}}-местный номер
+                                @break;
+                            @endif
+                        @endforeach
+
                     </div>
 
                     @if  (Request::is('favourites/*'))

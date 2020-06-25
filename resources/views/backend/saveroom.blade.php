@@ -7,6 +7,14 @@
         <h2 class="about__title  ml-3">Редактирование номера {{ $room->id}}
             объекта {{ $room->object->name }}</h2>
         <div class="col-xl-4 line  ml-3"></div>
+        @if (Auth::user()->hasRole(['admin']))
+            <div class="container m-0"><small>
+                    <a href="{{route('saveObject', ['id' => $room->object->id])}}">Объект id: {{$room->object->id}}</a>
+                    Номер id: {{$room->id}} <a href="{{route('room', ['id' => $room->id])}}"><i class="fas fa-eye"></i></a>
+
+                </small></div>
+
+        @endif
 
     @else
         <h2 class="about__title ml-3">Добавить номер к объекту {{$room->object ?? ''}}</h2>
@@ -54,7 +62,7 @@
             <div class="form-group">
                 <label for="descr" class="col-lg-2 control-label">Описание номера (не менее 100 символов) *</label>
                 <div class="col-lg-12">
-                <textarea name="description" required class="form-control" rows="3"
+                <textarea name="description" required class="form-control" rows="10"
                           id="descr">{{ $room->description ?? old('description')  }}</textarea>
                 </div>
             </div>

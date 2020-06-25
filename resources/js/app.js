@@ -70,20 +70,17 @@ $(document).ready(function () {
     })
 });
 
-
 window.axios = require('axios');
 window.Vue = require('vue');
 window.hooper = require('hooper')
-
-
 
 
 Vue.component('filters', require('./components/Filters.vue').default);
 Vue.component('slider', require('./components/Slider.vue').default);
 Vue.component('app-admin-reservations-index', require('./components/AppAdminReservationsIndex.vue').default);
 Vue.component('app-admin-objects-index', require('./components/AppAdminObjectsIndex.vue').default);
-Vue.component('app-modal', require('./components/AppModal.vue').default);
-
+Vue.component('app-sms-send', require('./components/AppSmsSend.vue').default);
+Vue.component('app-mail-send', require('./components/AppMailSend.vue').default);
 
 
 const app = new Vue({

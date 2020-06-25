@@ -113,6 +113,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
         Route::get('/objects', 'ReservationController@getobjectsAjax');
         Route::get('/objects/rooms/{id}', 'ObjectController@removeRoom');
         Route::get('/objects/{id}', 'ObjectController@removeObject');
+        Route::get('/sendSms/{phone}/{message}', 'UserController@sendSms');
+        Route::get('/sendEmail/{email}/{message}', 'UserController@sendEmail');
 
 
     });

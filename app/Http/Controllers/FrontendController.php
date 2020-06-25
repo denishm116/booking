@@ -57,6 +57,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class FrontendController extends Controller
 {
+    public $cities;
+    public $types;
     public function __construct(FrontendRepositoryInterface $frontendRepository, FrontendGateway $frontendGateway)
     {
 
@@ -433,7 +435,6 @@ class FrontendController extends Controller
 
     public function addComment($commentable_id, Request $request)
     {
-
         $type = 'App\TouristObject';
         $this->fG->addComment($commentable_id, $type, $request);
 

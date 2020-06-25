@@ -109,7 +109,7 @@ class FrontendGateway
     public function addComment($commentable_id, $type, $request)
     {
         $this->validate($request, [
-            'content' => "required|string"
+            'content' => "required|string|max:500"
         ]);
         return $this->fR->addComment($commentable_id, $type, $request);
     }

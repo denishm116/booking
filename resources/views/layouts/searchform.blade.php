@@ -1,7 +1,7 @@
 <div class="container">
     <form class="" method="POST" action="{{ route('roomSearch') }}">
 
-        <div class="form-serch form-row pb-5 align-items-center py-2">
+        <div class="form-serch form-row align-items-center py-2">
             <div class="col-xl-2 col-12 py-2">
                 <input name="city" value="{{ old('city')}}" type="text"
                        class="form-control autocomplete" id="city" placeholder="Куда вы едете?">

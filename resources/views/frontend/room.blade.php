@@ -25,8 +25,14 @@
             <div class="col-lg-8 col-12">
 
                 <h1 class="about__title-popular">Номер: {{$room->display_name ?? $room->id}} </h1>
-                id: {{$room->id}}
 
+                @auth()
+                    @if( Auth::id() == $room->object->user_id || Auth::user()->hasRole(['admin']))
+                        @if (Auth::user()->hasRole(['admin']))
+                            <a href="{{route('saveRoom', ['id'=>$room->id])}}"><i class="fas fa-cog"></i></a>
+                        @endif
+                    @endif
+                @endauth
 
                 <div class="col-xl-4 line"></div>
 
@@ -35,10 +41,10 @@
             <div class="col-lg-4 col-12">
                 <div class="objHead text-right">Объект размещения: <a
                         href="{{ route('object',['room'=>$room->object_id]) }}">{{ $room->object->name}}</a>
-                </div>
-                <div class="adress pl-1 pt-1 text-right"><i
+
+            <div class="adress pl-1 pt-1 text-right"><i
                         class="fa fa-map-marker pr-3 text-justify"></i>г. {{ $room->object->city->name }}
-                    ул. {{$room->object->address->street}}, д., {{$room->object->address->number}}</div>
+                    ул. {{$room->object->address->street}}</div>
             </div>
 
         </div>
@@ -190,7 +196,7 @@
             </div>
 
             <article class="object-description">
-                <p class="object-description_article text-justify">{{ $room->description }}</p>
+                <p class="object-description_article text-justify">{!!  nl2br(e($room->description)) !!}</p>
 
 
             </article>
@@ -335,7 +341,7 @@
                         </div>
                         <div class="row">
                             <div class="col">
-                                {{ $comment->content }}
+                                {!! nl2br(e($comment->content)) !!}
 
                             </div>
                         </div>
@@ -357,7 +363,7 @@
                             <div class="shadow-sm p-1 m-3">
 
                                 <label for="textArea" class="col control-label"><h4>Ваш отзыв
-                                        о {{$room->object->name ?? false}} </h4></label>
+                                        о {{$room->object->name ?? false}} </h4><small>Max 500 символов</small></label>
                                 <div class="col">
                                 <textarea required name="content" class="form-control" rows="3"
                                           id="textArea"></textarea>

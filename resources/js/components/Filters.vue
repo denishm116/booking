@@ -96,7 +96,8 @@
 
                     <div class="row p-1 align-items-center height h-100">
                         <div class="col-lg-4 col-sm-12 text-center m-0 p-1 h-100">
-                            <div class="thumbnail bg-light card-main-page__photo-row1" v-bind:class="{ looked: room.looked}">
+                            <div class="thumbnail bg-light card-main-page__photo-row1"
+                                 v-bind:class="{ looked: room.looked}">
                                 <a v-bind:href="'/room/'+room.id">
                                     <div class="card-main-page__photo-header">Номер ID: {{room.id}}</div>
                                     <div class="card__photo-wrapper">
@@ -151,10 +152,24 @@
 
                                 <div class="card-main-page__content-wrapper-row-2">
                                     <div class="card-main-page__content-wrapper-row-2-1">
-                                        <div class="">
-                                            {{room.room_size}}-местный номер
-                                        </div>
 
+
+                                        <div v-for=" (type, index) in room.object.types">
+                                            <div v-if="index === 0">
+                                                <div v-if="type.id === 6">
+                                                    {{room.room_number}}-комнатная квартира
+                                                </div>
+                                                <div v-else-if="type.id === 7">
+                                                    {{room.room_number}}-комнатный дом
+                                                </div>
+                                                <div v-else-if="type.id === 10">
+                                                    {{room.room_number}}-комнатный дом
+                                                </div>
+                                                <div v-else>
+                                                    {{room.room_size}}-местный номер
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="">
                                             <a v-bind:href="'/room/'+room.id" v-bind:data="room.id"
                                                class="favourites-button"
@@ -364,7 +379,7 @@
         },
         created() {
             this.getRooms();
-          },
+        },
         watch: {
             sortprice: function () {
                 this.setTypes()
@@ -466,106 +481,105 @@
                 },
 
 
+                setTypes: function () {
+                    this.allroom_display = [];
+                    this.typeArr = [];
+                    this.arr = [];
+                    this.arr1 = [];
+                    this.arr2 = [];
+                    this.arr3 = [];
+                    this.allroom_distance = [];
+                    let checker = (arr, target) => target.every(v => arr.includes(v));
+                    //Проверка стоимости номера
+                    if (this.sortprice) {
 
-            setTypes: function () {
-                this.allroom_display = [];
-                this.typeArr = [];
-                this.arr = [];
-                this.arr1 = [];
-                this.arr2 = [];
-                this.arr3 = [];
-                this.allroom_distance = [];
-                let checker = (arr, target) => target.every(v => arr.includes(v));
-                //Проверка стоимости номера
-                if (this.sortprice) {
-
-                    this.allroom.forEach((room) => {
-                        if (room.price <= this.sortprice) {
-                            this.arr3.push(room)
-                        }
-                    });
-
-                } else {
-                    this.arr3 = this.allroom
-                }
-
-                //Проверка дистанции до моря
-                if ((this.distance != 0)) {
-                    this.arr3.forEach((room) => {
-                        this.distance.forEach((di) => {
-                            if ((room.object.distance_id != null) && (room.object.distance_id <= di)) {
-                                this.allroom_distance.push(room);
+                        this.allroom.forEach((room) => {
+                            if (room.price <= this.sortprice) {
+                                this.arr3.push(room)
                             }
                         });
+
+                    } else {
+                        this.arr3 = this.allroom
+                    }
+
+                    //Проверка дистанции до моря
+                    if ((this.distance != 0)) {
+                        this.arr3.forEach((room) => {
+                            this.distance.forEach((di) => {
+                                if ((room.object.distance_id != null) && (room.object.distance_id <= di)) {
+                                    this.allroom_distance.push(room);
+                                }
+                            });
+                        });
+
+                        //Удаляем повторяющиеся элементы массива
+                        this.allroom_distance = Array.from(new Set(this.allroom_distance))
+
+                    } else {
+                        this.allroom_distance = this.arr3
+                    }
+                    //this.allroom_distance_unique = this.arr3;
+                    // console.log('Промежуточный результат: ' + this.arr3);
+                    //Проверка типа объека (Гостиница, гостевой дом итд)
+                    this.allroom_distance.forEach((room) => {
+                        // console.log(room);
+                        if (this.type !== 0) {
+
+                            let m = []
+                            room.object.types.forEach((roomAdditionals) => {
+                                m.push(roomAdditionals.id);
+                            });
+                            if (checker(m, this.type)) {
+                                this.typeArr.push(room)
+                            }
+                        }
                     });
 
-                    //Удаляем повторяющиеся элементы массива
-                    this.allroom_distance = Array.from(new Set(this.allroom_distance))
-
-                } else {
-                    this.allroom_distance = this.arr3
-                }
-                //this.allroom_distance_unique = this.arr3;
-                // console.log('Промежуточный результат: ' + this.arr3);
-                //Проверка типа объека (Гостиница, гостевой дом итд)
-                this.allroom_distance.forEach((room) => {
-                    // console.log(room);
-                    if (this.type !== 0) {
-
-                        let m = []
-                        room.object.types.forEach((roomAdditionals) => {
-                            m.push(roomAdditionals.id);
-                        });
-                        if (checker(m, this.type)) {
-                            this.typeArr.push(room)
+                    //Проверка доп услуг (проститутки)
+                    this.typeArr.forEach((room) => {
+                        if (this.additional !== 0) {
+                            let m = []
+                            room.object.additionals.forEach((roomAdditionals) => {
+                                m.push(roomAdditionals.id);
+                            });
+                            if (checker(m, this.additional)) {
+                                this.arr.push(room)
+                            }
                         }
-                    }
-                });
+                    });
 
-                //Проверка доп услуг (проститутки)
-                this.typeArr.forEach((room) => {
-                    if (this.additional !== 0) {
-                        let m = []
-                        room.object.additionals.forEach((roomAdditionals) => {
-                            m.push(roomAdditionals.id);
-                        });
-                        if (checker(m, this.additional)) {
-                            this.arr.push(room)
+                    //Проверка инфраструктуры
+                    this.arr.forEach((room) => {
+                        if (this.infrastructure !== 0) {
+                            let m = []
+                            room.object.infrastructures.forEach((roomAdditionals) => {
+                                m.push(roomAdditionals.id);
+                            });
+                            if (checker(m, this.infrastructure)) {
+                                this.arr1.push(room)
+                            }
                         }
-                    }
-                });
+                    });
 
-                //Проверка инфраструктуры
-                this.arr.forEach((room) => {
-                    if (this.infrastructure !== 0) {
-                        let m = []
-                        room.object.infrastructures.forEach((roomAdditionals) => {
-                            m.push(roomAdditionals.id);
-                        });
-                        if (checker(m, this.infrastructure)) {
-                            this.arr1.push(room)
+                    //Проверка дополнительных условий номера
+                    this.arr1.forEach((room) => {
+                        if (this.rservice !== 0) {
+                            let m = []
+                            room.rservices.forEach((roomAdditionals) => {
+                                m.push(roomAdditionals.id);
+                            });
+                            if (checker(m, this.rservice)) {
+                                this.allroom_display.push(room)
+                            }
                         }
-                    }
-                });
+                    });
+                    this.rooms = this.allroom_display;
 
-                //Проверка дополнительных условий номера
-                this.arr1.forEach((room) => {
-                    if (this.rservice !== 0) {
-                        let m = []
-                        room.rservices.forEach((roomAdditionals) => {
-                            m.push(roomAdditionals.id);
-                        });
-                        if (checker(m, this.rservice)) {
-                            this.allroom_display.push(room)
-                        }
-                    }
-                });
-                this.rooms = this.allroom_display;
+                },
+
 
             },
-
-
-        },
         computed: {
             displayedRooms() {
                 return this.paginate(this.rooms);
@@ -605,9 +619,10 @@
         width: 500px !important;
         margin: 20px auto;
     }
+
     @media only screen and (max-width: 768px) {
         .ml-vue {
-margin-left: 15px;
+            margin-left: 15px;
         }
     }
 </style>

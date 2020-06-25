@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', $seoType->title.'  в ' . $h1seo . ' 2020. Бронирование и цены.')
+@section('title', $seoType->title.'  в ' . $h1seo . '. Бронирование и цены.')
 
 @section('description', $seoType->title.' в ' . $h1seo  . '. Цены 2020 г. Бронирование жилья в Крыму без посредников!')
 
@@ -18,22 +18,41 @@
                 </div>
             </div>
         </div>
+
+
+
+
+
     </header>
 
 
 
     <div class="container">
-        <div class="breadcrumb-holder my-1">
-            <ul class="basic-breadcrumbs">
-                <li class="d-none d-lg-block"><a href="{{route('home')}}">Главная</a></li>
-                <li class="d-none d-lg-block"><a
-                        href="{{route('city', ['city'=>$city])}}">{{$krim}}</a>
-                </li>
-                <li class="d-none d-lg-block"><a href="#">{{$seoType->title}}</a></li>
-            </ul>
-        </div>
+
+                <div class="breadcrumb-holder my-1">
+                    <ul class="basic-breadcrumbs">
+                        <li class="d-none d-lg-block"><a href="{{route('home')}}">Главная</a></li>
+                        <li class="d-none d-lg-block"><a
+                                href="{{route('city', ['city'=>$city])}}">{{$krim}}</a>
+                        </li>
+                        <li class="d-none d-lg-block"><a href="#">{{$seoType->title}}</a></li>
+                    </ul>
+                </div>
+
+
+
+
 
         <div class="container ">
+
+
+
+
+
+
+
+
+
             <div class="row shadow-orange p-3 mb-5">
 
 
@@ -45,12 +64,12 @@
                                 <h2 class="text-center">Где остановиться в {{$h1seo}}</h2>
                                 @foreach($typesAlias as $type )
                                     <div class="{{($requestSegment == $type->alias) ? 'seo-search-left-bg' : ''}}">
-                                        <a href="{{ route('cityConditions',['alias' => $city, 'type'=>$type->alias] ) }}"> {{$type->title}} </a><br>
+                                        <a href="{{ route('cityConditions',['city' => $city, 'type'=>$type->alias] ) }}"> {{$type->title}} </a><br>
                                     </div>
                                     <div class="{{($requestSegment == $type->alias) ? '' : 'hidden'}}">
                                         @foreach($conditionsTypes as $condition )
                                             <div class="seo-search-left-additional">
-                                                <a href="{{ route('typeConditions',['alias'=>$city ?? false, 'type'=>$type->alias ?? false, 'condition' => $condition[1]] ) }}"> {{$condition[2]}}
+                                                <a href="{{ route('typeConditions',['city'=>$city ?? false, 'type'=>$type->alias ?? false, 'condition' => $condition[1]] ) }}"> {{$condition[2]}}
                                                     ({{$condition[0]}})</a>
                                             </div>
 
