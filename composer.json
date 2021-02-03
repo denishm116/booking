@@ -14,7 +14,7 @@
         "caouecs/laravel-lang": "~4.0",
         "doctrine/dbal": "^2.9",
         "fideloper/proxy": "^4.0",
-        "laravel/framework": "5.8.*",
+        "laravel/framework": "6.20.*",
         "laravel/tinker": "^1.0",
         "livewire/livewire": "^1.2",
         "om/icalparser": "^0.2.7",
